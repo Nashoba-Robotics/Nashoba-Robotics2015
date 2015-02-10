@@ -1,12 +1,16 @@
 package edu.nr.robotics;
 
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
-import edu.nr.robotics.subsystems.backElevator.BackElevatorGoToHeightCommand;
+import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
 import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
-import edu.nr.robotics.subsystems.frontElevator.FrontElevatorGoToHeightCommand;
+import edu.nr.robotics.subsystems.frontElevator.commands.FirstToteTwoGroup;
+import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
+import edu.nr.robotics.subsystems.frontElevator.commands.ToteOneToScoreGroup;
+import edu.nr.robotics.subsystems.frontElevator.commands.ToteTwoToScoreGroup;
+import edu.nr.robotics.subsystems.frontElevator.commands.ToteTwoToWaitGroup;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
@@ -57,50 +61,11 @@ public class OI
 		{
 			coffin = new Joystick(1);
 			//Front Elevator Buttons
-			new JoystickButton(buttonAssignmentStick, 1).whenPressed(new EmptyCommand()//Height: Adjust Tote #1
-			{
-				@Override
-				public void execute()
-				{
-					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE).start();
-				}
-			});
-			//INCOMPLETE:
-			new JoystickButton(buttonAssignmentStick, 2).whenPressed(new EmptyCommand()//Height: Pick up Tote #2, release bin, grab bin, go to waiting height
-			{
-				@Override
-				public void execute()
-				{
-					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_PICK_UP_TOTE_TWO).start();
-				}
-			});
-			//INCOMPLETE:
-			new JoystickButton(buttonAssignmentStick, 3).whenPressed(new EmptyCommand()//Height: Big red button: Pick up Tote #2, go to waiting height
-			{
-				@Override
-				public void execute()
-				{
-					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_PICK_UP_TOTE_TWO).start();
-				}
-			});
-			//INCOMPLETE:
-			new JoystickButton(buttonAssignmentStick, 4).whenPressed(new EmptyCommand()//Height: Pick up Tote #2, go to score height
-			{
-				@Override
-				public void execute()
-				{
-					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_PICK_UP_TOTE_TWO).start();
-				}
-			});
-			//INCOMPLETE:
-			new JoystickButton(buttonAssignmentStick, 5).whenPressed(new EmptyCommand()//Height: Pick up Tote #1, go to score height
-			{
-				@Override
-				public void execute()
-				{
-					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_PICK_UP_TOTE_TWO).start();
-				}
-			});
+			new JoystickButton(buttonAssignmentStick, 1).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE));
+			new JoystickButton(buttonAssignmentStick, 2).whenPressed(new FirstToteTwoGroup());
+			new JoystickButton(buttonAssignmentStick, 3).whenPressed(new ToteTwoToWaitGroup());
+			new JoystickButton(buttonAssignmentStick, 4).whenPressed(new ToteTwoToScoreGroup());
+			new JoystickButton(buttonAssignmentStick, 5).whenPressed(new ToteOneToScoreGroup());
 			//INCOMPLETE:
 			new JoystickButton(buttonAssignmentStick, 6).whenPressed(new EmptyCommand()
 			/* Score!:
@@ -134,30 +99,9 @@ public class OI
 			});
 
 		    //Back Elevator Buttons
-			new JoystickButton(buttonAssignmentStick, 9).whenPressed(new EmptyCommand()//Height: Hold
-			{
-				@Override
-				public void execute()
-				{
-					new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_HOLD).start();
-				}
-			});
-			new JoystickButton(buttonAssignmentStick, 10).whenPressed(new EmptyCommand()//Height: Obtain off step
-			{
-				@Override
-				public void execute()
-				{
-					new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_STEP).start();
-				}
-			});
-			new JoystickButton(buttonAssignmentStick, 11).whenPressed(new EmptyCommand()//Height: Obtain off floor / Put bin down
-			{
-				@Override
-				public void execute()
-				{
-					new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_FLOOR).start();
-				}
-			});
+			new JoystickButton(buttonAssignmentStick, 9).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_HOLD));
+			new JoystickButton(buttonAssignmentStick, 10).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_STEP));
+			new JoystickButton(buttonAssignmentStick, 11).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_FLOOR));
 			new JoystickButton(buttonAssignmentStick, 12).whenPressed(new EmptyCommand()//Height: Closed
 			{
 				@Override

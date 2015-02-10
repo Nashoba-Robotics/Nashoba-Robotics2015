@@ -2,6 +2,7 @@ package edu.nr.robotics.subsystems.frontElevator;
 
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.I2C;
+import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorIdleCommand;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DoubleSolenoid;

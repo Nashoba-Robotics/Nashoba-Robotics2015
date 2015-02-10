@@ -1,5 +1,6 @@
-package edu.nr.robotics.subsystems.backElevator;
+package edu.nr.robotics.subsystems.backElevator.commands;
 
+import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
