@@ -1,5 +1,7 @@
 package edu.nr.robotics;
 
+import edu.nr.robotics.subsystems.backElevator.BackElevator;
+import edu.nr.robotics.subsystems.backElevator.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
 import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
@@ -54,6 +56,7 @@ public class OI
 		if(USING_COFFIN)
 		{
 			coffin = new Joystick(1);
+			//Front Elevator Buttons
 			new JoystickButton(buttonAssignmentStick, 1).whenPressed(new EmptyCommand()//Height: Adjust Tote #1
 			{
 				@Override
@@ -127,6 +130,40 @@ public class OI
 				public void execute()
 				{
 					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_MIN).start();
+				}
+			});
+
+		    //Back Elevator Buttons
+			new JoystickButton(buttonAssignmentStick, 9).whenPressed(new EmptyCommand()//Height: Hold
+			{
+				@Override
+				public void execute()
+				{
+					new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_HOLD).start();
+				}
+			});
+			new JoystickButton(buttonAssignmentStick, 10).whenPressed(new EmptyCommand()//Height: Obtain off step
+			{
+				@Override
+				public void execute()
+				{
+					new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_STEP).start();
+				}
+			});
+			new JoystickButton(buttonAssignmentStick, 11).whenPressed(new EmptyCommand()//Height: Obtain off floor / Put bin down
+			{
+				@Override
+				public void execute()
+				{
+					new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_FLOOR).start();
+				}
+			});
+			new JoystickButton(buttonAssignmentStick, 12).whenPressed(new EmptyCommand()//Height: Closed
+			{
+				@Override
+				public void execute()
+				{
+					new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_CLOSED).start();
 				}
 			});
 		}

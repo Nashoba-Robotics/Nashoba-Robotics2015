@@ -11,18 +11,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class BackElevator extends PIDSubsystem {
 
-	//This needs to be set
+	//These needs to be set
     private static final double HEIGHT_MAX = 0;
+	public static final int HEIGHT_HOLD = 0;
+	public static final int HEIGHT_OBTAIN_STEP = 0;
+	public static final int HEIGHT_OBTAIN_FLOOR = 0;
+	public static final int HEIGHT_CLOSED = 0;
 
 	static BackElevator singleton;
-    
-    /*
-     * Rear Elevator: (Controlled with petentiometer)
-     * 1) Height: Hold
-     * 2) Height: Obtain off step
-     * 3) Height: Obtain off floor / Put bin down
-     * 4) Height: Closed
-     */
     
 	AnalogPotentiometer potentiometer;
     CANTalon talon;
