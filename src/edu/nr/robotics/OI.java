@@ -3,6 +3,8 @@ package edu.nr.robotics;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
 import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
+import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
+import edu.nr.robotics.subsystems.frontElevator.FrontElevatorGoToHeightCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
@@ -35,11 +37,7 @@ public class OI
 			stickTankLeft = new Joystick(2);
 			stickTankRight = new Joystick(3);
 		}
-		if(USING_COFFIN)
-		{
-			coffin = new Joystick(1);
-		}
-		
+
 		Joystick buttonAssignmentStick;
 		if(USING_ARCADE)
 		{
@@ -52,6 +50,87 @@ public class OI
 		{
 			buttonAssignmentStick = stickTankLeft;
 		}
+		
+		if(USING_COFFIN)
+		{
+			coffin = new Joystick(1);
+			new JoystickButton(buttonAssignmentStick, 1).whenPressed(new EmptyCommand()//Height: Adjust Tote #1
+			{
+				@Override
+				public void execute()
+				{
+					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE).start();
+				}
+			});
+			//INCOMPLETE:
+			new JoystickButton(buttonAssignmentStick, 2).whenPressed(new EmptyCommand()//Height: Pick up Tote #2, release bin, grab bin, go to waiting height
+			{
+				@Override
+				public void execute()
+				{
+					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_PICK_UP_TOTE_TWO).start();
+				}
+			});
+			//INCOMPLETE:
+			new JoystickButton(buttonAssignmentStick, 3).whenPressed(new EmptyCommand()//Height: Big red button: Pick up Tote #2, go to waiting height
+			{
+				@Override
+				public void execute()
+				{
+					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_PICK_UP_TOTE_TWO).start();
+				}
+			});
+			//INCOMPLETE:
+			new JoystickButton(buttonAssignmentStick, 4).whenPressed(new EmptyCommand()//Height: Pick up Tote #2, go to score height
+			{
+				@Override
+				public void execute()
+				{
+					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_PICK_UP_TOTE_TWO).start();
+				}
+			});
+			//INCOMPLETE:
+			new JoystickButton(buttonAssignmentStick, 5).whenPressed(new EmptyCommand()//Height: Pick up Tote #1, go to score height
+			{
+				@Override
+				public void execute()
+				{
+					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_PICK_UP_TOTE_TWO).start();
+				}
+			});
+			//INCOMPLETE:
+			new JoystickButton(buttonAssignmentStick, 6).whenPressed(new EmptyCommand()
+			/* Score!:
+			 * Release bin
+			 * Elevator down, once it touches bottom, down at 5%
+			 * Go backward
+			 */
+			{
+				@Override
+				public void execute()
+				{
+					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_PICK_UP_TOTE_TWO).start();
+				}
+			});	
+			//INCOMPLETE:
+			new JoystickButton(buttonAssignmentStick, 7).whenPressed(new EmptyCommand()//Toggle top gripper
+			{
+				@Override
+				public void execute()
+				{
+					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_PICK_UP_TOTE_TWO).start();
+				}
+			});
+			new JoystickButton(buttonAssignmentStick, 8).whenPressed(new EmptyCommand()//Height: Elevator all the way down
+			{
+				@Override
+				public void execute()
+				{
+					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_MIN).start();
+				}
+			});
+		}
+		
 		
 		/* Update this whenever a button is used. Don't use one of these buttons.
 		 * Used buttons: 10,12, 1

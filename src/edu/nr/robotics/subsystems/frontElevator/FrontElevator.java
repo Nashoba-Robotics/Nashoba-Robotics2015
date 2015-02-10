@@ -15,22 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class FrontElevator extends PIDSubsystem {
 
 	public static FrontElevator singleton;
-	/*
-Front Elevator: (Controlled with laser/petentiometer)
-1) Height: Adjust Tote #1
-2) Height: Pick up Tote #2, release bin, grab bin, go to waiting height
-3) Height: Big red button: Pick up Tote #2, go to waiting height
-4) Height: Pick up Tote #2, go to score height
-4) Height: Pick up Tote #1, go to score height
-5) SCORE!
-	Release bin
-	Elevator down, once it touches bottom, down at 5%
-	Go backward
-6) Toggle top gripper
-7) Elevator all the way down
-
--) Manual control
-	 */
 	
 	//These need to be found
 	//All heights in feet
@@ -40,6 +24,8 @@ Front Elevator: (Controlled with laser/petentiometer)
 	public static final double HEIGHT_PICK_UP_TOTE_TWO = 0;
 	public static final double HEIGHT_SCORING = 0;
 	public static final double HEIGHT_MAX = 5;
+	public static final double HEIGHT_MIN = 0;
+
 	
 	public static final boolean USING_LASER = false;
 

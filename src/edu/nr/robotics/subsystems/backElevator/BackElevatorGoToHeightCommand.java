@@ -1,14 +1,14 @@
-package edu.nr.robotics.subsystems.frontElevator;
+package edu.nr.robotics.subsystems.backElevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class GoToHeightCommand extends Command {
+public class BackElevatorGoToHeightCommand extends Command {
 	double height;
-    public GoToHeightCommand(double height) {
-        requires(FrontElevator.getInstance());
+    public BackElevatorGoToHeightCommand(double height) {
+        requires(BackElevator.getInstance());
         this.height = height;
     }
 
@@ -18,7 +18,7 @@ public class GoToHeightCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	FrontElevator.getInstance().setSetpoint(height);
+    	BackElevator.getInstance().setSetpoint(height);
     }
 
     // Make this return true when this Command no longer needs to run execute()

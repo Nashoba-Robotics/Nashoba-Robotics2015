@@ -1,4 +1,7 @@
 package edu.nr.robotics;
+
+import edu.wpi.first.wpilibj.AnalogInput;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -14,6 +17,8 @@ public class RobotMap
 	public static final int rightBackTalon = 3;
 	
 	public static final int frontElevatorTalon = 87;//This needs to be set.
+	public static final int backElevatorTalon = 87;//This needs to be set.
+
 	
 	public static final int pneumaticsModule = 1;
 	public static final int doubleSolenoidForward = 0;
@@ -33,4 +38,5 @@ public class RobotMap
 
 	//SET THIS
 	public static final int POTENTIOMETER_FRONT_ELEVATOR = 0;
+	public static final int POTENTIOMETER_BACK_ELEVATOR = 0;
 }
