@@ -1,7 +1,7 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.GyroCorrectionUtil;
+import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrectionUtil;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveDistanceCommand extends Command
 {
 	private double distanceFeet, speed;
-	private GyroCorrectionUtil gyroCorrection;
+	private AngleGyroCorrectionUtil gyroCorrection;
 	
 	private double initialEncoderDistance;
 	private boolean resetEncoders = true;
@@ -20,7 +20,8 @@ public class DriveDistanceCommand extends Command
     {
     	this.distanceFeet = distanceFeet;
     	this.speed = Math.abs(speed) * Math.signum(distanceFeet);
-    	gyroCorrection = new GyroCorrectionUtil();
+    	gyroCorrection = new AngleGyroCorrectionUtil();
+    	requires(Drive.getInstance());
     }
 
     // Called just before this Command runs the first time
@@ -28,8 +29,6 @@ public class DriveDistanceCommand extends Command
     {
     }
 
-    double flip = .01;
-    
     protected void execute()
     {
 		double turn = gyroCorrection.getTurnValue();
@@ -38,7 +37,7 @@ public class DriveDistanceCommand extends Command
 		{
 			initialEncoderDistance = Drive.getInstance().getEncoderAve();
 			resetEncoders = false;
-			Drive.getInstance().setDriveP(4);
+			Drive.getInstance().setDriveP(1);
 		}
 		
 		double distanceDriven = Drive.getInstance().getEncoderAve() - initialEncoderDistance;
@@ -47,7 +46,7 @@ public class DriveDistanceCommand extends Command
 		
 		double err = (distanceFeet - distanceDriven);
 		
-		double pMove = Math.max(Math.abs(err / 6 * tempSpeed), 0.07) * Math.signum(tempSpeed);
+		double pMove = Math.max(Math.abs(err / 1* tempSpeed), 0.07) * Math.signum(tempSpeed);
 		SmartDashboard.putNumber("P Move", pMove);
 		
 		double move;
@@ -58,10 +57,9 @@ public class DriveDistanceCommand extends Command
 		
 		Drive.getInstance().arcadeDrive(move, turn);
 		
-		SmartDashboard.putNumber("Drive Distance Move", move + move * flip);
-		SmartDashboard.putNumber("Drive Distance Turn", turn + turn * flip);
-		SmartDashboard.putNumber("Err", err + err * flip);
-		flip *= -1;
+		SmartDashboard.putNumber("Drive Distance Move", move);
+		SmartDashboard.putNumber("Drive Distance Turn", turn);
+		SmartDashboard.putNumber("Drive Distance Err", err);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -85,9 +83,9 @@ public class DriveDistanceCommand extends Command
     protected void end() 
     {
     	Drive.getInstance().arcadeDrive(0, 0);
-    	gyroCorrection.stop();
+    	gyroCorrection.clearInitialValue();
     	resetEncoders = true;
-    	Drive.getInstance().setDriveP(0.5);
+    	Drive.getInstance().setDriveP(Drive.JOYSTICK_DRIVE_P);
     }
 
     // Called when another command which requires one or more of the same

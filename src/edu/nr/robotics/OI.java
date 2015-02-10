@@ -1,8 +1,8 @@
 package edu.nr.robotics;
 
-import edu.nr.robotics.subsystems.pneumatics.SolenoidForwardCommand;
-import edu.nr.robotics.subsystems.pneumatics.SolenoidOffCommand;
-import edu.nr.robotics.subsystems.pneumatics.SolenoidReverseCommand;
+import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
+import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
+import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
@@ -12,72 +12,69 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI 
 {	
-	public static final boolean USING_XBOX = true;
-	public static final boolean USING_ARCADE = true;
+	public static boolean USING_ARCADE = true;
+	public static boolean USING_SPLIT_ARCADE = false;
+	public static boolean USING_COFFIN = false;
 	
 	private static OI singleton;
 	
-	Joystick xBox;
 	Joystick stickTankLeft;
 	Joystick stickTankRight;
 	Joystick stickArcade;
+	Joystick coffin;
 	//xBox goes in 0, joystick for Arcade goes in 1, left joystick for tank goes in 2, right joystick for tank goes in 3
 	
 	private OI()
 	{
-
-
-		
-		//Use this space for assigning button numbers, then below the if/else statement, create the actual JoystickButtons using
-		//the button numbers determined here
-		int solenoidOff;
-		int solenoidForward;
-		int solenoidReverse;
-		if(USING_XBOX)
+		if(USING_ARCADE && !USING_SPLIT_ARCADE)
 		{
-			/* Update this whenever a button is used. Don't use one of these buttons.
-			 * Used buttons: 1,2,3,6
-			 */
-			solenoidOff = 1;
-			solenoidForward = 2;
-			solenoidReverse = 3;
-			xBox = new Joystick(0);
-			new JoystickButton(xBox, solenoidOff).whenPressed(new SolenoidOffCommand());
-			new JoystickButton(xBox, solenoidForward).whenPressed(new SolenoidForwardCommand());
-			new JoystickButton(xBox, solenoidReverse).whenPressed(new SolenoidReverseCommand());
-
+			stickArcade = new Joystick(0);
 		}
 		else
 		{
-			/* Update this whenever a button is used. Don't use one of these buttons.
-			 * Used buttons: 2,8,10,12
-			 */
-			solenoidOff = 8;
-			solenoidForward = 10;
-			solenoidReverse = 12;
-			stickArcade = new Joystick(1);
 			stickTankLeft = new Joystick(2);
 			stickTankRight = new Joystick(3);
-			if(USING_ARCADE)
-			{
-				new JoystickButton(stickArcade, solenoidOff).whenPressed(new SolenoidOffCommand());
-				new JoystickButton(stickArcade, solenoidForward).whenPressed(new SolenoidForwardCommand());
-				new JoystickButton(stickArcade, solenoidReverse).whenPressed(new SolenoidReverseCommand());
-			}
-			else
-			{
-				new JoystickButton(stickTankLeft, solenoidOff).whenPressed(new SolenoidOffCommand());
-				new JoystickButton(stickTankLeft, solenoidForward).whenPressed(new SolenoidForwardCommand());
-				new JoystickButton(stickTankLeft, solenoidReverse).whenPressed(new SolenoidReverseCommand());
-			}
-
 		}
-
-		//Warning: button 2 on the Logitech stick is reserved for gyro correction while driving. Do not use.
-		//button 6 on the xbox controller is reserved for gyro correction as well. See useGyroCorrection() function below.
+		if(USING_COFFIN)
+		{
+			coffin = new Joystick(1);
+		}
 		
+		Joystick buttonAssignmentStick;
+		if(USING_ARCADE)
+		{
+			if(USING_SPLIT_ARCADE)
+				buttonAssignmentStick = stickTankRight;
+			else
+				buttonAssignmentStick = stickArcade;
+		}
+		else
+		{
+			buttonAssignmentStick = stickTankLeft;
+		}
+		
+		/* Update this whenever a button is used. Don't use one of these buttons.
+		 * Used buttons: 10,12, 1
+		 */
+		new JoystickButton(buttonAssignmentStick, 3).whenPressed(new EmptyCommand()
+		{
+			@Override
+			public void execute()
+			{
+				new DrivePositionCommand(true).start();
+			}
+		});
+		new JoystickButton(buttonAssignmentStick, 4).whenPressed(new EmptyCommand()
+		{
+			@Override
+			public void execute()
+			{
+				new DriveJoystickArcadeCommand().start();
+			}
+		});
+		new JoystickButton(buttonAssignmentStick, 12).whenPressed(new DriveDistanceCommand(-14.5/12d, 0.5));
 	}
-
+	
 	public static OI getInstance()
 	{
 		init();
@@ -92,106 +89,100 @@ public class OI
 	
 	public double getArcadeMoveValue()
 	{
-		if(USING_XBOX)
+		if(USING_ARCADE)
 		{
-			return -xBox.getRawAxis(1);
+			if(USING_SPLIT_ARCADE)
+				return -stickTankLeft.getY();
+			else
+				return -stickArcade.getY();
 		}
 		else
 		{
-			return -stickArcade.getY();
+			return 0;
 		}
 	}
 	
 	public double getArcadeTurnValue()
 	{
-		if(USING_XBOX)
+		if(USING_ARCADE)
 		{
-			return -xBox.getRawAxis(4);
+			if(USING_SPLIT_ARCADE)
+				return -stickTankRight.getX();
+			else
+				return -stickArcade.getZ();
 		}
 		else
 		{
-			return -stickArcade.getZ();
+			return 0;
 		}
 	}
 
 	public double getTankLeftValue()
 	{
-		if(USING_XBOX)
-		{
-			return -xBox.getRawAxis(1);
-		}
-		else
-		{
-			return -stickTankLeft.getY();
-		}
+		if(USING_ARCADE)
+			return 0;
+		
+		return -stickTankLeft.getY();
 	}
 
 	public double getTankRightValue()
 	{
-		if(USING_XBOX)
-		{
-			return xBox.getRawAxis(3);
-		}
-		else
-		{
-			return stickTankRight.getY();
-		}
-	}
-	
-	public double getAmplifyValue()
-	{
-		if(USING_XBOX)
-		{
-			return xBox.getRawAxis(3);
-		}
-		else
-		{
+		if(USING_ARCADE)
 			return 0;
-		}
+		
+		return stickTankRight.getY();
 	}
 	
+	public double getAmplifyMultiplyer()
+	{
+		if(USING_ARCADE)
+		{
+			if(USING_SPLIT_ARCADE)
+				return stickTankRight.getRawButton(1)?2:1;
+			else
+				return stickArcade.getRawButton(1)?2:1;
+		}
+		
+		return 1;
+	}
+		
 	public double getDecreaseValue()
 	{
-		if(USING_XBOX)
-		{
-			return xBox.getRawAxis(2);
-		}
-		else
-		{
-			return 0;
-		}
+		return 1;
 	}
 	
-	public double getDefaultMaxValue()
+	public double getFrontElevatorJoy()
 	{
-		if(USING_XBOX)
+		if(USING_COFFIN)
 		{
-			return 0.5;
+			return coffin.getRawAxis(1);//THIS NEEDS TO BE SET
 		}
-		else
-		{
-			return 1;
-		}
+		return 0;
 	}
+	
+	public double getBackElevatorJoy()
+	{
+		if(USING_COFFIN)
+		{
+			return coffin.getRawAxis(1);//THIS NEEDS TO BE SET
+		}
+		return 0;
+	}
+
 	
 	/**
 	 * @return true if the DriveJoystickCommand should ignore joystick Z value and use the gyro to drive straight instead.
 	 */
 	public boolean useGyroCorrection()
 	{
-		if(USING_XBOX)
+		if(USING_ARCADE)
 		{
-			return getRawButton(6, xBox);
+			if(USING_SPLIT_ARCADE)
+				return stickTankRight.getRawButton(2);
+			else
+				return stickArcade.getRawButton(2);
 		}
-		else
-		{
-			return getRawButton(2, stickArcade);
-		}
-	}
-	
-	public boolean getRawButton(int buttonNumber, Joystick stick)
-	{
-		return stick.getRawButton(buttonNumber);
+		return false;
 	}
 }
 

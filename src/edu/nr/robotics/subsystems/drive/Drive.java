@@ -3,42 +3,37 @@ package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
-import edu.nr.robotics.subsystems.drive.commands.AutonomousCommand;
-import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickTankCommand;
-import edu.nr.robotics.subsystems.drive.commands.ResetEncoderCommand;
+import edu.nr.robotics.subsystems.drive.mxp.NavX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Gyro;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
-import edu.wpi.first.wpilibj.TalonSRX;
-import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.Ultrasonic;
 
 /**
  *
  */
 public class Drive extends Subsystem 
 {	
+	public static final double JOYSTICK_DRIVE_P = 0.5;
+	public static final double CENTER_OF_ROTATION_RELATIVE_TO_CAMERA_FEET = 16.25/12;
 	
 	private static Drive singleton;
 	
 	private AnalogInput IRSensor;
-	
-	private Gyro gyro;
 	
 	private Encoder leftEnc, rightEnc;
 	private double ticksPerRev = 256, wheelDiameter = 0.4975;
 	
 	private DigitalInput bumper1, bumper2;
 	
-	private I2C ultrasonic;
+	private Ultrasonic leftUltrasonic, rightUltrasonic;
 	
 	private PIDController leftPid, rightPid;
 	
@@ -47,12 +42,21 @@ public class Drive extends Subsystem
 	AnalogInput IRSensor2;
 	
 	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
-	private final double MAX_ENCODER_RATE = 20;
+	private final double MAX_ENCODER_RATE = 7;
+	CANTalon[] talons;
 	
 	private Drive()
 	{
-		leftMotors = new MotorPair(new TalonSRX(RobotMap.leftFrontTalon), new TalonSRX(RobotMap.leftBackTalon));
-		rightMotors = new MotorPair(new VictorSP(RobotMap.rightFrontVictor), new VictorSP(RobotMap.rightBackVictor));
+		talons = new CANTalon[4];
+		talons[0] = new CANTalon(RobotMap.leftFrontTalon);
+		talons[1] = new CANTalon(RobotMap.leftBackTalon);
+		talons[2] = new CANTalon(RobotMap.rightFrontTalon);
+		talons[3] = new CANTalon(RobotMap.rightBackTalon);
+		
+		setTalonProperties();
+		
+		leftMotors = new MotorPair(talons[0], talons[1]);
+		rightMotors = new MotorPair(talons[2], talons[3]);
 		
 		leftEnc = new Encoder(RobotMap.ENCODER1_A, RobotMap.ENCODER1_B);
 		rightEnc = new Encoder(RobotMap.ENCODER2_A, RobotMap.ENCODER2_B);
@@ -79,18 +83,19 @@ public class Drive extends Subsystem
 		
 		IRSensor2 = new AnalogInput(RobotMap.IRSensor2);
 		
-		gyro = new Gyro(RobotMap.gyro);
-		
 		bumper1 = new DigitalInput(RobotMap.BUMPER_BUTTON_1);
 		bumper2 = new DigitalInput(RobotMap.BUMPER_BUTTON_2);
 		
-		ultrasonic = new I2C(Port.kOnboard, 112);
+		leftUltrasonic = new Ultrasonic(RobotMap.VEX_LEFT_ULTRASONIC_PING, RobotMap.VEX_LEFT_ULTRASONIC_ECHO);
+		rightUltrasonic = new Ultrasonic(RobotMap.VEX_RIGHT_ULTRASONIC_PING, RobotMap.VEX_RIGHT_ULTRASONIC_ECHO);
 		
-		SmartDashboard.putData(new ResetEncoderCommand());
-		SmartDashboard.putData("Drive Forward 20", new DriveDistanceCommand(20, 0.4));
-		SmartDashboard.putData("Drive Reverse 20", new DriveDistanceCommand(-20, 0.4));
-		SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
-        SmartDashboard.putNumber("Forward Speed", 0);
+		NavX.init();
+		
+        SmartDashboard.putBoolean("Joystick Arcade?", OI.USING_ARCADE);
+        
+        SmartDashboard.putNumber("Goal X", 0);
+		SmartDashboard.putNumber("Goal Y", 0);
+		SmartDashboard.putNumber("Goal Angle", 0);
 	}
 	
 	public static Drive getInstance()
@@ -104,6 +109,17 @@ public class Drive extends Subsystem
 		if(singleton == null)
 		{
 			singleton = new Drive();
+			SmartDashboard.putData("Drive Subsystem", singleton);
+		}
+	}
+	
+	public void setTalonProperties()
+	{
+		for(int i = 0; i < talons.length; i++)
+		{
+			talons[i].enableBrakeMode(false);
+			talons[i].enableLimitSwitch(true, true);
+			//talons[i].setVoltageRampRate(0.1);
 		}
 	}
 	
@@ -147,27 +163,61 @@ public class Drive extends Subsystem
             }
         }
 
-        if (moveValue > 0.0) {
-            if (rotateValue > 0.0) {
+        if (moveValue > 0.0)
+        {
+            if (rotateValue > 0.0) 
+            {
                 leftMotorSpeed = moveValue - rotateValue;
                 rightMotorSpeed = Math.max(moveValue, rotateValue);
-            } else {
+            } 
+            else
+            {
                 leftMotorSpeed = Math.max(moveValue, -rotateValue);
                 rightMotorSpeed = moveValue + rotateValue;
             }
-        } else {
-            if (rotateValue > 0.0) {
+        } 
+        else 
+        {
+            if (rotateValue > 0.0) 
+            {
                 leftMotorSpeed = -Math.max(-moveValue, rotateValue);
                 rightMotorSpeed = moveValue + rotateValue;
-            } else {
+            } 
+            else 
+            {
                 leftMotorSpeed = moveValue - rotateValue;
                 rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
             }
         }
         rightMotorSpeed = -rightMotorSpeed;
         
+        SmartDashboard.putNumber("Arcade Left Motors", leftMotorSpeed);
+        SmartDashboard.putNumber("Arcade Right Motors", rightMotorSpeed);
+        
     	leftPid.setSetpoint(leftMotorSpeed);
         rightPid.setSetpoint(rightMotorSpeed);
+	}
+	
+	public void setPIDEnabled(boolean enabled)
+	{
+		if(enabled && !leftPid.isEnable())
+		{
+			leftPid.enable();
+			rightPid.enable();
+		}
+		else if(!enabled && leftPid.isEnable())
+		{
+			leftPid.disable();
+			rightPid.disable();
+		}
+	}
+	
+	public void setRawMotorSpeed(double left, double right)
+	{
+		setPIDEnabled(false);
+		
+		leftMotors.set(left);
+		rightMotors.set(-right);
 	}
 	
 	public void tankDrive(double leftMotorSpeed, double rightMotorSpeed)
@@ -180,11 +230,6 @@ public class Drive extends Subsystem
 	{
 		leftPid.setPID(p, 0, 0, 1);
 		rightPid.setPID(p, 0, 0, 1);
-	}
-	
-	public void resetGyro()
-	{
-		gyro.reset();
 	}
 	
 	private double limit(double num)
@@ -203,9 +248,14 @@ public class Drive extends Subsystem
 		return IRSensor.getVoltage();
 	}
 
-	public double getAngle() 
+	public double getAngleDegrees() 
 	{
-		return gyro.getAngle();
+		return NavX.getInstance().getYaw();
+	}
+	
+	public double getAngleRadians()
+	{
+		return getAngleDegrees() * (Math.PI)/180;
 	}
 	
 	public double getEncoderAve()
@@ -254,33 +304,55 @@ public class Drive extends Subsystem
 		return !bumper2.get();
 	}
 	
-	/**
-	 * Gets the distance value from the ultrasonic sensor and send a request for a new reading.
-	 * @return The distance in centimeters
-	 */
-	public int getUltrasonicValue()
+	private boolean leftUltrasonicInit = false;
+	public double getLeftUltrasonicValue()
 	{
-		//Get the last reading from the device
-		byte[] result = new byte[2];
-		ultrasonic.readOnly(result, 2);
-		
-		//Send a new read command to the device
-		ultrasonic.writeBulk(new byte[] { 81 } );
-		
-		return ((result[0] & 0xff) << 8) | (result[1] & 0xff);
+		if(!leftUltrasonicInit)
+		{
+			leftUltrasonic.setAutomaticMode(true);
+			leftUltrasonicInit = true;
+		}
+		return leftUltrasonic.getRangeInches();
 	}
 	
-	public void sendEncoderInfo()
+	private boolean rightUltrasonicInit = false;
+	public double getRightUltrasonicValue()
+	{
+		if(!rightUltrasonicInit)
+		{
+			rightUltrasonic.setAutomaticMode(true);
+			rightUltrasonicInit = true;
+		}
+		
+		return rightUltrasonic.getRangeInches();
+	}
+	
+	public void putSmartDashboardInfo()
 	{
 		SmartDashboard.putNumber("Encoder 1", getEncoder1Distance());
 		SmartDashboard.putNumber("Encoder 2", getEncoder2Distance());
 		SmartDashboard.putNumber("Encoder Average", getEncoderAve());
+		SmartDashboard.putNumber("Encoder Rate", getEncoderAverageSpeed());
 		
-		SmartDashboard.putNumber("IR 2 Voltage", IRSensor2.getVoltage());
+		/*SmartDashboard.putNumber("IR 2 Voltage", IRSensor2.getVoltage());
 		SmartDashboard.putNumber("Velocity", getEncoderAverageSpeed());
 		
 		SmartDashboard.putBoolean("Button 1", this.getBumper1());
 		SmartDashboard.putBoolean("Button 2", this.getBumper2());
+		
+		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
+		SmartDashboard.putNumber("NavX Roll", NavX.getInstance().getRoll());
+		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());*/
+		
+		SmartDashboard.putNumber("Gyro", getAngleDegrees());
+		
+		/*double ultrasonic = getRightUltrasonicValue();
+		if(ultrasonic < 225 && ultrasonic > 0)
+			SmartDashboard.putNumber("Right Ultrasonic", ultrasonic);
+		
+		ultrasonic = getLeftUltrasonicValue();
+		if(ultrasonic < 225 && ultrasonic > 0)
+			SmartDashboard.putNumber("Left Ultrasonic", ultrasonic);*/
 	}
 }
 

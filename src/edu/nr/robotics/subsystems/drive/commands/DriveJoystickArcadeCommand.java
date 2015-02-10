@@ -2,7 +2,7 @@ package edu.nr.robotics.subsystems.drive.commands;
 
 import edu.nr.robotics.OI;
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.GyroCorrectionUtil;
+import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrectionUtil;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -11,19 +11,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class DriveJoystickArcadeCommand extends Command 
 {
-	GyroCorrectionUtil gyroCorrection;
+	AngleGyroCorrectionUtil gyroCorrection;
 	
     public DriveJoystickArcadeCommand() 
     {
         requires(Drive.getInstance());
-        gyroCorrection = new GyroCorrectionUtil();
+        gyroCorrection = new AngleGyroCorrectionUtil();
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     }
 
-    private final double deadZone = 0.05;
+    private final double deadZone = 0.1;
     
     // Called repeatedly when this Command is scheduled to run
     protected void execute()
@@ -44,13 +44,7 @@ public class DriveJoystickArcadeCommand extends Command
     		rawMoveValue *= (1 / (1 - deadZone));
     	}
     	
-    	
-    	//Determine scale value based off trigger values. This will always be 1 for the logitech joystick.
-    	double scaleDrive = OI.getInstance().getDefaultMaxValue() 
-    			- (OI.getInstance().getDecreaseValue()*0.4) 
-    			+ (OI.getInstance().getAmplifyValue()*0.4);
-    	
-    	double driveMagnitude = rawMoveValue * scaleDrive;
+    	double driveMagnitude = rawMoveValue/2 * OI.getInstance().getAmplifyMultiplyer();
     	double turn;
     	
     	if(OI.getInstance().useGyroCorrection())
@@ -75,15 +69,13 @@ public class DriveJoystickArcadeCommand extends Command
         		rawTurn += deadZone;
         		rawTurn *= (1 / (1 - deadZone));
         	}
-    		turn = rawTurn * scaleDrive;
+    		turn = rawTurn /2 * OI.getInstance().getAmplifyMultiplyer();
     		
-    		gyroCorrection.stop();
+    		gyroCorrection.clearInitialValue();
     	}
     	
     	SmartDashboard.putNumber("Drive Magnitude", driveMagnitude);
-    	SmartDashboard.putNumber("Turn", turn);
-    	SmartDashboard.putNumber("scaleDrive", scaleDrive);
-    	
+    	SmartDashboard.putNumber("Turn", turn);    	
 
     	Drive.getInstance().arcadeDrive(driveMagnitude, turn, false);
     }
@@ -98,7 +90,7 @@ public class DriveJoystickArcadeCommand extends Command
     protected void end() 
     {
     	Drive.getInstance().arcadeDrive(0, 0);
-    	gyroCorrection.stop();
+    	gyroCorrection.clearInitialValue();
     }
 
     // Called when another command which requires one or more of the same

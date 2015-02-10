@@ -1,14 +1,17 @@
-package edu.nr.robotics.subsystems.pneumatics;
+package edu.nr.robotics.subsystems.backElevator;
 
+import edu.nr.robotics.OI;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class SolenoidOffCommand extends Command {
+public class BackElevatorIdleCommand extends Command {
 
-    public SolenoidOffCommand() {
-    	requires(Pneumatics.getInstance());
+    private static final double JOYSTICK_ADJUSTMENT_VALUE = 0.2;
+
+	public BackElevatorIdleCommand() {
+        requires(BackElevator.getInstance());
     }
 
     // Called just before this Command runs the first time
@@ -17,12 +20,15 @@ public class SolenoidOffCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Pneumatics.getInstance().solenoidOff();
+    	if(Math.abs(OI.getInstance().getBackElevatorJoy()) > 0.05)
+    	{
+    		BackElevator.getInstance().setSetpoint(BackElevator.getInstance().getSetpoint() + OI.getInstance().getBackElevatorJoy()*JOYSTICK_ADJUSTMENT_VALUE );
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return false;
     }
 
     // Called once after isFinished returns true

@@ -6,10 +6,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MotorPair implements PIDOutput
 {
+	private static int count = 1;
+	
 	private SpeedController first, second;
+	private int num;
 	
 	public MotorPair(SpeedController first, SpeedController second)
 	{
+		num = count;
+		count++;
 		this.first = first;
 		this.second = second;
 	}
@@ -17,14 +22,9 @@ public class MotorPair implements PIDOutput
 	@Override
 	public void pidWrite(double output) 
 	{
-		if(output  < 0)
-			output = Math.max(-0.7, output);
-		else
-			output = Math.min(0.7, output);
-		
 		first.set(output);
 		second.set(output);
-		SmartDashboard.putNumber("MotorPair", output);
+		SmartDashboard.putNumber("MotorPair " + num + " actual output", output);
 	}
 	
 	public void set(double output)

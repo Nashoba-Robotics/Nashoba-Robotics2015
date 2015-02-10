@@ -1,9 +1,9 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
-import edu.nr.robotics.Fieldcentric;
+import edu.nr.robotics.subsystems.drive.mxp.NavX;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ResetFieldcentricCommand extends Command
+public class ZeroNavXCommand extends Command
 {
 	@Override
 	protected void initialize() {
@@ -11,20 +11,18 @@ public class ResetFieldcentricCommand extends Command
 	}
 
 	@Override
-	protected void execute() 
+	protected void execute()
 	{
-		Fieldcentric.getRobotInstance().reset();
+		NavX.getInstance().resetAll();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	protected void end() {
-		// TODO Auto-generated method stub
 		
 	}
 
