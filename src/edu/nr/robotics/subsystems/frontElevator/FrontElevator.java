@@ -3,9 +3,9 @@ package edu.nr.robotics.subsystems.frontElevator;
 import edu.nr.robotics.CantTalon;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.I2C;
+import edu.nr.robotics.subsystems.drive.MotorPair;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorIdleCommand;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class FrontElevator extends PIDSubsystem {
-
 	public static FrontElevator singleton;
 	
 	//These need to be found
@@ -33,7 +32,9 @@ public class FrontElevator extends PIDSubsystem {
 
 	AnalogPotentiometer potentiometer;
 	LIDAR laser;
-    CantTalon talon;
+    CantTalon talon1;
+    CantTalon talon2;
+    MotorPair motors;
     
     private DoubleSolenoid binGrabber;
 
@@ -42,8 +43,9 @@ public class FrontElevator extends PIDSubsystem {
     	//Only need the P, I, D terms in this case (because our elevator has no back-drive, so motors can be cut when at target)
     	super("Front Elevator", 0, 0, 0);
     	
-    	talon = new CantTalon(RobotMap.frontElevatorTalon);
-    	
+    	talon1 = new CantTalon(RobotMap.frontElevatorTalon1);
+    	talon2 = new CantTalon(RobotMap.frontElevatorTalon2);
+    	motors = new MotorPair(talon1, talon2);
 		laser = new LIDAR(I2C.Port.kMXP);
 		laser.start(); //Start polling
 		
@@ -91,7 +93,7 @@ public class FrontElevator extends PIDSubsystem {
     
     protected void usePIDOutput(double output) 
     {
-        talon.set(output);
+        motors.set(output);
     }
     
     public void binGrabberForward()
