@@ -30,7 +30,7 @@ public class RobotMap
 	public static final int ENCODER_LEFT_A = 7, ENCODER_LEFT_B = 6;
 	public static final int ENCODER_RIGHT_A = 9, ENCODER_RIGHT_B = 8;
 	
-	public static final int BUMPER_BUTTON_1 = 0, BUMPER_BUTTON_2 = 1;
+	public static final int BUMPER_BUTTON_LEFT = 4, BUMPER_BUTTON_RIGHT = 5;
 	
 	public static final int LASER_RANGING_MODULE = 0x62; //Provided by documentation.
 

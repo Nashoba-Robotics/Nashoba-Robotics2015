@@ -31,7 +31,7 @@ public class Drive extends Subsystem
 	private Encoder leftEnc, rightEnc;
 	private double ticksPerRev = 256, wheelDiameter = 0.4975;
 	
-	private DigitalInput bumper1, bumper2;
+	private DigitalInput bumperButtonLeft, bumperButtonRight;
 	
 	private PIDController leftPid, rightPid;
 	
@@ -82,8 +82,8 @@ public class Drive extends Subsystem
 		
 		IRSensor2 = new AnalogInput(RobotMap.IRSensor2);
 		
-		bumper1 = new DigitalInput(RobotMap.BUMPER_BUTTON_1);
-		bumper2 = new DigitalInput(RobotMap.BUMPER_BUTTON_2);
+		bumperButtonLeft = new DigitalInput(RobotMap.BUMPER_BUTTON_LEFT);
+		bumperButtonRight = new DigitalInput(RobotMap.BUMPER_BUTTON_RIGHT);
 		
 		NavX.init();
 		
@@ -292,12 +292,12 @@ public class Drive extends Subsystem
 	
 	public boolean getBumper1()
 	{
-		return !bumper1.get();
+		return !bumperButtonLeft.get();
 	}
 	
 	public boolean getBumper2()
 	{
-		return !bumper2.get();
+		return !bumperButtonRight.get();
 	}
 	
 	public void putSmartDashboardInfo()
