@@ -1,5 +1,6 @@
 package edu.nr.robotics.subsystems.backElevator;
 
+import edu.nr.robotics.CantTalon;
 import edu.nr.robotics.RobotMap;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.CANTalon;
@@ -21,13 +22,13 @@ public class BackElevator extends PIDSubsystem {
 	static BackElevator singleton;
     
 	AnalogPotentiometer potentiometer;
-    CANTalon talon;
+	CantTalon talon;
     
     public BackElevator() {
     	super("Back Elevator", 0, 0, 0);
         // setSetpoint() -  Sets where the PID controller should move the system to
         enable();
-    	talon = new CANTalon(RobotMap.backElevatorTalon);
+    	talon = new CantTalon(RobotMap.backElevatorTalon);
 		potentiometer = new AnalogPotentiometer(RobotMap.POTENTIOMETER_BACK_ELEVATOR, HEIGHT_MAX, -HEIGHT_MAX/2);
     }
     

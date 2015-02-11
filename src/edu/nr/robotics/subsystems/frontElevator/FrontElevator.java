@@ -1,5 +1,6 @@
 package edu.nr.robotics.subsystems.frontElevator;
 
+import edu.nr.robotics.CantTalon;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.I2C;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorIdleCommand;
@@ -32,7 +33,7 @@ public class FrontElevator extends PIDSubsystem {
 
 	AnalogPotentiometer potentiometer;
 	LIDAR laser;
-    CANTalon talon;
+    CantTalon talon;
     
     private DoubleSolenoid binGrabber;
 
@@ -41,7 +42,7 @@ public class FrontElevator extends PIDSubsystem {
     	//Only need the P, I, D terms in this case (because our elevator has no back-drive, so motors can be cut when at target)
     	super("Front Elevator", 0, 0, 0);
     	
-    	talon = new CANTalon(RobotMap.frontElevatorTalon);
+    	talon = new CantTalon(RobotMap.frontElevatorTalon);
     	
 		laser = new LIDAR(I2C.Port.kMXP);
 		laser.start(); //Start polling
