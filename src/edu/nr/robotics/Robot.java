@@ -1,6 +1,7 @@
 
 package edu.nr.robotics;
 
+import edu.nr.robotics.subsystems.TestsubSystem;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.commands.AutonomousCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
@@ -9,7 +10,6 @@ import edu.nr.robotics.subsystems.drive.commands.DriveForwardCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveIdleCommand;
 import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
 import edu.nr.robotics.subsystems.drive.commands.ResetEncoderCommand;
-import edu.nr.robotics.subsystems.drive.commands.ResetFieldcentricCommand;
 import edu.nr.robotics.subsystems.drive.commands.SetTalonProperties;
 import edu.nr.robotics.subsystems.drive.commands.ZeroNavXCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
@@ -33,12 +33,11 @@ public class Robot extends IterativeRobot
     {
     	pdp = new PowerDistributionPanel();
     	
-		OI.init();
+		/*OI.init();
 		Drive.init();
-		FrontElevator.init();
+		FrontElevator.init();*/
+		TestsubSystem.getInstance();
 		
-		SmartDashboard.putData("Drive at SmartDashboard Speed", new DriveForwardCommand(false));
-		SmartDashboard.putData("Reset Field Values", new ResetFieldcentricCommand());
 		SmartDashboard.putData("Drive 15 degrees", new DriveAngleCommand(15 * Math.PI/180));
 		SmartDashboard.putData("Manual Drive Position", new DrivePositionCommand(false));
 		SmartDashboard.putData("RoboRealms Drive Position", new DrivePositionCommand(true));
@@ -47,6 +46,16 @@ public class Robot extends IterativeRobot
 		SmartDashboard.putData(new ResetEncoderCommand());
 		SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
         SmartDashboard.putData(new ZeroNavXCommand());
+        
+        SmartDashboard.putNumber("Test speed", 0);
+        SmartDashboard.putData(new EmptyCommand("Set")
+        {
+        	@Override
+        	public void execute()
+        	{
+        		TestsubSystem.getInstance().set(SmartDashboard.getNumber("Test speed"));
+        	}
+        });
 		
         // instantiate the command used for the autonomous period
         autonomousCommand = new DriveIdleCommand();

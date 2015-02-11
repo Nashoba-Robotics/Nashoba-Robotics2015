@@ -3,23 +3,30 @@ package edu.nr.robotics;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class CantTalon implements SpeedController, PIDOutput
 {
+	private int deviceNum;
+	
 	CANTalon talon;
 	public CantTalon(int deviceNumber) 
 	{
 		talon = new CANTalon(deviceNumber);
 		initThread();
+		deviceNum = deviceNumber;
 	}
 	
-	private double previousSetValueTime = -1;
+	private long previousSetValueTime = -1;
 	private double targetValue = 0;
 	private double voltageRampRate = 0;
 	private boolean rampEnabled = false;
+	private double currentSetValue = 0;
 	
 	public void set(double value)
 	{
+		value = Math.signum(value) * Math.min(1, Math.abs(value));
+		
 		if(rampEnabled)
 		{
 			targetValue = value;
@@ -34,12 +41,13 @@ public class CantTalon implements SpeedController, PIDOutput
 	{
 		previousSetValueTime = System.currentTimeMillis();
 		talon.set(value);
+		currentSetValue = value;
 	}
 	
-	public void setVoltageRampRate(double voltsPerSecond)
+	public void setVoltageRampRate(double percentPerSecond)
 	{
 		rampEnabled = true;
-		voltageRampRate = Math.abs(voltsPerSecond);
+		voltageRampRate = Math.abs(percentPerSecond);
 	}
 	
 	public void disableVoltageRamp()
@@ -60,14 +68,22 @@ public class CantTalon implements SpeedController, PIDOutput
 						previousSetValueTime = System.currentTimeMillis();
 					else
 					{
-						double deltaTime = (System.currentTimeMillis() - previousSetValueTime) *1000;
+						double deltaTime = (System.currentTimeMillis() - previousSetValueTime) / 1000d;
 						
-						double currentSetValue = talon.get();
+						if(deviceNum == RobotMap.HDriveTalon)
+						{
+							SmartDashboard.putNumber("Delta Time", deltaTime);
+							SmartDashboard.putNumber("Talon Get", currentSetValue);
+						}
 						
 						double incrementSign = Math.signum(targetValue - currentSetValue);
+						
 						double incrementValue = voltageRampRate * deltaTime;
 						
 						incrementValue = incrementSign * Math.min(incrementValue, Math.abs(targetValue - currentSetValue));
+						
+						if(deviceNum == RobotMap.HDriveTalon)
+							SmartDashboard.putNumber("Increment per second", incrementValue / deltaTime);
 						
 						rawSet(currentSetValue + incrementValue);
 					}
