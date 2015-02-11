@@ -1,6 +1,7 @@
 
 package edu.nr.robotics.subsystems.drive;
 
+import edu.nr.robotics.CantTalon;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
@@ -43,15 +44,15 @@ public class Drive extends Subsystem
 	
 	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
 	private final double MAX_ENCODER_RATE = 7;
-	CANTalon[] talons;
+	CantTalon[] talons;
 	
 	private Drive()
 	{
-		talons = new CANTalon[4];
-		talons[0] = new CANTalon(RobotMap.leftFrontTalon);
-		talons[1] = new CANTalon(RobotMap.leftBackTalon);
-		talons[2] = new CANTalon(RobotMap.rightFrontTalon);
-		talons[3] = new CANTalon(RobotMap.rightBackTalon);
+		talons = new CantTalon[4];
+		talons[0] = new CantTalon(RobotMap.leftFrontTalon);
+		talons[1] = new CantTalon(RobotMap.leftBackTalon);
+		talons[2] = new CantTalon(RobotMap.rightFrontTalon);
+		talons[3] = new CantTalon(RobotMap.rightBackTalon);
 		
 		setTalonProperties();
 		
