@@ -107,6 +107,11 @@ public class FrontElevator extends PIDSubsystem {
 		binGrabber.set(Value.kOff);
 	}
     
+    public Value getBinGrabber()
+    {
+    	return binGrabber.get();
+    }
+    
     public void startLaserPolling()
 	{
 		laser.start(100);

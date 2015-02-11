@@ -2,15 +2,9 @@ package edu.nr.robotics;
 
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
-import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
-import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
-import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
+import edu.nr.robotics.subsystems.drive.commands.*;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
-import edu.nr.robotics.subsystems.frontElevator.commands.FirstToteTwoGroup;
-import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
-import edu.nr.robotics.subsystems.frontElevator.commands.ToteOneToScoreGroup;
-import edu.nr.robotics.subsystems.frontElevator.commands.ToteTwoToScoreGroup;
-import edu.nr.robotics.subsystems.frontElevator.commands.ToteTwoToWaitGroup;
+import edu.nr.robotics.subsystems.frontElevator.commands.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
@@ -66,72 +60,19 @@ public class OI
 			new JoystickButton(buttonAssignmentStick, 3).whenPressed(new ToteTwoToWaitGroup());
 			new JoystickButton(buttonAssignmentStick, 4).whenPressed(new ToteTwoToScoreGroup());
 			new JoystickButton(buttonAssignmentStick, 5).whenPressed(new ToteOneToScoreGroup());
-			//INCOMPLETE:
-			new JoystickButton(buttonAssignmentStick, 6).whenPressed(new EmptyCommand()
-			/* Score!:
-			 * Release bin
-			 * Elevator down, once it touches bottom, down at 5%
-			 * Go backward
-			 */
-			{
-				@Override
-				public void execute()
-				{
-					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_PICK_UP_TOTE_TWO).start();
-				}
-			});	
-			//INCOMPLETE:
-			new JoystickButton(buttonAssignmentStick, 7).whenPressed(new EmptyCommand()//Toggle top gripper
-			{
-				@Override
-				public void execute()
-				{
-					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_PICK_UP_TOTE_TWO).start();
-				}
-			});
-			new JoystickButton(buttonAssignmentStick, 8).whenPressed(new EmptyCommand()//Height: Elevator all the way down
-			{
-				@Override
-				public void execute()
-				{
-					new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_MIN).start();
-				}
-			});
+			new JoystickButton(buttonAssignmentStick, 6).whenPressed(new ScoreGroup());	
+			new JoystickButton(buttonAssignmentStick, 7).whenPressed(new ToggleBinCommand());
+			new JoystickButton(buttonAssignmentStick, 8).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_MIN));
 
 		    //Back Elevator Buttons
 			new JoystickButton(buttonAssignmentStick, 9).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_HOLD));
 			new JoystickButton(buttonAssignmentStick, 10).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_STEP));
 			new JoystickButton(buttonAssignmentStick, 11).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_FLOOR));
-			new JoystickButton(buttonAssignmentStick, 12).whenPressed(new EmptyCommand()//Height: Closed
-			{
-				@Override
-				public void execute()
-				{
-					new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_CLOSED).start();
-				}
-			});
+			new JoystickButton(buttonAssignmentStick, 12).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_CLOSED));
 		}
 		
-		
-		/* Update this whenever a button is used. Don't use one of these buttons.
-		 * Used buttons: 10,12, 1
-		 */
-		new JoystickButton(buttonAssignmentStick, 3).whenPressed(new EmptyCommand()
-		{
-			@Override
-			public void execute()
-			{
-				new DrivePositionCommand(true).start();
-			}
-		});
-		new JoystickButton(buttonAssignmentStick, 4).whenPressed(new EmptyCommand()
-		{
-			@Override
-			public void execute()
-			{
-				new DriveJoystickArcadeCommand().start();
-			}
-		});
+		new JoystickButton(buttonAssignmentStick, 3).whenPressed(new DrivePositionCommand(true));
+		new JoystickButton(buttonAssignmentStick, 4).whenPressed(new DriveJoystickArcadeCommand());
 		new JoystickButton(buttonAssignmentStick, 12).whenPressed(new DriveDistanceCommand(-14.5/12d, 0.5));
 	}
 	
