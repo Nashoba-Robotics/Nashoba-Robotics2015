@@ -48,10 +48,10 @@ public class Drive extends Subsystem
 	private Drive()
 	{
 		talons = new CantTalon[4];
-		talons[0] = new CantTalon(RobotMap.leftFrontTalon);
-		talons[1] = new CantTalon(RobotMap.leftBackTalon);
-		talons[2] = new CantTalon(RobotMap.rightFrontTalon);
-		talons[3] = new CantTalon(RobotMap.rightBackTalon);
+		talons[0] = new CantTalon(RobotMap.leftDriveTalon1);
+		talons[1] = new CantTalon(RobotMap.leftDriveTalon2);
+		talons[2] = new CantTalon(RobotMap.rightDriveTalon1);
+		talons[3] = new CantTalon(RobotMap.rightDriveTalon2);
 		
 		setTalonProperties();
 		

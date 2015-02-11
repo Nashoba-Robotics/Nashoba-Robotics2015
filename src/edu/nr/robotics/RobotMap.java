@@ -8,15 +8,18 @@ package edu.nr.robotics;
  */
 public class RobotMap 
 {
-	public static final int leftFrontTalon = 5;
-	public static final int leftBackTalon = 4;
+	public static final int leftDriveTalon1 = 12;
+	public static final int leftDriveTalon2 = 13;
 	
-	public static final int rightFrontTalon = 2;
-	public static final int rightBackTalon = 3;
+	public static final int rightDriveTalon1 = 0;
+	public static final int rightDriveTalon2 = 3;
 	
-	public static final int frontElevatorTalon = 87;//This needs to be set.
-	public static final int backElevatorTalon = 87;//This needs to be set.
-
+	public static final int middleDriveTalon = 4;
+	
+	public static final int frontElevatorTalon1 = 2;
+	public static final int frontElevatorTalon2 = 1;
+	public static final int backElevatorTalon1 = 15;
+	public static final int backElevatorTalon2 = 14;
 	
 	public static final int pneumaticsModule = 1;
 	public static final int doubleSolenoidForward = 0;
