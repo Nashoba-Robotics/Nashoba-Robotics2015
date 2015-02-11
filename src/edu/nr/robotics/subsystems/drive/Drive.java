@@ -33,8 +33,6 @@ public class Drive extends Subsystem
 	
 	private DigitalInput bumper1, bumper2;
 	
-	private Ultrasonic leftUltrasonic, rightUltrasonic;
-	
 	private PIDController leftPid, rightPid;
 	
 	MotorPair leftMotors, rightMotors;
@@ -50,6 +48,7 @@ public class Drive extends Subsystem
 		talons = new CantTalon[4];
 		talons[0] = new CantTalon(RobotMap.leftDriveTalon1);
 		talons[1] = new CantTalon(RobotMap.leftDriveTalon2);
+		
 		talons[2] = new CantTalon(RobotMap.rightDriveTalon1);
 		talons[3] = new CantTalon(RobotMap.rightDriveTalon2);
 		
@@ -58,8 +57,8 @@ public class Drive extends Subsystem
 		leftMotors = new MotorPair(talons[0], talons[1]);
 		rightMotors = new MotorPair(talons[2], talons[3]);
 		
-		leftEnc = new Encoder(RobotMap.ENCODER1_A, RobotMap.ENCODER1_B);
-		rightEnc = new Encoder(RobotMap.ENCODER2_A, RobotMap.ENCODER2_B);
+		leftEnc = new Encoder(RobotMap.ENCODER_LEFT_A, RobotMap.ENCODER_LEFT_B);
+		rightEnc = new Encoder(RobotMap.ENCODER_RIGHT_A, RobotMap.ENCODER_RIGHT_B);
 		
 		leftEnc.setPIDSourceParameter(PIDSourceParameter.kRate);
 		rightEnc.setPIDSourceParameter(PIDSourceParameter.kRate);
@@ -85,9 +84,6 @@ public class Drive extends Subsystem
 		
 		bumper1 = new DigitalInput(RobotMap.BUMPER_BUTTON_1);
 		bumper2 = new DigitalInput(RobotMap.BUMPER_BUTTON_2);
-		
-		leftUltrasonic = new Ultrasonic(RobotMap.VEX_LEFT_ULTRASONIC_PING, RobotMap.VEX_LEFT_ULTRASONIC_ECHO);
-		rightUltrasonic = new Ultrasonic(RobotMap.VEX_RIGHT_ULTRASONIC_PING, RobotMap.VEX_RIGHT_ULTRASONIC_ECHO);
 		
 		NavX.init();
 		
@@ -304,29 +300,6 @@ public class Drive extends Subsystem
 		return !bumper2.get();
 	}
 	
-	private boolean leftUltrasonicInit = false;
-	public double getLeftUltrasonicValue()
-	{
-		if(!leftUltrasonicInit)
-		{
-			leftUltrasonic.setAutomaticMode(true);
-			leftUltrasonicInit = true;
-		}
-		return leftUltrasonic.getRangeInches();
-	}
-	
-	private boolean rightUltrasonicInit = false;
-	public double getRightUltrasonicValue()
-	{
-		if(!rightUltrasonicInit)
-		{
-			rightUltrasonic.setAutomaticMode(true);
-			rightUltrasonicInit = true;
-		}
-		
-		return rightUltrasonic.getRangeInches();
-	}
-	
 	public void putSmartDashboardInfo()
 	{
 		SmartDashboard.putNumber("Encoder 1", getEncoder1Distance());
@@ -345,14 +318,6 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());*/
 		
 		SmartDashboard.putNumber("Gyro", getAngleDegrees());
-		
-		/*double ultrasonic = getRightUltrasonicValue();
-		if(ultrasonic < 225 && ultrasonic > 0)
-			SmartDashboard.putNumber("Right Ultrasonic", ultrasonic);
-		
-		ultrasonic = getLeftUltrasonicValue();
-		if(ultrasonic < 225 && ultrasonic > 0)
-			SmartDashboard.putNumber("Left Ultrasonic", ultrasonic);*/
 	}
 }
 

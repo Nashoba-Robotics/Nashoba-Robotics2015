@@ -3,11 +3,11 @@ package edu.nr.robotics;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class EmptyCommand extends Command
+public abstract class EmptyCommand extends Command
 {
-	public EmptyCommand()
+	public EmptyCommand(String name)
 	{
-		
+		super(name);
 	}
 	public EmptyCommand(Subsystem requires)
 	{
@@ -17,12 +17,6 @@ public class EmptyCommand extends Command
 	@Override
 	protected void initialize() 
 	{
-	}
-
-	@Override
-	protected void execute() 
-	{
-		
 	}
 
 	@Override

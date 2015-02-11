@@ -14,7 +14,7 @@ public class RobotMap
 	public static final int rightDriveTalon1 = 0;
 	public static final int rightDriveTalon2 = 3;
 	
-	public static final int middleDriveTalon = 4;
+	public static final int HDriveTalon = 4;
 	
 	public static final int frontElevatorTalon1 = 2;
 	public static final int frontElevatorTalon2 = 1;
@@ -27,13 +27,10 @@ public class RobotMap
 	
 	public static final int IRSensor = 1, IRSensor2 = 2;
 	
-	public static final int ENCODER1_A = 0, ENCODER1_B = 1;
-	public static final int ENCODER2_A = 2, ENCODER2_B = 3;
+	public static final int ENCODER_LEFT_A = 7, ENCODER_LEFT_B = 6;
+	public static final int ENCODER_RIGHT_A = 9, ENCODER_RIGHT_B = 8;
 	
-	public static final int VEX_LEFT_ULTRASONIC_PING = 6, VEX_LEFT_ULTRASONIC_ECHO = 9;
-	public static final int VEX_RIGHT_ULTRASONIC_PING = 4, VEX_RIGHT_ULTRASONIC_ECHO = 5;
-	
-	public static final int BUMPER_BUTTON_1 = 7, BUMPER_BUTTON_2 = 8;
+	public static final int BUMPER_BUTTON_1 = 0, BUMPER_BUTTON_2 = 1;
 	
 	public static final int LASER_RANGING_MODULE = 0x62; //Provided by documentation.
 
