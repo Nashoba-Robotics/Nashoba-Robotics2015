@@ -16,7 +16,7 @@ public class ScoreGroup extends CommandGroup {
 		 * Go backward
 		 */
     	addSequential(new ReleaseBinCommand());
-    	addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_MIN));
+    	addSequential(new FrontElevatorGoToHeightCommand(0));
     	addSequential(new DriveDistanceCommand(-5, 0.5));
     }
 }

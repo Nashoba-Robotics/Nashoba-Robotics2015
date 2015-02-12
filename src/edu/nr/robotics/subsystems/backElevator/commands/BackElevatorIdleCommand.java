@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class BackElevatorIdleCommand extends Command {
+public class BackElevatorIdleCommand extends CMD {
 
     private static final double JOYSTICK_ADJUSTMENT_VALUE = 0.2;
 

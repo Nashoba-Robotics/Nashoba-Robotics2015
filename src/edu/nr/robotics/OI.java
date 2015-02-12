@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI 
 {	
 	public static boolean USING_ARCADE = true;
-	public static boolean USING_SPLIT_ARCADE = false;
+	public static boolean USING_SPLIT_ARCADE = true;
 	public static boolean USING_COFFIN = false;
 	
 	private static OI singleton;
@@ -24,7 +24,7 @@ public class OI
 	Joystick stickTankRight;
 	Joystick stickArcade;
 	Joystick coffin;
-	//xBox goes in 0, joystick for Arcade goes in 1, left joystick for tank goes in 2, right joystick for tank goes in 3
+	//joystick for Arcade goes in 0, left joystick for tank goes in 2, right joystick for tank goes in 3
 	
 	private OI()
 	{
@@ -62,7 +62,7 @@ public class OI
 			new JoystickButton(buttonAssignmentStick, 5).whenPressed(new ToteOneToScoreGroup());
 			new JoystickButton(buttonAssignmentStick, 6).whenPressed(new ScoreGroup());	
 			new JoystickButton(buttonAssignmentStick, 7).whenPressed(new ToggleBinCommand());
-			new JoystickButton(buttonAssignmentStick, 8).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_MIN));
+			new JoystickButton(buttonAssignmentStick, 8).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.POT_MIN));
 
 		    //Back Elevator Buttons
 			new JoystickButton(buttonAssignmentStick, 9).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_HOLD));

@@ -2,6 +2,7 @@
 package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.robotics.CantTalon;
+import edu.nr.robotics.MotorPair;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
@@ -121,14 +122,14 @@ public class Drive extends Subsystem
 	
 	public void initDefaultCommand()
 	{
-		if(OI.USING_ARCADE)
+		/*if(OI.USING_ARCADE)
 		{
 			setDefaultCommand(new DriveJoystickArcadeCommand());
 		}
 		else
 		{
 			setDefaultCommand(new DriveJoystickTankCommand());
-		}
+		}*/
     }
 
 	public void arcadeDrive(double moveValue, double rotateValue)

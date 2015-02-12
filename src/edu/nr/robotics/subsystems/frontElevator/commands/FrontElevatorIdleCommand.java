@@ -2,12 +2,13 @@ package edu.nr.robotics.subsystems.frontElevator.commands;
 
 import edu.nr.robotics.OI;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class FrontElevatorIdleCommand extends Command {
+public class FrontElevatorIdleCommand extends CMD {
 	
     private static final double JOYSTICK_ADJUSTMENT_VALUE = 0.2;
     
@@ -21,12 +22,14 @@ public class FrontElevatorIdleCommand extends Command {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-    	if(Math.abs(OI.getInstance().getFrontElevatorJoy()) > 0.05)
+    protected void execute() 
+    {
+    	/*if(Math.abs(OI.getInstance().getFrontElevatorJoy()) > 0.05)
     	{
     		FrontElevator.getInstance().setSetpoint(FrontElevator.getInstance().getSetpoint() + OI.getInstance().getFrontElevatorJoy()*JOYSTICK_ADJUSTMENT_VALUE );
-    	}
-    	FrontElevator.getInstance().binGrabberOff();
+    	}*/
+    	
+		FrontElevator.getInstance().binGrabberOff();
     }
 
     // Make this return true when this Command no longer needs to run execute()

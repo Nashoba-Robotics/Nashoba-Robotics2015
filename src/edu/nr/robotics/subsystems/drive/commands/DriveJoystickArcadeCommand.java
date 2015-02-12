@@ -1,32 +1,36 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
 import edu.nr.robotics.OI;
+import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrectionUtil;
+import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrection;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class DriveJoystickArcadeCommand extends Command 
+public class DriveJoystickArcadeCommand extends CMD 
 {
-	AngleGyroCorrectionUtil gyroCorrection;
+	AngleGyroCorrection gyroCorrection;
 	
     public DriveJoystickArcadeCommand() 
     {
         requires(Drive.getInstance());
-        gyroCorrection = new AngleGyroCorrectionUtil();
+        gyroCorrection = new AngleGyroCorrection();
     }
 
-    // Called just before this Command runs the first time
-    protected void initialize() {
-    }
+    @Override
+	protected void onStart()
+    {
+		
+	}
 
     private final double deadZone = 0.1;
     
     // Called repeatedly when this Command is scheduled to run
-    protected void execute()
+    @Override
+    protected void onExecute()
     {
     	double rawMoveValue = OI.getInstance().getArcadeMoveValue();
     	if(rawMoveValue < deadZone && rawMoveValue > -deadZone)
@@ -87,17 +91,9 @@ public class DriveJoystickArcadeCommand extends Command
     }
 
     // Called once after isFinished returns true
-    protected void end() 
+    protected void onEnd(boolean interrupted) 
     {
     	Drive.getInstance().arcadeDrive(0, 0);
     	gyroCorrection.clearInitialValue();
-    }
-
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted()
-    {
-    	//Cleanup is the same whether ending peacefully or not (in this case)
-    	end();
     }
 }

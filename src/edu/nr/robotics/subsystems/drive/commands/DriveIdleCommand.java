@@ -1,23 +1,26 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
+import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class DriveIdleCommand extends Command {
+public class DriveIdleCommand extends CMD {
 
     public DriveIdleCommand() {
         requires(Drive.getInstance());
     }
 
-    // Called just before this Command runs the first time
-    protected void initialize() {
+    @Override
+    protected void onStart()
+    {
+    	
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
+    protected void onExecute() {
     	Drive.getInstance().arcadeDrive(0, 0);
     }
 
@@ -27,11 +30,8 @@ public class DriveIdleCommand extends Command {
     }
 
     // Called once after isFinished returns true
-    protected void end() {
-    }
-
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() {
+    protected void onEnd(boolean interrupted)
+    {
+    	
     }
 }

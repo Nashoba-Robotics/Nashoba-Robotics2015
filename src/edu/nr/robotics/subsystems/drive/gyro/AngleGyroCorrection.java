@@ -2,7 +2,7 @@ package edu.nr.robotics.subsystems.drive.gyro;
 
 import edu.nr.robotics.subsystems.drive.Drive;
 
-public class AngleGyroCorrectionUtil extends GyroCorrection
+public class AngleGyroCorrection extends GyroCorrection
 {
 	private double initialAngle;
 	

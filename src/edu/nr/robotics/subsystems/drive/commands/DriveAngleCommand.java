@@ -1,5 +1,6 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
+import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.GyroPIDSource;
 import edu.nr.robotics.subsystems.drive.RotationPIDOutput;
@@ -10,9 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class DriveAngleCommand extends Command 
+public class DriveAngleCommand extends CMD 
 {
-	boolean reset = true;
 	double targetDeltaAngleRadians;
 	PIDController pidController;
 	GyroPIDSource gyroSource;
@@ -26,22 +26,16 @@ public class DriveAngleCommand extends Command
     	this.targetDeltaAngleRadians = targetDeltaAngleRadians;
     }
 
-    // Called just before this Command runs the first time
-    protected void initialize()
-    {
-    	
-    }
+    @Override
+	protected void onStart() 
+	{
+		pidController.enable();
+		pidController.setSetpoint(gyroSource.pidGet() + targetDeltaAngleRadians);
+	}
 
-    // Called repeatedly when this Command is scheduled to run
-    int count = 0;
-    protected void execute() 
+    @Override
+    protected void onExecute() 
     {
-    	if(reset)
-    	{
-    		pidController.enable();
-    		pidController.setSetpoint(gyroSource.pidGet() + targetDeltaAngleRadians);
-    		reset = false;
-    	}
     	SmartDashboard.putNumber("Drive Angle Command err", pidController.getError());
     }
 
@@ -52,16 +46,10 @@ public class DriveAngleCommand extends Command
     }
 
     // Called once after isFinished returns true
-    protected void end() 
+    @Override
+    protected void onEnd(boolean interrupted) 
     {
     	pidController.disable();
-    	reset = true;
     }
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() 
-    {
-    	end();
-    }
 }

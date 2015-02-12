@@ -78,14 +78,34 @@ public class CantTalon implements SpeedController, PIDOutput
 						
 						double incrementSign = Math.signum(targetValue - currentSetValue);
 						
-						double incrementValue = voltageRampRate * deltaTime;
+						boolean shouldRamp = (rampDirection == RampDirection.Both);
+						if(rampDirection != RampDirection.Both)
+						{
+							if(incrementSign < 0 && rampDirection == RampDirection.SpeedDecrease)
+							{
+								shouldRamp = true;
+							}
+							else if(incrementSign > 0 && rampDirection == RampDirection.SpeedIncrease)
+							{
+								shouldRamp = true;
+							}
+						}
 						
-						incrementValue = incrementSign * Math.min(incrementValue, Math.abs(targetValue - currentSetValue));
-						
-						if(deviceNum == RobotMap.HDriveTalon)
-							SmartDashboard.putNumber("Increment per second", incrementValue / deltaTime);
-						
-						rawSet(currentSetValue + incrementValue);
+						if(shouldRamp)
+						{
+							double incrementValue = voltageRampRate * deltaTime;
+							
+							incrementValue = incrementSign * Math.min(incrementValue, Math.abs(targetValue - currentSetValue));
+							
+							if(deviceNum == RobotMap.HDriveTalon)
+								SmartDashboard.putNumber("Increment per second", incrementValue / deltaTime);
+							
+							rawSet(currentSetValue + incrementValue);
+						}
+						else
+						{
+							rawSet(targetValue);
+						}
 					}
 					
 					try {
@@ -131,4 +151,18 @@ public class CantTalon implements SpeedController, PIDOutput
 	{
 		talon.disable();
 	}
+	
+	
+	public enum RampDirection
+	{
+		Both, SpeedIncrease, SpeedDecrease
+	}
+	
+	private RampDirection rampDirection = RampDirection.Both;
+	
+	public void setVoltageRampRateDirection(RampDirection direction)
+	{
+		this.rampDirection = direction;
+	}
+	
 }

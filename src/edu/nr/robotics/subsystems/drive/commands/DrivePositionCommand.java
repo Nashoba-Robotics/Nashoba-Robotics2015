@@ -1,13 +1,13 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
 import edu.nr.robotics.Fieldcentric;
+import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class DrivePositionCommand extends Command
+public class DrivePositionCommand extends CMD
 {
-	private boolean reset = true;
 	private final boolean useRoboRealm;
 	
 	private double goalX, goalY, goalAngle;
@@ -29,35 +29,29 @@ public class DrivePositionCommand extends Command
 	}
 	
 	@Override
-	protected void initialize() 
+	protected void onStart() 
 	{
+		Drive.getInstance().setDriveP(1);
+		this.goalX = SmartDashboard.getNumber((useRoboRealm)?"ToteX":"Goal X");
+		this.goalY = SmartDashboard.getNumber((useRoboRealm)?"ToteY":"Goal Y");
+		this.goalAngle = -SmartDashboard.getNumber((useRoboRealm)?"ToteAngle":"Goal Angle");
+		coordinateSystem.reset();
 		
+		//Center of rotation correction
+		final double P = Drive.CENTER_OF_ROTATION_RELATIVE_TO_CAMERA_FEET;
+		
+		double deltaX = P - P * Math.cos(goalAngle);
+		double deltaY = P * Math.sin(goalAngle) ;
+		
+		this.goalX += deltaX;
+		this.goalY += deltaY;
 	}
 
 	int iCount = 0;
 	
 	@Override
-	protected void execute()
+	protected void onExecute()
 	{
-		if(reset)
-		{
-			Drive.getInstance().setDriveP(1);
-			this.goalX = SmartDashboard.getNumber((useRoboRealm)?"ToteX":"Goal X");
-			this.goalY = SmartDashboard.getNumber((useRoboRealm)?"ToteY":"Goal Y");
-			this.goalAngle = -SmartDashboard.getNumber((useRoboRealm)?"ToteAngle":"Goal Angle");
-			coordinateSystem.reset();
-			
-			//Center of rotation correction
-			final double P = Drive.CENTER_OF_ROTATION_RELATIVE_TO_CAMERA_FEET;
-			
-			double deltaX = P - P * Math.cos(goalAngle);
-			double deltaY = P * Math.sin(goalAngle) ;
-			
-			this.goalX += deltaX;
-			this.goalY += deltaY;
-			
-			reset = false;
-		}
 		coordinateSystem.update();
 		
 		//Velocity calculations
@@ -117,16 +111,8 @@ public class DrivePositionCommand extends Command
 	}
 
 	@Override
-	protected void end() 
+	protected void onEnd(boolean interrupted) 
 	{
-		reset = true;
 		Drive.getInstance().setDriveP(Drive.JOYSTICK_DRIVE_P);
 	}
-
-	@Override
-	protected void interrupted() 
-	{
-		end();
-	}
-
 }

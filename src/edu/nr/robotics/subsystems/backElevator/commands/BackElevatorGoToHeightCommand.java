@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class BackElevatorGoToHeightCommand extends Command {
+public class BackElevatorGoToHeightCommand extends CMD {
 	double height;
     public BackElevatorGoToHeightCommand(double height) {
         requires(BackElevator.getInstance());

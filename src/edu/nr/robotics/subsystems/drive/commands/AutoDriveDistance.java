@@ -1,7 +1,8 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
+import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrectionUtil;
+import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrection;
 import edu.nr.robotics.subsystems.drive.gyro.GyroCorrection;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -9,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class AutoDriveDistance extends Command
+public class AutoDriveDistance extends CMD
 {
 	private long startTime;
 	private double speed;
@@ -17,28 +18,22 @@ public class AutoDriveDistance extends Command
 	private GyroCorrection gyroCorrection;
 	
 	private double initialEncoderDistance;
-	private boolean resetEncoders = true;
 	
     public AutoDriveDistance(double speed) 
     {
-    	gyroCorrection = new AngleGyroCorrectionUtil();
+    	gyroCorrection = new AngleGyroCorrection();
     }
 
-    // Called just before this Command runs the first time
-    protected void initialize() 
-    {
-    }
+    @Override
+	public void onStart() 
+	{
+		initialEncoderDistance = Drive.getInstance().getEncoderAve();
+		Drive.getInstance().setDriveP(3);
+		startTime = System.currentTimeMillis();
+	}
 
-    protected void execute()
+    protected void onExecute()
     {
-		if(resetEncoders)
-		{
-			initialEncoderDistance = Drive.getInstance().getEncoderAve();
-			resetEncoders = false;
-			Drive.getInstance().setDriveP(3);
-			startTime = System.currentTimeMillis();
-		}
-		
 		double turn = gyroCorrection.getTurnValue();
 		
 		double distanceDriven = Drive.getInstance().getEncoderAve() - initialEncoderDistance;
@@ -69,38 +64,16 @@ public class AutoDriveDistance extends Command
 		SmartDashboard.putNumber("Err", err);
     }
 
-    // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
-    	/*double distanceDriven = Drive.getInstance().getEncoderAve() - initialEncoderDistance;
-		double err = (distanceFeet - distanceDriven);
-		
-    	if(distanceFeet < 0)
-    	{
-    		return (err > 0);
-    	}
-		else
-		{
-			return (err < 0);
-		}*/
-    	
     	return (Drive.getInstance().getBumper1() && Drive.getInstance().getBumper2());
     }
 
-    // Called once after isFinished returns true
-    protected void end() 
+    protected void onEnd(boolean interrupted) 
     {
     	Drive.getInstance().arcadeDrive(0, 0);
     	SmartDashboard.putNumber("Drive Distance Time", (System.currentTimeMillis() - startTime)/1000f);
     	gyroCorrection.clearInitialValue();
-    	resetEncoders = true;
     	Drive.getInstance().setDriveP(0.5);
-    }
-
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() 
-    {
-    	end();
     }
 }

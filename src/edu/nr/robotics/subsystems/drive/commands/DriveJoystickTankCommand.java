@@ -1,13 +1,14 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
 import edu.nr.robotics.OI;
+import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class DriveJoystickTankCommand extends Command {
+public class DriveJoystickTankCommand extends CMD {
 
     public DriveJoystickTankCommand() {
         requires(Drive.getInstance());
@@ -20,7 +21,7 @@ public class DriveJoystickTankCommand extends Command {
     private final double deadZone = 0.05;
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
+    protected void onExecute() {
     	double left = OI.getInstance().getTankLeftValue();
     	double right = OI.getInstance().getTankRightValue();
     	
@@ -55,11 +56,20 @@ public class DriveJoystickTankCommand extends Command {
     }
 
     // Called once after isFinished returns true
-    protected void end() {
+    protected void onEnd() 
+    {
+    	
     }
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() {
-    }
+	@Override
+	protected void onStart()
+	{
+		
+	}
+
+	@Override
+	protected void onEnd(boolean interrupted) 
+	{
+		
+	}
 }
