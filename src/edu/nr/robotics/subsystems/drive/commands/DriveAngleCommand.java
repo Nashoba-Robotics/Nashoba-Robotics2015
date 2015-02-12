@@ -5,7 +5,6 @@ import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.GyroPIDSource;
 import edu.nr.robotics.subsystems.drive.RotationPIDOutput;
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**

@@ -4,14 +4,12 @@ import edu.nr.robotics.CantTalon;
 import edu.nr.robotics.MotorPair;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.I2C;
-import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorIdleCommand;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorJoystickCommand;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 

@@ -3,7 +3,6 @@ package edu.nr.robotics.subsystems.frontElevator.commands;
 import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *

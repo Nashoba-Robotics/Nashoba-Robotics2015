@@ -2,15 +2,12 @@ package edu.nr.robotics.subsystems.drive.commands;
 
 import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
 public class HDriveJoystickCommand extends CMD 
-{
-	private boolean reset = true;
-	
+{	
     public HDriveJoystickCommand() 
     {
         requires(Drive.getInstance());

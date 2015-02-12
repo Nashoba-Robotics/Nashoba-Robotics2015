@@ -2,15 +2,7 @@
 package edu.nr.robotics;
 
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.commands.AutonomousCommand;
-import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
-import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
-import edu.nr.robotics.subsystems.drive.commands.DriveForwardCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveIdleCommand;
-import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
-import edu.nr.robotics.subsystems.drive.commands.ResetEncoderCommand;
-import edu.nr.robotics.subsystems.drive.commands.SetTalonProperties;
-import edu.nr.robotics.subsystems.drive.commands.ZeroNavXCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -52,10 +44,12 @@ public class Robot extends IterativeRobot
         SmartDashboard.putData("Go to smartdashboard height", new EmptyCommand("elevator to smart height")
         {
 			@Override
-			protected void execute() 
+			protected void onExecute() 
 			{
 				new FrontElevatorGoToHeightCommand(SmartDashboard.getNumber("ElevatorHeightSet")).start();;
 			}
+			
+			protected void onStart(){}
         });
 		
 		

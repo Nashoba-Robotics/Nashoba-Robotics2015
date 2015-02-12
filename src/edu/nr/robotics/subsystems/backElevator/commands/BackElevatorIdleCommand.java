@@ -1,8 +1,8 @@
 package edu.nr.robotics.subsystems.backElevator.commands;
 
 import edu.nr.robotics.OI;
+import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
-import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
@@ -16,11 +16,11 @@ public class BackElevatorIdleCommand extends CMD {
     }
 
     // Called just before this Command runs the first time
-    protected void initialize() {
+    protected void onStart() {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
+    protected void onExecute() {
     	if(Math.abs(OI.getInstance().getBackElevatorJoy()) > 0.05)
     	{
     		BackElevator.getInstance().setSetpoint(BackElevator.getInstance().getSetpoint() + OI.getInstance().getBackElevatorJoy()*JOYSTICK_ADJUSTMENT_VALUE );
@@ -33,11 +33,6 @@ public class BackElevatorIdleCommand extends CMD {
     }
 
     // Called once after isFinished returns true
-    protected void end() {
-    }
-
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() {
+    protected void onEnd(boolean interrupted) {
     }
 }

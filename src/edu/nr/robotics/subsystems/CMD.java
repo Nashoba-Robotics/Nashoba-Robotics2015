@@ -4,6 +4,16 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public abstract class CMD extends Command
 {
+	public CMD()
+	{
+		super();
+	}
+	
+	public CMD(String name)
+	{
+		super(name);
+	}
+	
 	private boolean reset = true;
 	
 	/**
