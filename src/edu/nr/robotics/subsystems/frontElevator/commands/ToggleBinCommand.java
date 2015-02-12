@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ToggleBinCommand extends Command {
+public class ToggleBinCommand extends CMD {
 
     public ToggleBinCommand() {
         requires(FrontElevator.getInstance());

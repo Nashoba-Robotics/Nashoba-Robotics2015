@@ -1,44 +1,40 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
+import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrectionUtil;
+import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrection;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class DriveDistanceCommand extends Command
+public class DriveDistanceCommand extends CMD
 {
 	private double distanceFeet, speed;
-	private AngleGyroCorrectionUtil gyroCorrection;
+	private AngleGyroCorrection gyroCorrection;
 	
 	private double initialEncoderDistance;
-	private boolean resetEncoders = true;
 	
     public DriveDistanceCommand(double distanceFeet, double speed) 
     {
     	this.distanceFeet = distanceFeet;
     	this.speed = Math.abs(speed) * Math.signum(distanceFeet);
-    	gyroCorrection = new AngleGyroCorrectionUtil();
+    	gyroCorrection = new AngleGyroCorrection();
     	requires(Drive.getInstance());
     }
 
-    // Called just before this Command runs the first time
-    protected void initialize() 
-    {
-    }
+	@Override
+	protected void onStart() 
+	{
+		initialEncoderDistance = Drive.getInstance().getEncoderAve();
+		Drive.getInstance().setDriveP(1);
+	}
 
-    protected void execute()
+    @Override
+	protected void onExecute()
     {
 		double turn = gyroCorrection.getTurnValue();
-		
-		if(resetEncoders)
-		{
-			initialEncoderDistance = Drive.getInstance().getEncoderAve();
-			resetEncoders = false;
-			Drive.getInstance().setDriveP(1);
-		}
 		
 		double distanceDriven = Drive.getInstance().getEncoderAve() - initialEncoderDistance;
 		
@@ -79,19 +75,11 @@ public class DriveDistanceCommand extends Command
     	
     }
 
-    // Called once after isFinished returns true
-    protected void end() 
-    {
-    	Drive.getInstance().arcadeDrive(0, 0);
+	@Override
+	protected void onEnd(boolean interrupted) 
+	{
+		Drive.getInstance().arcadeDrive(0, 0);
     	gyroCorrection.clearInitialValue();
-    	resetEncoders = true;
-    	Drive.getInstance().setDriveP(Drive.JOYSTICK_DRIVE_P);
-    }
-
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() 
-    {
-    	end();
-    }
+    	Drive.getInstance().setDriveP(Drive.JOYSTICK_DRIVE_P);		
+	}
 }

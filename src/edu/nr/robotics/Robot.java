@@ -1,7 +1,6 @@
 
 package edu.nr.robotics;
 
-import edu.nr.robotics.subsystems.TestsubSystem;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.commands.AutonomousCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
@@ -13,6 +12,7 @@ import edu.nr.robotics.subsystems.drive.commands.ResetEncoderCommand;
 import edu.nr.robotics.subsystems.drive.commands.SetTalonProperties;
 import edu.nr.robotics.subsystems.drive.commands.ZeroNavXCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
+import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
@@ -33,29 +33,31 @@ public class Robot extends IterativeRobot
     {
     	pdp = new PowerDistributionPanel();
     	
-		/*OI.init();
+		OI.init();
 		Drive.init();
-		FrontElevator.init();*/
-		TestsubSystem.getInstance();
+		FrontElevator.init();
 		
-		SmartDashboard.putData("Drive 15 degrees", new DriveAngleCommand(15 * Math.PI/180));
+		/*SmartDashboard.putData("Drive 15 degrees", new DriveAngleCommand(15 * Math.PI/180));
 		SmartDashboard.putData("Manual Drive Position", new DrivePositionCommand(false));
 		SmartDashboard.putData("RoboRealms Drive Position", new DrivePositionCommand(true));
 		SmartDashboard.putData(new DriveDistanceCommand(10, 0.3));
 		SmartDashboard.putData(new SetTalonProperties());
 		SmartDashboard.putData(new ResetEncoderCommand());
 		SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
-        SmartDashboard.putData(new ZeroNavXCommand());
-        
-        SmartDashboard.putNumber("Test speed", 0);
-        SmartDashboard.putData(new EmptyCommand("Set")
+        SmartDashboard.putData(new ZeroNavXCommand());*/
+		
+		SmartDashboard.putNumber("ElevatorHeightSet", 1);
+		SmartDashboard.putData("Front Elevator Height 3", new FrontElevatorGoToHeightCommand(3));
+		SmartDashboard.putData("Front Elevator Height 4", new FrontElevatorGoToHeightCommand(4));
+        SmartDashboard.putData("Go to smartdashboard height", new EmptyCommand("elevator to smart height")
         {
-        	@Override
-        	public void execute()
-        	{
-        		TestsubSystem.getInstance().set(SmartDashboard.getNumber("Test speed"));
-        	}
+			@Override
+			protected void execute() 
+			{
+				new FrontElevatorGoToHeightCommand(SmartDashboard.getNumber("ElevatorHeightSet")).start();;
+			}
         });
+		
 		
         // instantiate the command used for the autonomous period
         autonomousCommand = new DriveIdleCommand();

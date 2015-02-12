@@ -3,7 +3,7 @@ package edu.nr.robotics;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-public abstract class EmptyCommand extends Command
+public abstract class EmptyCommand extends CMD
 {
 	public EmptyCommand(String name)
 	{

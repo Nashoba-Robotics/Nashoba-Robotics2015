@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class GrabBinCommand extends Command {
+public class GrabBinCommand extends CMD {
 
     public GrabBinCommand() {
         requires(FrontElevator.getInstance());

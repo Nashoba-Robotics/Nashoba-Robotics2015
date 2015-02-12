@@ -1,9 +1,9 @@
 package edu.nr.robotics.subsystems.backElevator;
 
 import edu.nr.robotics.CantTalon;
+import edu.nr.robotics.MotorPair;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorIdleCommand;
-import edu.nr.robotics.subsystems.drive.MotorPair;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

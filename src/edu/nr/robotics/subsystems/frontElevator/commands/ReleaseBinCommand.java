@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ReleaseBinCommand extends Command {
+public class ReleaseBinCommand extends CMD {
 
     public ReleaseBinCommand() {
         requires(FrontElevator.getInstance());
