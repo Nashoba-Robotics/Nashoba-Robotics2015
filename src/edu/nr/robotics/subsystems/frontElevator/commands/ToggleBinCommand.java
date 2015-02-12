@@ -1,8 +1,8 @@
 package edu.nr.robotics.subsystems.frontElevator.commands;
 
+import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
@@ -14,11 +14,12 @@ public class ToggleBinCommand extends CMD {
     }
 
     // Called just before this Command runs the first time
-    protected void initialize() {
+    protected void onStart() {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
+    @Override
+    protected void onExecute() {
     	Value value = FrontElevator.getInstance().getBinGrabber();
     	if(value == Value.kForward)
     	{
@@ -41,11 +42,8 @@ public class ToggleBinCommand extends CMD {
     }
 
     // Called once after isFinished returns true
-    protected void end() {
+    @Override
+    protected void onEnd(boolean interrupted) {
     }
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() {
-    }
 }

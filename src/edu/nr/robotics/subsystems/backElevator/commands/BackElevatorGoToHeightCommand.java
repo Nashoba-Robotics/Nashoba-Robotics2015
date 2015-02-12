@@ -1,7 +1,7 @@
 package edu.nr.robotics.subsystems.backElevator.commands;
 
+import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
-import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
@@ -14,11 +14,11 @@ public class BackElevatorGoToHeightCommand extends CMD {
     }
 
     // Called just before this Command runs the first time
-    protected void initialize() {
+    protected void onStart() {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
+    protected void onExecute() {
     	BackElevator.getInstance().setSetpoint(height);
     }
 
@@ -26,13 +26,9 @@ public class BackElevatorGoToHeightCommand extends CMD {
     protected boolean isFinished() {
         return true;
     }
-
-    // Called once after isFinished returns true
-    protected void end() {
-    }
-
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() {
-    }
+    
+	@Override
+	protected void onEnd(boolean interrupted) {
+		
+	}
 }

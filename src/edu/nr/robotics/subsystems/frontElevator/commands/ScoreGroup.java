@@ -1,7 +1,6 @@
 package edu.nr.robotics.subsystems.frontElevator.commands;
 
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
-import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**

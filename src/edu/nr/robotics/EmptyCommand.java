@@ -1,6 +1,6 @@
 package edu.nr.robotics;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.nr.robotics.subsystems.CMD;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public abstract class EmptyCommand extends CMD
@@ -26,11 +26,7 @@ public abstract class EmptyCommand extends CMD
 	}
 
 	@Override
-	protected void end() {
-	}
-
-	@Override
-	protected void interrupted() {
+	protected void onEnd(boolean interrupted) {
 	}
 
 }
