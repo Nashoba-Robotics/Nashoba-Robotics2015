@@ -12,13 +12,14 @@ public class FrontElevatorGoToHeightCommand extends CMD
 	double height;
 	
 	PIDController pid;
+	double startTime;
 	
     public FrontElevatorGoToHeightCommand(double height) 
     {
         requires(FrontElevator.getInstance());
         
         this.height = height;
-        pid = new PIDController(2, 0, 0, FrontElevator.getInstance(), FrontElevator.getInstance());
+        pid = new PIDController(1, 0.1, 0, FrontElevator.getInstance(), FrontElevator.getInstance());
     }
     
     @Override
@@ -26,20 +27,23 @@ public class FrontElevatorGoToHeightCommand extends CMD
     {
     	pid.enable();
 		pid.setSetpoint(height);
-		
+		startTime = System.currentTimeMillis();
 	}
 
     // Called repeatedly when this Command is scheduled to run
     @Override
 	protected void onExecute()
     {
-    	
+    	if(System.currentTimeMillis() - startTime > 250)
+    	{
+    		//FrontElevator.getInstance().disableRamping();
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
-        return Math.abs(pid.getError()) < 0.5/12d;
+        return Math.abs(pid.getError()) < 0.25/12d;
     }
 
     @Override

@@ -55,6 +55,11 @@ public class BackElevator extends PIDSubsystem {
         return singleton;
     }
 	
+    public void setElevatorSpeed(double speed)
+    {
+    	motors.set(-speed);
+    }
+	
 	public static void init()
 	{
 		if(singleton == null)

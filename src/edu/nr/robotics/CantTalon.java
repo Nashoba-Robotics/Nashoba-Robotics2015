@@ -42,6 +42,7 @@ public class CantTalon implements SpeedController, PIDOutput
 		previousSetValueTime = System.currentTimeMillis();
 		talon.set(value);
 		currentSetValue = value;
+		SmartDashboard.putDouble("output value", value);
 	}
 	
 	public void setVoltageRampRate(double percentPerSecond)
