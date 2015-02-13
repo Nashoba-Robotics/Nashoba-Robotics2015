@@ -1,8 +1,8 @@
 package edu.nr.robotics.subsystems.backElevator;
 
-import edu.nr.robotics.CantTalon;
-import edu.nr.robotics.MotorPair;
 import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.custom.CantTalon;
+import edu.nr.robotics.custom.MotorPair;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorIdleCommand;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -34,8 +34,8 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
     public BackElevator() {
     	super("Back Elevator");
         // setSetpoint() -  Sets where the PID controller should move the system to
-    	talon1 = new CantTalon(RobotMap.backElevatorTalon1);
-    	talon2 = new CantTalon(RobotMap.backElevatorTalon2);
+    	talon1 = CantTalon.newCantTalon(RobotMap.backElevatorTalon1);
+    	talon2 = CantTalon.newCantTalon(RobotMap.backElevatorTalon2);
     	motors = new MotorPair(talon1, talon2);
     	
     	motors.enableCantTalonLimitSwitch(true, true);

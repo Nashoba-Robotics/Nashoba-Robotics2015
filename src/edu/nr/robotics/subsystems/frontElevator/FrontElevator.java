@@ -1,9 +1,10 @@
 package edu.nr.robotics.subsystems.frontElevator;
 
-import edu.nr.robotics.CantTalon;
-import edu.nr.robotics.MotorPair;
 import edu.nr.robotics.RobotMap;
-import edu.nr.robotics.subsystems.drive.I2C;
+import edu.nr.robotics.custom.CantTalon;
+import edu.nr.robotics.custom.I2C;
+import edu.nr.robotics.custom.LIDAR;
+import edu.nr.robotics.custom.MotorPair;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorJoystickCommand;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -45,8 +46,8 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 
     public FrontElevator() 
     {
-    	talon1 = new CantTalon(RobotMap.frontElevatorTalon1);
-    	talon2 = new CantTalon(RobotMap.frontElevatorTalon2);
+    	talon1 = CantTalon.newCantTalon(RobotMap.frontElevatorTalon1);
+    	talon2 = CantTalon.newCantTalon(RobotMap.frontElevatorTalon2);
     	talon1.setVoltageRampRate(4);
     	talon2.setVoltageRampRate(4);
     	

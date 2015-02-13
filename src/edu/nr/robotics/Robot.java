@@ -1,11 +1,14 @@
 
 package edu.nr.robotics;
 
+import java.io.PrintStream;
+
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.commands.DriveIdleCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
+import edu.nr.robotics.util.ProcessTimer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
@@ -14,7 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot 
 {
-
     Command autonomousCommand;
     PowerDistributionPanel pdp;
 
@@ -31,7 +33,7 @@ public class Robot extends IterativeRobot
 		FrontElevator.init();
 		BackElevator.init();
 		
-		SmartDashboard.putNumber("ElevatorHeightSet", 1);
+		/*SmartDashboard.putNumber("ElevatorHeightSet", 1);
 		SmartDashboard.putData("Front Elevator Height 3", new FrontElevatorGoToHeightCommand(3));
 		SmartDashboard.putData("Front Elevator Height 4", new FrontElevatorGoToHeightCommand(4));
         SmartDashboard.putData("Go to smartdashboard height", new EmptyCommand("elevator to smart height")
@@ -43,7 +45,7 @@ public class Robot extends IterativeRobot
 			}
 			
 			protected void onStart(){}
-        });
+        });*/
 		
 		
         // instantiate the command used for the autonomous period
@@ -73,6 +75,7 @@ public class Robot extends IterativeRobot
 
     public void teleopInit() 
     {
+    	previousTime = System.currentTimeMillis();
 		// This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
@@ -80,19 +83,25 @@ public class Robot extends IterativeRobot
         if (autonomousCommand != null) autonomousCommand.cancel();
     }
     
+    long previousTime = 0;
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() 
     {
+    	SmartDashboard.putNumber("dt", System.currentTimeMillis() - previousTime);
+    	previousTime = System.currentTimeMillis();
     	//FieldCentric should come first in periodic functions, so the commands run by the scheduler
     	//aren't using stale location data
+    	
     	Fieldcentric.getRobotInstance().update();
     	
         Scheduler.getInstance().run();
-        
+    	
         //Update SmartDashboard info after the scheduler runs our commands
-        putSubsystemDashInfo();
+        //putSubsystemDashInfo();
+        
+        
     }
 
     /**

@@ -25,7 +25,7 @@ public class DriveJoystickArcadeCommand extends CMD
 		
 	}
 
-    private final double deadZone = 0.1;
+    private final double deadZone = 0.05;
     
     // Called repeatedly when this Command is scheduled to run
     @Override
@@ -47,7 +47,7 @@ public class DriveJoystickArcadeCommand extends CMD
     		rawMoveValue *= (1 / (1 - deadZone));
     	}
     	
-    	double driveMagnitude = rawMoveValue/2 * OI.getInstance().getAmplifyMultiplyer();
+    	double driveMagnitude = rawMoveValue/2d * OI.getInstance().getAmplifyMultiplyer();
     	double turn;
     	
     	if(OI.getInstance().useGyroCorrection())
@@ -74,7 +74,17 @@ public class DriveJoystickArcadeCommand extends CMD
         	}
     		turn = rawTurn /2 * OI.getInstance().getAmplifyMultiplyer();
     		
+    		
     		gyroCorrection.clearInitialValue();
+    	}
+    	
+    	if(OI.getInstance().useHDrive())
+    	{
+    		Drive.getInstance().setHDrive(OI.getInstance().getHDriveValue());
+    	}
+    	else
+    	{
+    		Drive.getInstance().setHDrive(0);
     	}
     	
     	SmartDashboard.putNumber("Drive Magnitude", driveMagnitude);
@@ -93,6 +103,7 @@ public class DriveJoystickArcadeCommand extends CMD
     protected void onEnd(boolean interrupted) 
     {
     	Drive.getInstance().arcadeDrive(0, 0);
+    	Drive.getInstance().setHDrive(0);
     	gyroCorrection.clearInitialValue();
     }
 }
