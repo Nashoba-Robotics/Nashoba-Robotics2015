@@ -3,6 +3,7 @@ package edu.nr.robotics.subsystems.backElevator.commands;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
+import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 
 /**
  *
@@ -23,8 +24,9 @@ public class BackElevatorIdleCommand extends CMD {
     protected void onExecute() {
     	if(Math.abs(OI.getInstance().getBackElevatorJoy()) > 0.05)
     	{
-    		BackElevator.getInstance().setSetpoint(BackElevator.getInstance().getSetpoint() + OI.getInstance().getBackElevatorJoy()*JOYSTICK_ADJUSTMENT_VALUE );
+    		//BackElevator.getInstance().setSetpoint(BackElevator.getInstance().getSetpoint() + OI.getInstance().getArcadeTurnValue()*JOYSTICK_ADJUSTMENT_VALUE );
     	}
+    	BackElevator.getInstance().setElevatorSpeed(OI.getInstance().getArcadeTurnValue());
     }
 
     // Make this return true when this Command no longer needs to run execute()

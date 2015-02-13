@@ -1,6 +1,7 @@
 
 package edu.nr.robotics;
 
+import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.commands.DriveIdleCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
@@ -28,6 +29,7 @@ public class Robot extends IterativeRobot
 		OI.init();
 		Drive.init();
 		FrontElevator.init();
+		BackElevator.init();
 		
 		/*SmartDashboard.putData("Drive 15 degrees", new DriveAngleCommand(15 * Math.PI/180));
 		SmartDashboard.putData("Manual Drive Position", new DrivePositionCommand(false));

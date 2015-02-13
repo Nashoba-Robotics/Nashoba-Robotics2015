@@ -58,4 +58,10 @@ public class MotorPair implements PIDOutput
 			System.err.println("Warning: Tried to set ramp rate direction on a non-CantTalon speed controller");
 		}
 	}
+	
+	public void disableCantTalonRamping()
+	{
+		((CantTalon)first).disableVoltageRamp();
+		((CantTalon)second).disableVoltageRamp();
+	}
 }

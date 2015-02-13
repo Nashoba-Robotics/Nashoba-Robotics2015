@@ -150,6 +150,11 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
         }
 	}
 	
+	public void disableRamping()
+	{
+		motors.disableCantTalonRamping();
+	}
+	
 	private double getScaledPot()
 	{
 		double value = potentiometer.get();
