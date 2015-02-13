@@ -2,15 +2,21 @@ package edu.nr.robotics.subsystems.backElevator.commands;
 
 import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
+import edu.wpi.first.wpilibj.PIDController;
 
 /**
  *
  */
-public class BackElevatorGoToHeightCommand extends CMD {
-	double height;
-    public BackElevatorGoToHeightCommand(double height) {
+public class BackElevatorGoToHeightCommand extends CMD
+{
+	PIDController pid;
+	
+    public BackElevatorGoToHeightCommand(double height) 
+    {
         requires(BackElevator.getInstance());
-        this.height = height;
+        
+        pid = new PIDController(1, 0.1, 0, BackElevator.getInstance(), BackElevator.getInstance());
+        pid.setSetpoint(height);
     }
 
     // Called just before this Command runs the first time
@@ -18,13 +24,15 @@ public class BackElevatorGoToHeightCommand extends CMD {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void onExecute() {
-    	BackElevator.getInstance().setSetpoint(height);
+    protected void onExecute() 
+    {
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
-    protected boolean isFinished() {
-        return true;
+    protected boolean isFinished() 
+    {
+        return Math.abs(pid.getError()) < 0.25d/12;
     }
     
 	@Override

@@ -5,13 +5,13 @@ import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 
 /**
- *
+ * Command that moves the front elevator manually based off joystick input
  */
-public class FrontElevatorJoystickCommand extends CMD {
+public class FrontElevatorJoystickCommand extends CMD 
+{
 
-    public FrontElevatorJoystickCommand() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+    public FrontElevatorJoystickCommand() 
+    {
     	this.requires(FrontElevator.getInstance());
     }
 
@@ -24,7 +24,6 @@ public class FrontElevatorJoystickCommand extends CMD {
     @Override
     protected void onExecute() 
     {
-    	FrontElevator.getInstance().setElevatorSpeed(OI.getInstance().getArcadeMoveValue());
     }
 
     // Make this return true when this Command no longer needs to run execute()

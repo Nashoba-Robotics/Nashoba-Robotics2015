@@ -20,6 +20,7 @@ public class AutoDriveDistance extends CMD
 	
     public AutoDriveDistance(double speed) 
     {
+    	requires(Drive.getInstance());
     	gyroCorrection = new AngleGyroCorrection();
     }
 

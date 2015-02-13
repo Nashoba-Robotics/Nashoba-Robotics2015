@@ -59,6 +59,8 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
         binGrabber = new DoubleSolenoid(RobotMap.pneumaticsModule, 
 				  RobotMap.doubleSolenoidForward, 
 				  RobotMap.doubleSolenoidReverse);
+        
+        setRampDirection(CantTalon.RampDirection.SpeedIncrease);
     }
     
     public static FrontElevator getInstance()
@@ -153,6 +155,16 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	public void disableRamping()
 	{
 		motors.disableCantTalonRamping();
+	}
+	
+	public void setRampRate(double percentPerSecond)
+	{
+		motors.setCantTalonRampRate(percentPerSecond);
+	}
+	
+	public void setRampDirection(CantTalon.RampDirection direction)
+	{
+		motors.setCantTalonRampDirection(direction);
 	}
 	
 	private double getScaledPot()
