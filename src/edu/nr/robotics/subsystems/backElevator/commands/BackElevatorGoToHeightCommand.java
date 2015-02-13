@@ -15,7 +15,7 @@ public class BackElevatorGoToHeightCommand extends CMD
     {
         requires(BackElevator.getInstance());
         
-        pid = new PIDController(1, 0.1, 0, BackElevator.getInstance(), BackElevator.getInstance());
+        pid = new PIDController(2, 0.001, 0, BackElevator.getInstance(), BackElevator.getInstance());
         pid.setSetpoint(height);
     }
 

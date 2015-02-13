@@ -5,8 +5,9 @@ import edu.nr.robotics.custom.CantTalon;
 import edu.nr.robotics.custom.I2C;
 import edu.nr.robotics.custom.LIDAR;
 import edu.nr.robotics.custom.MotorPair;
-import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorJoystickCommand;
+import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorIdleCommand;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -29,29 +30,36 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	public static final double HEIGHT_PICK_UP_TOTE_TWO = 0;
 	public static final double HEIGHT_SCORING = 0;
 	
-	public static final double POT_MAX = 0.80;
-	public static final double POT_MIN = 0.08;
-	private final double POT_RANGE = (51)/12d;
+	private final double POT_MAX = 0.80; //potentiometer voltage at max position
+	private final double POT_MIN = 0.08;//potentiometer voltage at min value
+	private final double POT_RANGE = (51)/12d; //Range between max and min in feet
 
-	
 	public static final boolean USING_LASER = false;
 	
 	AnalogPotentiometer potentiometer;
 	LIDAR laser;
-    CantTalon talon1;
-    CantTalon talon2;
-    MotorPair motors;
+    CANTalon talon1;
+    //MotorPair motors;
+    
+    private final double MAX_ALLOWED_HEIGHT = 4.2;
+    private final double MIN_ALLOWED_HEIGHT = 0.03;
     
     private DoubleSolenoid binGrabber;
 
     public FrontElevator() 
     {
-    	talon1 = CantTalon.newCantTalon(RobotMap.frontElevatorTalon1);
-    	talon2 = CantTalon.newCantTalon(RobotMap.frontElevatorTalon2);
-    	talon1.setVoltageRampRate(4);
-    	talon2.setVoltageRampRate(4);
+    	talon1 = new CANTalon (RobotMap.frontElevatorTalon1);
+    	CANTalon slave = new CANTalon(RobotMap.frontElevatorTalon2);
+    	slave.changeControlMode(CANTalon.ControlMode.Follower);
+    	slave.set(talon1.getDeviceID());
     	
-    	motors = new MotorPair(talon1, talon2);
+    	
+    	//talon1.setVoltageRampRate(1);
+    	//talon2.setVoltageRampRate(1);
+    	
+    	//motors = new MotorPair(talon1, talon2);
+    	//motors.enableDebug();
+    	
 		laser = new LIDAR(I2C.Port.kMXP);
 		laser.start(); //Start polling
 		
@@ -61,7 +69,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 				  RobotMap.doubleSolenoidForward, 
 				  RobotMap.doubleSolenoidReverse);
         
-        setRampDirection(CantTalon.RampDirection.SpeedIncrease);
+        //setRampDirection(CantTalon.RampDirection.Both);
     }
     
     public static FrontElevator getInstance()
@@ -79,14 +87,27 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 		}
 	}
 	
+	public void setTalonRampRate(double value)
+	{
+		talon1.setVoltageRampRate(value);
+	}
+	
     public void initDefaultCommand() 
     {
-        setDefaultCommand(new FrontElevatorJoystickCommand());
+        setDefaultCommand(new FrontElevatorIdleCommand());
     }
     
     public void setElevatorSpeed(double speed)
     {
-    	motors.set(-speed);
+    	speed = -speed;
+    	
+    	if(getScaledPot() > MAX_ALLOWED_HEIGHT && speed < 0)
+    		speed = 0;
+    	else if(getScaledPot() < MIN_ALLOWED_HEIGHT && speed > 0)
+    		speed = 0;
+    	
+    	//motors.set(speed);
+    	talon1.set(speed);
     }
     
     public void binGrabberForward()
@@ -137,6 +158,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	@Override
 	public void pidWrite(double output) 
 	{
+		SmartDashboard.putNumber("Front Elevator pid output", output);
 		setElevatorSpeed(output);
 	}
 
@@ -153,9 +175,12 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
         }
 	}
 	
-	public void disableRamping()
+	/*public void setRampEnabled(boolean enabled)
 	{
-		motors.disableCantTalonRamping();
+		if(enabled)
+			motors.enableCantTalonRamping();
+		else
+			motors.disableCantTalonRamping();
 	}
 	
 	public void setRampRate(double percentPerSecond)
@@ -166,7 +191,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	public void setRampDirection(CantTalon.RampDirection direction)
 	{
 		motors.setCantTalonRampDirection(direction);
-	}
+	}*/
 	
 	private double getScaledPot()
 	{

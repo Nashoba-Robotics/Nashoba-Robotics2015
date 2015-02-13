@@ -1,5 +1,6 @@
 package edu.nr.robotics.subsystems.frontElevator.commands;
 
+import edu.nr.robotics.OI;
 import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 
@@ -17,13 +18,14 @@ public class FrontElevatorIdleCommand extends CMD
 	@Override
 	protected void onStart() 
 	{
+		FrontElevator.getInstance().setTalonRampRate(24);
 	}
 
     // Called repeatedly when this Command is scheduled to run
 	@Override
     protected void onExecute() 
     {
-    	FrontElevator.getInstance().setElevatorSpeed(0);
+    	FrontElevator.getInstance().setElevatorSpeed(OI.getInstance().getFrontElevatorManual());
 		FrontElevator.getInstance().binGrabberOff();
     }
 
@@ -34,6 +36,8 @@ public class FrontElevatorIdleCommand extends CMD
     }
 
 	@Override
-	protected void onEnd(boolean interrupted) {		
+	protected void onEnd(boolean interrupted) 
+	{
+		FrontElevator.getInstance().setElevatorSpeed(0);
 	}
 }

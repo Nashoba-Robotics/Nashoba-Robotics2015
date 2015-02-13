@@ -73,6 +73,11 @@ public class CantTalon implements SpeedController, PIDOutput
 		voltageRampRate = Math.abs(percentPerSecond);
 	}
 	
+	public void enableVoltageRamp()
+	{
+		rampEnabled = true;
+	}
+	
 	/**
 	 */
 	public void disableVoltageRamp()

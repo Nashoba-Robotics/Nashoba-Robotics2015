@@ -74,6 +74,19 @@ public class MotorPair implements PIDOutput
 		}
 	}
 	
+	public void enableCantTalonRamping()
+	{
+		if(isCantTalonPair())
+		{
+			((CantTalon)first).enableVoltageRamp();
+			((CantTalon)second).enableVoltageRamp();
+		}
+		else
+		{
+			printCantWarning();
+		}
+	}
+	
 	public void enableCantTalonLimitSwitch(boolean forward, boolean reverse)
 	{
 		if(isCantTalonPair())

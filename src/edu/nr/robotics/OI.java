@@ -64,7 +64,7 @@ public class OI
 			new JoystickButton(coffin, 5).whenPressed(new ToteOneToScoreGroup());
 			new JoystickButton(coffin, 6).whenPressed(new ScoreGroup());	
 			new JoystickButton(coffin, 7).whenPressed(new ToggleBinCommand());
-			new JoystickButton(coffin, 8).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.POT_MIN));
+			//TODO new JoystickButton(coffin, 8).whenPressed(new FrontElevatorGoToHeightCommand());
 
 		    //Back Elevator Buttons
 			new JoystickButton(coffin, 9).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_HOLD));
@@ -78,8 +78,9 @@ public class OI
 			new JoystickButton(buttonAssignmentStick, 8).whenPressed(new GrabBinCommand());
 			new JoystickButton(buttonAssignmentStick, 9).whenPressed(new ReleaseBinCommand());
 		}
+		
 		//new JoystickButton(buttonAssignmentStick, 3).whenPressed(new DrivePositionCommand(true));
-		new JoystickButton(buttonAssignmentStick, 4).whenPressed(new DriveJoystickArcadeCommand());
+		//new JoystickButton(buttonAssignmentStick, 4).whenPressed(new DriveJoystickArcadeCommand());
 	}
 	
 	public static OI getInstance()
@@ -111,6 +112,9 @@ public class OI
 	
 	public double getArcadeTurnValue()
 	{
+		if(useFrontElevatorManual() || useRearElevatorManual())
+			return 0;
+		
 		if(USING_ARCADE)
 		{
 			if(USING_SPLIT_ARCADE)
@@ -146,6 +150,37 @@ public class OI
 		}
 		
 		return 0;
+	}
+	
+	public double getFrontElevatorManual()
+	{
+		if(USING_ARCADE)
+		{
+			if(buttonAssignmentStick.getRawButton(3))
+				return -buttonAssignmentStick.getY();
+		}
+		
+		return 0;
+	}
+	
+	public boolean useFrontElevatorManual()
+	{
+		return buttonAssignmentStick.getRawButton(3);
+	}
+	
+	public double getRearElevatorManual()
+	{
+		if(USING_ARCADE)
+		{
+			if(buttonAssignmentStick.getRawButton(4))
+				return -buttonAssignmentStick.getY();
+		}
+		return 0;
+	}
+	
+	public boolean useRearElevatorManual()
+	{
+		return buttonAssignmentStick.getRawButton(4);
 	}
 
 	public boolean useHDrive()
@@ -205,7 +240,6 @@ public class OI
 		}
 		return 0;
 	}
-
 	
 	/**
 	 * @return true if the DriveJoystickCommand should ignore joystick Z value and use the gyro to drive straight instead.

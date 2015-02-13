@@ -16,7 +16,7 @@ public class Robot extends IterativeRobot
 {
     Command autonomousCommand;
     PowerDistributionPanel pdp;
-
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -30,9 +30,10 @@ public class Robot extends IterativeRobot
 		FrontElevator.init();
 		BackElevator.init();
 		
-		/*SmartDashboard.putNumber("ElevatorHeightSet", 1);
-		SmartDashboard.putData("Front Elevator Height 3", new FrontElevatorGoToHeightCommand(3));
+		SmartDashboard.putNumber("ElevatorHeightSet", 1);
+		/*SmartDashboard.putData("Front Elevator Height 3", new FrontElevatorGoToHeightCommand(3));
 		SmartDashboard.putData("Front Elevator Height 4", new FrontElevatorGoToHeightCommand(4));
+		*/
         SmartDashboard.putData("Go to smartdashboard height", new EmptyCommand("elevator to smart height")
         {
 			@Override
@@ -42,7 +43,7 @@ public class Robot extends IterativeRobot
 			}
 			
 			protected void onStart(){}
-        });*/
+        });
 		
 		
         // instantiate the command used for the autonomous period
@@ -96,7 +97,7 @@ public class Robot extends IterativeRobot
         Scheduler.getInstance().run();
     	
         //Update SmartDashboard info after the scheduler runs our commands
-        //putSubsystemDashInfo();
+        putSubsystemDashInfo();
         
         
     }

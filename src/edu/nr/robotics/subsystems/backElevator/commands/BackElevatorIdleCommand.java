@@ -23,7 +23,7 @@ public class BackElevatorIdleCommand extends CMD {
     // Called repeatedly when this Command is scheduled to run
     protected void onExecute() 
     {
-    	
+    	BackElevator.getInstance().setElevatorSpeed(OI.getInstance().getRearElevatorManual());
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -32,6 +32,8 @@ public class BackElevatorIdleCommand extends CMD {
     }
 
     // Called once after isFinished returns true
-    protected void onEnd(boolean interrupted) {
+    protected void onEnd(boolean interrupted) 
+    {
+    	BackElevator.getInstance().setElevatorSpeed(0);
     }
 }
