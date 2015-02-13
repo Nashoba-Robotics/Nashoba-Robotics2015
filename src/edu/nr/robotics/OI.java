@@ -55,25 +55,29 @@ public class OI
 		{
 			coffin = new Joystick(1);
 			//Front Elevator Buttons
-			new JoystickButton(buttonAssignmentStick, 1).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE));
-			new JoystickButton(buttonAssignmentStick, 2).whenPressed(new FirstToteTwoGroup());
-			new JoystickButton(buttonAssignmentStick, 3).whenPressed(new ToteTwoToWaitGroup());
-			new JoystickButton(buttonAssignmentStick, 4).whenPressed(new ToteTwoToScoreGroup());
-			new JoystickButton(buttonAssignmentStick, 5).whenPressed(new ToteOneToScoreGroup());
-			new JoystickButton(buttonAssignmentStick, 6).whenPressed(new ScoreGroup());	
-			new JoystickButton(buttonAssignmentStick, 7).whenPressed(new ToggleBinCommand());
-			new JoystickButton(buttonAssignmentStick, 8).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.POT_MIN));
+			new JoystickButton(coffin, 1).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE));
+			new JoystickButton(coffin, 2).whenPressed(new FirstToteTwoGroup());
+			new JoystickButton(coffin, 3).whenPressed(new ToteTwoToWaitGroup());
+			new JoystickButton(coffin, 4).whenPressed(new ToteTwoToScoreGroup());
+			new JoystickButton(coffin, 5).whenPressed(new ToteOneToScoreGroup());
+			new JoystickButton(coffin, 6).whenPressed(new ScoreGroup());	
+			new JoystickButton(coffin, 7).whenPressed(new ToggleBinCommand());
+			new JoystickButton(coffin, 8).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.POT_MIN));
 
 		    //Back Elevator Buttons
-			new JoystickButton(buttonAssignmentStick, 9).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_HOLD));
-			new JoystickButton(buttonAssignmentStick, 10).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_STEP));
-			new JoystickButton(buttonAssignmentStick, 11).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_FLOOR));
-			new JoystickButton(buttonAssignmentStick, 12).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_CLOSED));
+			new JoystickButton(coffin, 9).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_HOLD));
+			new JoystickButton(coffin, 10).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_STEP));
+			new JoystickButton(coffin, 11).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_FLOOR));
+			new JoystickButton(coffin, 12).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_CLOSED));
 		}
-		
-		new JoystickButton(buttonAssignmentStick, 3).whenPressed(new DrivePositionCommand(true));
+		else
+		{
+			new JoystickButton(buttonAssignmentStick, 6).whenPressed(new ToggleBinCommand());
+			new JoystickButton(buttonAssignmentStick, 8).whenPressed(new GrabBinCommand());
+			new JoystickButton(buttonAssignmentStick, 9).whenPressed(new ReleaseBinCommand());
+		}
+		//new JoystickButton(buttonAssignmentStick, 3).whenPressed(new DrivePositionCommand(true));
 		new JoystickButton(buttonAssignmentStick, 4).whenPressed(new DriveJoystickArcadeCommand());
-		new JoystickButton(buttonAssignmentStick, 12).whenPressed(new DriveDistanceCommand(-14.5/12d, 0.5));
 	}
 	
 	public static OI getInstance()

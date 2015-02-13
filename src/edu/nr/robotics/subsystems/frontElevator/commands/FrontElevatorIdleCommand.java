@@ -6,10 +6,9 @@ import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 /**
  *
  */
-public class FrontElevatorIdleCommand extends CMD {
+public class FrontElevatorIdleCommand extends CMD 
+{
 	
-    private static final double JOYSTICK_ADJUSTMENT_VALUE = 0.2;
-    
     public FrontElevatorIdleCommand() 
     {
         requires(FrontElevator.getInstance());
@@ -24,11 +23,7 @@ public class FrontElevatorIdleCommand extends CMD {
 	@Override
     protected void onExecute() 
     {
-    	/*if(Math.abs(OI.getInstance().getFrontElevatorJoy()) > 0.05)
-    	{
-    		FrontElevator.getInstance().setSetpoint(FrontElevator.getInstance().getSetpoint() + OI.getInstance().getFrontElevatorJoy()*JOYSTICK_ADJUSTMENT_VALUE );
-    	}*/
-    	
+    	FrontElevator.getInstance().setElevatorSpeed(0);
 		FrontElevator.getInstance().binGrabberOff();
     }
 

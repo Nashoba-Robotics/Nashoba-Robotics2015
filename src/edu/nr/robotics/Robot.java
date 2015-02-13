@@ -31,15 +31,6 @@ public class Robot extends IterativeRobot
 		FrontElevator.init();
 		BackElevator.init();
 		
-		/*SmartDashboard.putData("Drive 15 degrees", new DriveAngleCommand(15 * Math.PI/180));
-		SmartDashboard.putData("Manual Drive Position", new DrivePositionCommand(false));
-		SmartDashboard.putData("RoboRealms Drive Position", new DrivePositionCommand(true));
-		SmartDashboard.putData(new DriveDistanceCommand(10, 0.3));
-		SmartDashboard.putData(new SetTalonProperties());
-		SmartDashboard.putData(new ResetEncoderCommand());
-		SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
-        SmartDashboard.putData(new ZeroNavXCommand());*/
-		
 		SmartDashboard.putNumber("ElevatorHeightSet", 1);
 		SmartDashboard.putData("Front Elevator Height 3", new FrontElevatorGoToHeightCommand(3));
 		SmartDashboard.putData("Front Elevator Height 4", new FrontElevatorGoToHeightCommand(4));

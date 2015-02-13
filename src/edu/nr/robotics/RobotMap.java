@@ -21,9 +21,9 @@ public class RobotMap
 	public static final int backElevatorTalon1 = 15;
 	public static final int backElevatorTalon2 = 14;
 	
-	public static final int pneumaticsModule = 1;
-	public static final int doubleSolenoidForward = 0;
-	public static final int doubleSolenoidReverse = 1;
+	public static final int pneumaticsModule = 61;
+	public static final int doubleSolenoidForward = 2;
+	public static final int doubleSolenoidReverse = 3;
 	
 	public static final int IRSensor = 1, IRSensor2 = 2;
 	

@@ -21,12 +21,9 @@ public class BackElevatorIdleCommand extends CMD {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void onExecute() {
-    	if(Math.abs(OI.getInstance().getBackElevatorJoy()) > 0.05)
-    	{
-    		//BackElevator.getInstance().setSetpoint(BackElevator.getInstance().getSetpoint() + OI.getInstance().getArcadeTurnValue()*JOYSTICK_ADJUSTMENT_VALUE );
-    	}
-    	BackElevator.getInstance().setElevatorSpeed(OI.getInstance().getArcadeTurnValue());
+    protected void onExecute() 
+    {
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()

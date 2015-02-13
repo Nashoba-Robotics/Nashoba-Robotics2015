@@ -42,26 +42,56 @@ public class MotorPair implements PIDOutput
 		}
 		else
 		{
-			System.err.println("Warning: Tried to set ramp rate on a non-CantTalon speed controller");
+			printCantWarning();
 		}
 	}
 	
 	public void setCantTalonRampDirection(CantTalon.RampDirection direction)
 	{
-		if(first instanceof CantTalon && second instanceof CantTalon)
+		if(isCantTalonPair())
 		{
 			((CantTalon)first).setVoltageRampRateDirection(direction);
 			((CantTalon)second).setVoltageRampRateDirection(direction);
 		}
 		else
 		{
-			System.err.println("Warning: Tried to set ramp rate direction on a non-CantTalon speed controller");
+			printCantWarning();
 		}
 	}
 	
 	public void disableCantTalonRamping()
 	{
-		((CantTalon)first).disableVoltageRamp();
-		((CantTalon)second).disableVoltageRamp();
+		if(isCantTalonPair())
+		{
+			((CantTalon)first).disableVoltageRamp();
+			((CantTalon)second).disableVoltageRamp();
+		}
+		else
+		{
+			printCantWarning();
+		}
+	}
+	
+	public void enableCantTalonLimitSwitch(boolean forward, boolean reverse)
+	{
+		if(isCantTalonPair())
+		{
+			((CantTalon)first).enableLimitSwitch(forward, reverse);
+			((CantTalon)second).enableLimitSwitch(forward, reverse);
+		}
+		else
+		{
+			printCantWarning();
+		}
+	}
+	
+	private boolean isCantTalonPair()
+	{
+		return (first instanceof CantTalon && second instanceof CantTalon);
+	}
+	
+	private void printCantWarning()
+	{
+		System.err.println("Warning: Tried to use non-CantTalon speed controller as a CantTalon");
 	}
 }

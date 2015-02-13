@@ -5,13 +5,17 @@ import edu.nr.robotics.MotorPair;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorIdleCommand;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class BackElevator extends PIDSubsystem {
+public class BackElevator extends Subsystem implements PIDOutput, PIDSource
+{
 
 	//These needs to be set
     private static final double HEIGHT_MAX = 0;
@@ -28,21 +32,23 @@ public class BackElevator extends PIDSubsystem {
 	MotorPair motors;
     
     public BackElevator() {
-    	super("Back Elevator", 0, 0, 0);
+    	super("Back Elevator");
         // setSetpoint() -  Sets where the PID controller should move the system to
-        enable();
     	talon1 = new CantTalon(RobotMap.backElevatorTalon1);
     	talon2 = new CantTalon(RobotMap.backElevatorTalon2);
     	motors = new MotorPair(talon1, talon2);
-
-		potentiometer = new AnalogPotentiometer(RobotMap.POTENTIOMETER_BACK_ELEVATOR, HEIGHT_MAX, -HEIGHT_MAX/2);
+    	
+    	motors.enableCantTalonLimitSwitch(true, true);
+    	
+		potentiometer = new AnalogPotentiometer(RobotMap.POTENTIOMETER_BACK_ELEVATOR);
     }
     
     public void initDefaultCommand() {
     	setDefaultCommand(new BackElevatorIdleCommand());
     }
     
-    protected double returnPIDInput() {
+    protected double returnPIDInput() 
+    {
         return potentiometer.get();
     }
     
@@ -69,5 +75,15 @@ public class BackElevator extends PIDSubsystem {
 		}
 	}
 
-	
+	@Override
+	public double pidGet()
+	{
+		return potentiometer.get();
+	}
+
+	@Override
+	public void pidWrite(double output) 
+	{
+		setElevatorSpeed(output);
+	}
 }

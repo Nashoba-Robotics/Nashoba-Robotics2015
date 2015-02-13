@@ -5,6 +5,8 @@ import edu.nr.robotics.CantTalon;
 import edu.nr.robotics.MotorPair;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
+import edu.nr.robotics.subsystems.drive.commands.DriveJoystickTankCommand;
 import edu.nr.robotics.subsystems.drive.mxp.NavX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -119,14 +121,14 @@ public class Drive extends Subsystem
 	
 	public void initDefaultCommand()
 	{
-		/*if(OI.USING_ARCADE)
+		if(OI.USING_ARCADE)
 		{
 			setDefaultCommand(new DriveJoystickArcadeCommand());
 		}
 		else
 		{
 			setDefaultCommand(new DriveJoystickTankCommand());
-		}*/
+		}
     }
 
 	public void arcadeDrive(double moveValue, double rotateValue)
@@ -304,16 +306,6 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("Encoder 2", getEncoder2Distance());
 		SmartDashboard.putNumber("Encoder Average", getEncoderAve());
 		SmartDashboard.putNumber("Encoder Rate", getEncoderAverageSpeed());
-		
-		/*SmartDashboard.putNumber("IR 2 Voltage", IRSensor2.getVoltage());
-		SmartDashboard.putNumber("Velocity", getEncoderAverageSpeed());
-		
-		SmartDashboard.putBoolean("Button 1", this.getBumper1());
-		SmartDashboard.putBoolean("Button 2", this.getBumper2());
-		
-		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
-		SmartDashboard.putNumber("NavX Roll", NavX.getInstance().getRoll());
-		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());*/
 		
 		SmartDashboard.putNumber("Gyro", getAngleDegrees());
 	}
