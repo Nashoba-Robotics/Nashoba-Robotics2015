@@ -1,4 +1,4 @@
-package edu.nr.robotics;
+package edu.nr.robotics.custom;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -6,17 +6,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MotorPair implements PIDOutput
 {
-	private static int count = 1;
-	
 	private SpeedController first, second;
-	private int num;
+	private boolean debugMode = false;
 	
 	public MotorPair(SpeedController first, SpeedController second)
 	{
-		num = count;
-		count++;
 		this.first = first;
 		this.second = second;
+	}
+	
+	public void enableDebug()
+	{
+		debugMode = true;
 	}
 	
 	@Override
@@ -24,7 +25,8 @@ public class MotorPair implements PIDOutput
 	{
 		first.set(output);
 		second.set(output);
-		SmartDashboard.putNumber("MotorPair " + num + " actual output", output);
+		if(debugMode)
+			SmartDashboard.putNumber("MotorPair actual output", output);
 	}
 	
 	public void set(double output)

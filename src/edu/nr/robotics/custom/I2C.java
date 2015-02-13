@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-package edu.nr.robotics.subsystems.drive;
+package edu.nr.robotics.custom;
 
 import java.nio.ByteOrder;
 import java.nio.ByteBuffer;
@@ -251,7 +251,7 @@ public class I2C extends SensorBase {
 	 * @return true if the sensor was verified to be connected
 	 */
 	public boolean verifySensor(int registerAddress, int count, byte[] expected) {
-		// TODO: Make use of all 7 read bytes
+		// Make use of all 7 read bytes
 		byte[] deviceData = new byte[4];
 		for (int i = 0, curRegisterAddress = registerAddress; i < count; i += 4, curRegisterAddress += 4) {
 			int toRead = count - i < 4 ? count - i : 4;

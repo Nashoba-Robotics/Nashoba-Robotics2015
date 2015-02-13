@@ -1,10 +1,10 @@
 
 package edu.nr.robotics.subsystems.drive;
 
-import edu.nr.robotics.CantTalon;
-import edu.nr.robotics.MotorPair;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.custom.CantTalon;
+import edu.nr.robotics.custom.MotorPair;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickTankCommand;
 import edu.nr.robotics.subsystems.drive.mxp.NavX;
@@ -21,12 +21,10 @@ import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
  */
 public class Drive extends Subsystem 
 {	
-	public static final double JOYSTICK_DRIVE_P = 0.5;
+	public static final double JOYSTICK_DRIVE_P = 0.25;
 	public static final double CENTER_OF_ROTATION_RELATIVE_TO_CAMERA_FEET = 16.25/12;
 	
 	private static Drive singleton;
-	
-	private AnalogInput IRSensor;
 	
 	private Encoder leftEnc, rightEnc;
 	private double ticksPerRev = 256, wheelDiameter = 0.4975;
@@ -37,20 +35,20 @@ public class Drive extends Subsystem
 	
 	MotorPair leftMotors, rightMotors;
 	
-	AnalogInput IRSensor2;
-	
 	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
 	private final double MAX_ENCODER_RATE = 7;
 	CantTalon[] talons;
 	
+	CantTalon hDrive;
+	
 	private Drive()
 	{
 		talons = new CantTalon[4];
-		talons[0] = new CantTalon(RobotMap.leftDriveTalon1);
-		talons[1] = new CantTalon(RobotMap.leftDriveTalon2);
+		talons[0] = CantTalon.newCantTalon(RobotMap.leftDriveTalon1);
+		talons[1] = CantTalon.newCantTalon(RobotMap.leftDriveTalon2);
 		
-		talons[2] = new CantTalon(RobotMap.rightDriveTalon1);
-		talons[3] = new CantTalon(RobotMap.rightDriveTalon2);
+		talons[2] = CantTalon.newCantTalon(RobotMap.rightDriveTalon1);
+		talons[3] = CantTalon.newCantTalon(RobotMap.rightDriveTalon2);
 		
 		setTalonProperties();
 		
@@ -70,17 +68,15 @@ public class Drive extends Subsystem
 		leftEnc.setDistancePerPulse(distancePerPulse / MAX_ENCODER_RATE);
 		rightEnc.setDistancePerPulse(distancePerPulse / MAX_ENCODER_RATE);
 		
-		leftPid = new PIDController(0.5, 0, 0, 1, leftEnc, leftMotors);
-		rightPid = new PIDController(0.5, 0, 0, 1, rightEnc, rightMotors);
+		leftPid = new PIDController(JOYSTICK_DRIVE_P, 0, 0, 1, leftEnc, leftMotors);
+		rightPid = new PIDController(JOYSTICK_DRIVE_P, 0, 0, 1, rightEnc, rightMotors);
 		leftPid.enable();
 		rightPid.enable();
-		
+
 		SmartDashboard.putData("Left Side PID", leftPid);
 		SmartDashboard.putData("Right Side PID", rightPid);
 		
-		IRSensor = new AnalogInput(RobotMap.IRSensor);
-		
-		IRSensor2 = new AnalogInput(RobotMap.IRSensor2);
+		hDrive = CantTalon.newCantTalon(RobotMap.HDriveTalon);
 		
 		bumperButtonLeft = new DigitalInput(RobotMap.BUMPER_BUTTON_LEFT);
 		bumperButtonRight = new DigitalInput(RobotMap.BUMPER_BUTTON_RIGHT);
@@ -194,6 +190,11 @@ public class Drive extends Subsystem
         rightPid.setSetpoint(rightMotorSpeed);
 	}
 	
+	public void setHDrive(double value)
+	{
+		hDrive.set(value);
+	}
+	
 	public void setPIDEnabled(boolean enabled)
 	{
 		if(enabled && !leftPid.isEnable())
@@ -239,11 +240,6 @@ public class Drive extends Subsystem
         return num;
 	}
 	
-	public double getIRDistance() 
-	{
-		return IRSensor.getVoltage();
-	}
-
 	public double getAngleDegrees() 
 	{
 		return NavX.getInstance().getYaw();

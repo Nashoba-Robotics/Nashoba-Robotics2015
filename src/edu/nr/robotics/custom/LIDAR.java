@@ -1,7 +1,6 @@
-package edu.nr.robotics.subsystems.frontElevator;
+package edu.nr.robotics.custom;
 
-import edu.nr.robotics.subsystems.drive.I2C;
-import edu.nr.robotics.subsystems.drive.I2C.Port;
+import edu.nr.robotics.custom.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LIDAR
@@ -120,7 +119,7 @@ public class LIDAR
 	// Timer task to keep distance updated
 	private class LIDARUpdater implements Runnable 
 	{
-		private int period = 1000/100; //Default of 100Hz
+		private int period = 1000/50; //Default of 100Hz
 		
 		public LIDARUpdater() //Provides a default value for period
 		{

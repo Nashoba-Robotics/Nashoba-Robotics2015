@@ -24,7 +24,10 @@ public class OI
 	Joystick stickTankRight;
 	Joystick stickArcade;
 	Joystick coffin;
+	Joystick buttonAssignmentStick;
 	//joystick for Arcade goes in 0, left joystick for tank goes in 2, right joystick for tank goes in 3
+
+	public static int H_DRIVE_BUTTON = 2;
 	
 	private OI()
 	{
@@ -38,7 +41,6 @@ public class OI
 			stickTankRight = new Joystick(3);
 		}
 
-		Joystick buttonAssignmentStick;
 		if(USING_ARCADE)
 		{
 			if(USING_SPLIT_ARCADE)
@@ -112,16 +114,49 @@ public class OI
 		if(USING_ARCADE)
 		{
 			if(USING_SPLIT_ARCADE)
-				return -stickTankRight.getX();
+			{
+				if(!stickTankRight.getRawButton(H_DRIVE_BUTTON))
+					return -stickTankRight.getX();
+			}
 			else
-				return -stickArcade.getZ();
+			{
+				if(!stickArcade.getRawButton(H_DRIVE_BUTTON))
+					return -stickArcade.getZ();
+			}
 		}
-		else
+		
+		return 0;
+	}
+	
+	//TODO make this compatible with the coffin 'dinky' joystick (so a tank drive system can go sideways as well)
+	public double getHDriveValue()
+	{
+		if(USING_ARCADE)
 		{
-			return 0;
+			if(USING_SPLIT_ARCADE)
+			{
+				if(buttonAssignmentStick.getRawButton(H_DRIVE_BUTTON))
+					return -stickTankRight.getX();
+			}
+			else
+			{
+				if(buttonAssignmentStick.getRawButton(H_DRIVE_BUTTON))
+					return -stickArcade.getX();
+			}
 		}
+		
+		return 0;
 	}
 
+	public boolean useHDrive()
+	{
+		if(USING_ARCADE)
+		{
+			return buttonAssignmentStick.getRawButton(H_DRIVE_BUTTON);
+		}
+		return false;
+	}
+	
 	public double getTankLeftValue()
 	{
 		if(USING_ARCADE)
@@ -142,10 +177,7 @@ public class OI
 	{
 		if(USING_ARCADE)
 		{
-			if(USING_SPLIT_ARCADE)
-				return stickTankRight.getRawButton(1)?2:1;
-			else
-				return stickArcade.getRawButton(1)?2:1;
+			return buttonAssignmentStick.getRawButton(1)?2:1;
 		}
 		
 		return 1;
@@ -160,7 +192,7 @@ public class OI
 	{
 		if(USING_COFFIN)
 		{
-			return coffin.getRawAxis(1);//THIS NEEDS TO BE SET
+			return coffin.getRawAxis(1);//TODO THIS NEEDS TO BE SET
 		}
 		return 0;
 	}
@@ -169,7 +201,7 @@ public class OI
 	{
 		if(USING_COFFIN)
 		{
-			return coffin.getRawAxis(1);//THIS NEEDS TO BE SET
+			return coffin.getRawAxis(1);//TODO THIS NEEDS TO BE SET
 		}
 		return 0;
 	}
@@ -182,10 +214,7 @@ public class OI
 	{
 		if(USING_ARCADE)
 		{
-			if(USING_SPLIT_ARCADE)
-				return stickTankRight.getRawButton(2);
-			else
-				return stickArcade.getRawButton(2);
+			return buttonAssignmentStick.getRawButton(H_DRIVE_BUTTON);
 		}
 		return false;
 	}
