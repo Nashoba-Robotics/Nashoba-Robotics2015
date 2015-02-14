@@ -12,24 +12,36 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class DriveAngleCommand extends CMD 
 {
-	double targetDeltaAngleRadians;
+	double targetSetpoint;
 	PIDController pidController;
 	GyroPIDSource gyroSource;
 	
-    public DriveAngleCommand(double targetDeltaAngleRadians) 
+	/**
+	 * 
+	 * @param targetAngleRadians Angle in radians
+	 */
+    public DriveAngleCommand(double targetAngleRadians, boolean absolute) 
     {
     	requires(Drive.getInstance());
     	gyroSource = new GyroPIDSource();
-    	pidController = new PIDController(0.5, 0.073, 0, gyroSource, new RotationPIDOutput());
+    	pidController = new PIDController(0.25, 0.03, 0, gyroSource, new RotationPIDOutput());
     	SmartDashboard.putData("Angle PID", pidController);
-    	this.targetDeltaAngleRadians = targetDeltaAngleRadians;
+    	
+    	if(absolute)
+    	{
+    		this.targetSetpoint = targetAngleRadians;
+    	}
+    	else
+		{
+    		this.targetSetpoint = gyroSource.pidGet() + targetAngleRadians;
+		}
     }
 
     @Override
 	protected void onStart() 
 	{
 		pidController.enable();
-		pidController.setSetpoint(gyroSource.pidGet() + targetDeltaAngleRadians);
+		pidController.setSetpoint(targetSetpoint);
 	}
 
     @Override

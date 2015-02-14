@@ -3,7 +3,9 @@ package edu.nr.robotics;
 
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.drive.Drive;
+import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveIdleCommand;
+import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -31,9 +33,7 @@ public class Robot extends IterativeRobot
 		BackElevator.init();
 		
 		SmartDashboard.putNumber("ElevatorHeightSet", 1);
-		/*SmartDashboard.putData("Front Elevator Height 3", new FrontElevatorGoToHeightCommand(3));
-		SmartDashboard.putData("Front Elevator Height 4", new FrontElevatorGoToHeightCommand(4));
-		*/
+		
         SmartDashboard.putData("Go to smartdashboard height", new EmptyCommand("elevator to smart height")
         {
 			@Override
@@ -44,7 +44,23 @@ public class Robot extends IterativeRobot
 			
 			protected void onStart(){}
         });
+        
+        SmartDashboard.putNumber("Smart Angle", 0.262);
+        SmartDashboard.putData(new EmptyCommand("Drive to smartdash angle")
+        {
+			@Override
+			protected void onStart() 
+			{
+			}
+
+			@Override
+			protected void onExecute() 
+			{
+				new DriveAngleCommand(SmartDashboard.getNumber("Smart Angle"), false).start();
+			}
+        });
 		
+        SmartDashboard.putData(new DrivePositionCommand(false));
 		
         // instantiate the command used for the autonomous period
         autonomousCommand = new DriveIdleCommand();
@@ -98,8 +114,6 @@ public class Robot extends IterativeRobot
     	
         //Update SmartDashboard info after the scheduler runs our commands
         putSubsystemDashInfo();
-        
-        
     }
 
     /**
@@ -127,5 +141,6 @@ public class Robot extends IterativeRobot
     {
     	Drive.getInstance().putSmartDashboardInfo();
     	FrontElevator.getInstance().putSmartDashboardInfo();
+    	BackElevator.getInstance().dashboardInfo();
     }
 }
