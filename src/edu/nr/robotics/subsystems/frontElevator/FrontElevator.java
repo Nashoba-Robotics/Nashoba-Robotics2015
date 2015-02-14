@@ -45,6 +45,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
     private final double MIN_ALLOWED_HEIGHT = 0.03;
     
     private DoubleSolenoid binGrabber;
+    private Value binGrabberValue;
 
     public FrontElevator() 
     {
@@ -68,6 +69,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
         binGrabber = new DoubleSolenoid(RobotMap.pneumaticsModule, 
 				  RobotMap.doubleSolenoidForward, 
 				  RobotMap.doubleSolenoidReverse);
+        binGrabberValue = Value.kOff;
         
         //setRampDirection(CantTalon.RampDirection.Both);
     }
@@ -126,7 +128,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
     
     public Value getBinGrabber()
     {
-    	return binGrabber.get();
+    	return binGrabberValue;
     }
     
     public void startLaserPolling()
