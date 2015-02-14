@@ -27,9 +27,11 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 	private static BackElevator singleton;
     
 	AnalogPotentiometer potentiometer;
-	private final double POT_MIN = 0;
-	private final double POT_MAX = 0;
-	private final double POT_RANGE = 0/12; //Range between max and min in feet
+	private final double POT_MIN = 1 - 0.84;
+	private final double POT_MAX = 1 - 0.4;
+	private final double POT_RANGE = 26/12; //Range between max and min in feet
+	
+	private final double AUTON_HEIGHT = 1.08; //In feet
 	
 	CantTalon talon1;
 	CantTalon talon2;
@@ -47,7 +49,8 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 		potentiometer = new AnalogPotentiometer(RobotMap.POTENTIOMETER_BACK_ELEVATOR);
     }
     
-    public void initDefaultCommand() {
+    public void initDefaultCommand() 
+    {
     	setDefaultCommand(new BackElevatorIdleCommand());
     }
     
@@ -87,7 +90,7 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 	
 	public double getScaledPot()
 	{
-		double value = potentiometer.get();
+		double value = 1- potentiometer.get();
     	value -= POT_MIN;
     	value = value/(POT_MAX-POT_MIN) * POT_RANGE;
     	return value;
@@ -102,5 +105,6 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 	public void dashboardInfo()
 	{
 		SmartDashboard.putNumber("Rear pot raw", potentiometer.get());
+		SmartDashboard.putNumber("Rear Pot Scaled", getScaledPot());
 	}
 }

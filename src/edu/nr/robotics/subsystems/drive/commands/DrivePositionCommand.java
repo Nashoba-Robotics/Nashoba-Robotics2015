@@ -12,7 +12,9 @@ public class DrivePositionCommand extends CMD
 	private double goalX, goalY, goalAngle;
 	private Fieldcentric coordinateSystem;
 	
-	private final double Kp = 0.3, Ka = 1.2, Kb = -0.3;
+	private double coordinateSystemOffsetRad;
+	
+	private final double Kp = 0.3, Ka = 1, Kb = -0.4;
 	
 	public DrivePositionCommand(boolean useRoboRealm)
 	{
@@ -30,11 +32,14 @@ public class DrivePositionCommand extends CMD
 	@Override
 	protected void onStart() 
 	{
-		Drive.getInstance().setDriveP(1);
+		Drive.getInstance().setDriveP(0.25);
 		this.goalX = SmartDashboard.getNumber((useRoboRealm)?"ToteX":"Goal X");
 		this.goalY = SmartDashboard.getNumber((useRoboRealm)?"ToteY":"Goal Y");
 		this.goalAngle = -SmartDashboard.getNumber((useRoboRealm)?"ToteAngle":"Goal Angle");
 		coordinateSystem.reset();
+		
+		coordinateSystemOffsetRad = Drive.getInstance().getAngleRadians();
+		
 		
 		//Center of rotation correction
 		final double P = Drive.CENTER_OF_ROTATION_RELATIVE_TO_CAMERA_FEET;
@@ -58,7 +63,7 @@ public class DrivePositionCommand extends CMD
 		double dy = goalY - coordinateSystem.getY();
 		double p = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 		double velocity = Kp * p;
-		velocity = Math.min(velocity, 0.7);
+		velocity = Math.min(velocity, 0.4);
 		
 		//Turn Velocity Calculations
 		double angle = coordinateSystem.getFieldCentricAngleRadians();
@@ -99,11 +104,11 @@ public class DrivePositionCommand extends CMD
 		SmartDashboard.putNumber("dx", dx);
 		SmartDashboard.putNumber("dy", dy);
 		
-		double deltaAngle = (-goalAngle - coordinateSystem.getFieldCentricAngleRadians());
-		
-		if(p < .2)
+		if(p < .2 || dx < 0)
 		{
-			new DriveAngleCommand(-deltaAngle).start();
+			double targetAngle = (goalAngle + coordinateSystemOffsetRad);
+			
+			new DriveAngleCommand(targetAngle, true).start();
 			return true;
 		}
 		return false;

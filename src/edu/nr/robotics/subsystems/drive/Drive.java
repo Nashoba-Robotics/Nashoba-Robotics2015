@@ -36,7 +36,7 @@ public class Drive extends Subsystem
 	MotorPair leftMotors, rightMotors;
 	
 	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
-	private final double MAX_ENCODER_RATE = 7;
+	private final double MAX_ENCODER_RATE = 12;
 	CantTalon[] talons;
 	
 	CantTalon hDrive;
@@ -186,6 +186,7 @@ public class Drive extends Subsystem
         SmartDashboard.putNumber("Arcade Left Motors", leftMotorSpeed);
         SmartDashboard.putNumber("Arcade Right Motors", rightMotorSpeed);
         
+        
     	leftPid.setSetpoint(leftMotorSpeed);
         rightPid.setSetpoint(rightMotorSpeed);
 	}
@@ -302,6 +303,8 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("Encoder 2", getEncoder2Distance());
 		SmartDashboard.putNumber("Encoder Average", getEncoderAve());
 		SmartDashboard.putNumber("Encoder Rate", getEncoderAverageSpeed());
+		
+		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
 		
 		SmartDashboard.putNumber("Gyro", getAngleDegrees());
 	}

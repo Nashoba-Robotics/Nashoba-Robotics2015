@@ -15,44 +15,22 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI 
 {	
 	public static boolean USING_ARCADE = true;
-	public static boolean USING_SPLIT_ARCADE = true;
 	public static boolean USING_COFFIN = false;
 	
 	private static OI singleton;
 	
 	Joystick stickTankLeft;
 	Joystick stickTankRight;
-	Joystick stickArcade;
 	Joystick coffin;
-	Joystick buttonAssignmentStick;
 	//joystick for Arcade goes in 0, left joystick for tank goes in 2, right joystick for tank goes in 3
 
 	public static int H_DRIVE_BUTTON = 2;
 	
 	private OI()
 	{
-		if(USING_ARCADE && !USING_SPLIT_ARCADE)
-		{
-			stickArcade = new Joystick(0);
-		}
-		else
-		{
-			stickTankLeft = new Joystick(2);
-			stickTankRight = new Joystick(3);
-		}
+		stickTankLeft = new Joystick(0);
+		stickTankRight = new Joystick(1);
 
-		if(USING_ARCADE)
-		{
-			if(USING_SPLIT_ARCADE)
-				buttonAssignmentStick = stickTankRight;
-			else
-				buttonAssignmentStick = stickArcade;
-		}
-		else
-		{
-			buttonAssignmentStick = stickTankLeft;
-		}
-		
 		if(USING_COFFIN)
 		{
 			coffin = new Joystick(1);
@@ -74,9 +52,9 @@ public class OI
 		}
 		else
 		{
-			new JoystickButton(buttonAssignmentStick, 6).whenPressed(new ToggleBinCommand());
-			new JoystickButton(buttonAssignmentStick, 8).whenPressed(new GrabBinCommand());
-			new JoystickButton(buttonAssignmentStick, 9).whenPressed(new ReleaseBinCommand());
+			new JoystickButton(stickTankLeft, 3).whenPressed(new ToggleBinCommand());
+			new JoystickButton(stickTankLeft, 5).whenPressed(new GrabBinCommand());
+			new JoystickButton(stickTankLeft, 4).whenPressed(new ReleaseBinCommand());
 		}
 		
 		//new JoystickButton(buttonAssignmentStick, 3).whenPressed(new DrivePositionCommand(true));
@@ -99,10 +77,7 @@ public class OI
 	{
 		if(USING_ARCADE)
 		{
-			if(USING_SPLIT_ARCADE)
-				return -stickTankLeft.getY();
-			else
-				return -stickArcade.getY();
+			return -stickTankLeft.getY();
 		}
 		else
 		{
@@ -117,16 +92,9 @@ public class OI
 		
 		if(USING_ARCADE)
 		{
-			if(USING_SPLIT_ARCADE)
-			{
-				if(!stickTankRight.getRawButton(H_DRIVE_BUTTON))
-					return -stickTankRight.getX();
-			}
-			else
-			{
-				if(!stickArcade.getRawButton(H_DRIVE_BUTTON))
-					return -stickArcade.getZ();
-			}
+			//Right stick controls the H drive if this button is held
+			if(!stickTankRight.getRawButton(H_DRIVE_BUTTON))
+				return -stickTankRight.getX();
 		}
 		
 		return 0;
@@ -137,16 +105,8 @@ public class OI
 	{
 		if(USING_ARCADE)
 		{
-			if(USING_SPLIT_ARCADE)
-			{
-				if(buttonAssignmentStick.getRawButton(H_DRIVE_BUTTON))
-					return -stickTankRight.getX();
-			}
-			else
-			{
-				if(buttonAssignmentStick.getRawButton(H_DRIVE_BUTTON))
-					return -stickArcade.getX();
-			}
+			if(stickTankRight.getRawButton(H_DRIVE_BUTTON))
+				return -stickTankRight.getX();
 		}
 		
 		return 0;
@@ -156,8 +116,8 @@ public class OI
 	{
 		if(USING_ARCADE)
 		{
-			if(buttonAssignmentStick.getRawButton(3))
-				return -buttonAssignmentStick.getY();
+			if(stickTankRight.getRawButton(3))
+				return -stickTankRight.getY();
 		}
 		
 		return 0;
@@ -165,29 +125,29 @@ public class OI
 	
 	public boolean useFrontElevatorManual()
 	{
-		return buttonAssignmentStick.getRawButton(3);
+		return stickTankRight.getRawButton(3);
 	}
 	
 	public double getRearElevatorManual()
 	{
 		if(USING_ARCADE)
 		{
-			if(buttonAssignmentStick.getRawButton(4))
-				return -buttonAssignmentStick.getY();
+			if(stickTankRight.getRawButton(4))
+				return -stickTankRight.getY();
 		}
 		return 0;
 	}
 	
 	public boolean useRearElevatorManual()
 	{
-		return buttonAssignmentStick.getRawButton(4);
+		return stickTankRight.getRawButton(4);
 	}
 
 	public boolean useHDrive()
 	{
 		if(USING_ARCADE)
 		{
-			return buttonAssignmentStick.getRawButton(H_DRIVE_BUTTON);
+			return stickTankRight.getRawButton(H_DRIVE_BUTTON);
 		}
 		return false;
 	}
@@ -212,7 +172,7 @@ public class OI
 	{
 		if(USING_ARCADE)
 		{
-			return buttonAssignmentStick.getRawButton(1)?2:1;
+			return stickTankRight.getRawButton(1)?2:1;
 		}
 		
 		return 1;
@@ -248,7 +208,7 @@ public class OI
 	{
 		if(USING_ARCADE)
 		{
-			return buttonAssignmentStick.getRawButton(H_DRIVE_BUTTON);
+			return stickTankRight.getRawButton(H_DRIVE_BUTTON);
 		}
 		return false;
 	}
