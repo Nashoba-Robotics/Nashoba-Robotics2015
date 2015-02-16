@@ -1,13 +1,20 @@
 
 package edu.nr.robotics;
 
+import edu.nr.robotics.commandgroup.AutonShortDistanceGroup;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
+import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
+import edu.nr.robotics.subsystems.drive.commands.AutonDriveShortDistance;
 import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveIdleCommand;
 import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
+import edu.nr.robotics.subsystems.frontElevator.commands.AdjustRecycleGroup;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
+import edu.nr.robotics.subsystems.frontElevator.commands.ScoreGroup;
+import edu.nr.robotics.subsystems.frontElevator.commands.ToteOneToScoreGroup;
+import edu.nr.robotics.subsystems.frontElevator.commands.ToteTwoToWaitGroup;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
@@ -31,6 +38,9 @@ public class Robot extends IterativeRobot
 		Drive.init();
 		FrontElevator.init();
 		BackElevator.init();
+		
+		SmartDashboard.putData(FrontElevator.getInstance());
+		SmartDashboard.putData(Drive.getInstance());
 		
 		SmartDashboard.putNumber("ElevatorHeightSet", 1);
 		
@@ -59,8 +69,37 @@ public class Robot extends IterativeRobot
 				new DriveAngleCommand(SmartDashboard.getNumber("Smart Angle"), false).start();
 			}
         });
+        
+        SmartDashboard.putNumber("Rear Elevator Height Set", 1);
+        SmartDashboard.putData(new EmptyCommand("Rear Elevator to smart height")
+        {
+			@Override
+			protected void onStart() 
+			{
+			}
+
+			@Override
+			protected void onExecute() 
+			{
+				new BackElevatorGoToHeightCommand(SmartDashboard.getNumber("Rear Elevator Height Set")).start();
+			}
+        });
+        
+        SmartDashboard.putData(new BackElevatorGoToHeightCommand(2.02));
+        
+        for(int i = 0; i < FrontElevator.commandedHeights.length; i++)
+        {
+        	SmartDashboard.putData(FrontElevator.commandedHeights[i].cmdName, new FrontElevatorGoToHeightCommand(FrontElevator.commandedHeights[i].height));
+        }
+        
+        SmartDashboard.putData("Adjust Recycle Group", new AdjustRecycleGroup());
+        SmartDashboard.putData(new AutonDriveShortDistance());
+        SmartDashboard.putData(new AutonShortDistanceGroup());
+        SmartDashboard.putData(new ToteTwoToWaitGroup());
 		
         SmartDashboard.putData(new DrivePositionCommand(false));
+        SmartDashboard.putData(new ToteOneToScoreGroup());
+        SmartDashboard.putData(new ScoreGroup());
 		
         // instantiate the command used for the autonomous period
         autonomousCommand = new DriveIdleCommand();

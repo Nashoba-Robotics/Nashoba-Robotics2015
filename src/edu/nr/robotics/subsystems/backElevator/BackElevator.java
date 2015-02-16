@@ -18,11 +18,11 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 {
 
 	//These needs to be set
-    private static final double HEIGHT_MAX = 0;
-	public static final int HEIGHT_HOLD = 0;
-	public static final int HEIGHT_OBTAIN_STEP = 0;
-	public static final int HEIGHT_OBTAIN_FLOOR = 0;
-	public static final int HEIGHT_CLOSED = 0;
+	public static final double HEIGHT_HOLD = 2;
+	public static final double HEIGHT_OBTAIN_STEP = 1.08;
+	public static final double HEIGHT_OBTAIN_FLOOR = 0;
+	public static final double HEIGHT_SLOW_DOWN = 0.73;
+	public static final double HEIGHT_CLOSED = 0;
 
 	private static BackElevator singleton;
     
@@ -30,8 +30,6 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 	private final double POT_MIN = 1 - 0.84;
 	private final double POT_MAX = 1 - 0.4;
 	private final double POT_RANGE = 26/12; //Range between max and min in feet
-	
-	private final double AUTON_HEIGHT = 1.08; //In feet
 	
 	CantTalon talon1;
 	CantTalon talon2;
@@ -70,6 +68,7 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 	
     public void setElevatorSpeed(double speed)
     {
+    	SmartDashboard.putNumber("Commanded Back Elevator", -speed);
     	motors.set(-speed);
     }
 	

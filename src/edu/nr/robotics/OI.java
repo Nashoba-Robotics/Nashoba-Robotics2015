@@ -1,5 +1,6 @@
 package edu.nr.robotics;
 
+import edu.nr.robotics.commandgroup.StartingConfigurationGroup;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.drive.commands.*;
@@ -7,6 +8,7 @@ import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -55,6 +57,8 @@ public class OI
 			new JoystickButton(stickTankLeft, 3).whenPressed(new ToggleBinCommand());
 			new JoystickButton(stickTankLeft, 5).whenPressed(new GrabBinCommand());
 			new JoystickButton(stickTankLeft, 4).whenPressed(new ReleaseBinCommand());
+			new JoystickButton(stickTankRight, 5).whenPressed(new PickupBarrelAndRaiseGroup());
+			new JoystickButton(stickTankRight, 10).whenPressed(new StartingConfigurationGroup());
 		}
 		
 		//new JoystickButton(buttonAssignmentStick, 3).whenPressed(new DrivePositionCommand(true));

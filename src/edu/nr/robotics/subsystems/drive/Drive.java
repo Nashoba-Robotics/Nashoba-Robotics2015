@@ -11,15 +11,19 @@ import edu.nr.robotics.subsystems.drive.mxp.NavX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
 
 /**
  *
  */
-public class Drive extends Subsystem 
+public class Drive extends Subsystem
 {	
 	public static final double JOYSTICK_DRIVE_P = 0.25;
 	public static final double CENTER_OF_ROTATION_RELATIVE_TO_CAMERA_FEET = 16.25/12;
@@ -33,27 +37,32 @@ public class Drive extends Subsystem
 	
 	private PIDController leftPid, rightPid;
 	
-	MotorPair leftMotors, rightMotors;
-	
 	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
 	private final double MAX_ENCODER_RATE = 12;
-	CantTalon[] talons;
 	
-	CantTalon hDrive;
+	
+	CANTalon leftTalon, rightTalon;
+	CANTalon hDrive;
 	
 	private Drive()
 	{
-		talons = new CantTalon[4];
-		talons[0] = CantTalon.newCantTalon(RobotMap.leftDriveTalon1);
-		talons[1] = CantTalon.newCantTalon(RobotMap.leftDriveTalon2);
+		leftTalon = new CANTalon(RobotMap.leftDriveTalon1);
+		leftTalon.enableLimitSwitch(true, true);
 		
-		talons[2] = CantTalon.newCantTalon(RobotMap.rightDriveTalon1);
-		talons[3] = CantTalon.newCantTalon(RobotMap.rightDriveTalon2);
+		CANTalon tempLeftTalon = new CANTalon(RobotMap.leftDriveTalon2);
+		tempLeftTalon.changeControlMode(ControlMode.Follower);
+		tempLeftTalon.set(leftTalon.getDeviceID());
+		tempLeftTalon.enableLimitSwitch(true, true);
+		
+		rightTalon = new CANTalon(RobotMap.rightDriveTalon1);
+		rightTalon.enableLimitSwitch(true, true);
+		
+		CANTalon tempRightTalon = new CANTalon(RobotMap.rightDriveTalon2);
+		tempRightTalon.changeControlMode(ControlMode.Follower);
+		tempRightTalon.set(rightTalon.getDeviceID());
+		tempRightTalon.enableLimitSwitch(true, true);
 		
 		setTalonProperties();
-		
-		leftMotors = new MotorPair(talons[0], talons[1]);
-		rightMotors = new MotorPair(talons[2], talons[3]);
 		
 		leftEnc = new Encoder(RobotMap.ENCODER_LEFT_A, RobotMap.ENCODER_LEFT_B);
 		rightEnc = new Encoder(RobotMap.ENCODER_RIGHT_A, RobotMap.ENCODER_RIGHT_B);
@@ -68,15 +77,15 @@ public class Drive extends Subsystem
 		leftEnc.setDistancePerPulse(distancePerPulse / MAX_ENCODER_RATE);
 		rightEnc.setDistancePerPulse(distancePerPulse / MAX_ENCODER_RATE);
 		
-		leftPid = new PIDController(JOYSTICK_DRIVE_P, 0, 0, 1, leftEnc, leftMotors);
-		rightPid = new PIDController(JOYSTICK_DRIVE_P, 0, 0, 1, rightEnc, rightMotors);
+		leftPid = new PIDController(JOYSTICK_DRIVE_P, 0, 0, 1, leftEnc, leftTalon);
+		rightPid = new PIDController(JOYSTICK_DRIVE_P, 0, 0, 1, rightEnc, rightTalon);
 		leftPid.enable();
 		rightPid.enable();
 
 		SmartDashboard.putData("Left Side PID", leftPid);
 		SmartDashboard.putData("Right Side PID", rightPid);
 		
-		hDrive = CantTalon.newCantTalon(RobotMap.HDriveTalon);
+		hDrive = new CANTalon(RobotMap.HDriveTalon);
 		
 		bumperButtonLeft = new DigitalInput(RobotMap.BUMPER_BUTTON_LEFT);
 		bumperButtonRight = new DigitalInput(RobotMap.BUMPER_BUTTON_RIGHT);
@@ -107,12 +116,17 @@ public class Drive extends Subsystem
 	
 	public void setTalonProperties()
 	{
-		for(int i = 0; i < talons.length; i++)
-		{
-			talons[i].enableBrakeMode(false);
-			talons[i].enableLimitSwitch(true, true);
-			//talons[i].setVoltageRampRate(0.1);
-		}
+		//leftTalon.enableBrakeMode(true);
+		
+		
+		//rightTalon.enableBrakeMode(true);
+		rightTalon.enableLimitSwitch(true, true);
+	}
+	
+	public void setTalonRampRate(double value)
+	{
+		leftTalon.setVoltageRampRate(value);
+		rightTalon.setVoltageRampRate(value);
 	}
 	
 	public void initDefaultCommand()
@@ -214,8 +228,8 @@ public class Drive extends Subsystem
 	{
 		setPIDEnabled(false);
 		
-		leftMotors.set(left);
-		rightMotors.set(-right);
+		leftTalon.set(left);
+		rightTalon.set(-right);
 	}
 	
 	public void tankDrive(double leftMotorSpeed, double rightMotorSpeed)
@@ -305,8 +319,12 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("Encoder Rate", getEncoderAverageSpeed());
 		
 		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
+		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
 		
 		SmartDashboard.putNumber("Gyro", getAngleDegrees());
+		
+		SmartDashboard.putBoolean("Bumper 1", this.getBumper1());
+		SmartDashboard.putBoolean("Bumper 2", this.getBumper2());
 	}
 }
 
