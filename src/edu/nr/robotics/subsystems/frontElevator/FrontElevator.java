@@ -24,11 +24,36 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	
 	//These need to be found
 	//All heights in feet
-	public static final double HEIGHT_ADJUST_TOTE_ONE = 0;
-	public static final double HEIGHT_WAITING = 0;
-	public static final double HEIGHT_PICK_UP_TOTE_ONE = 0;
-	public static final double HEIGHT_PICK_UP_TOTE_TWO = 0;
-	public static final double HEIGHT_SCORING = 0;
+	public static final double HEIGHT_ADJUST_TOTE_ONE = 0.33;
+	public static final double HEIGHT_WAITING = 2.93;
+	public static final double HEIGHT_PICK_UP_TOTE_ONE = 0.02;
+	public static final double HEIGHT_PICK_UP_TOTE_TWO = 0.85;
+	public static final double HEIGHT_ADJUST_BIN = 0.44;
+	public static final double HEIGHT_SCORING = 0.5;
+	public static final double HEIGHT_BOTTOM = 0.01;
+	
+	public static final double BARREL_ABOVE_FIRST_TOTE = 1.22;
+	
+	public static final ToteHeightPair[] commandedHeights = 
+		{
+		new ToteHeightPair("Waiting Height", HEIGHT_WAITING),
+		new ToteHeightPair("Bottom Height", HEIGHT_BOTTOM),
+		new ToteHeightPair("Pickup Tote Two", HEIGHT_PICK_UP_TOTE_TWO),
+		new ToteHeightPair("Recycle above tote  Height", BARREL_ABOVE_FIRST_TOTE),
+		new ToteHeightPair("Adjust Tote Height", HEIGHT_ADJUST_TOTE_ONE)
+		};
+	
+	//A utility class for putting batch commands to smartdashboard for these heights
+	public static class ToteHeightPair
+	{
+		public final String cmdName;
+		public final double height;
+		public ToteHeightPair(String cmdName, double height)
+		{
+			this.cmdName = cmdName;
+			this.height = height;
+		}
+	}
 	
 	private final double POT_MAX = 0.80; //potentiometer voltage at max position
 	private final double POT_MIN = 0.08;//potentiometer voltage at min value
@@ -69,7 +94,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
         binGrabber = new DoubleSolenoid(RobotMap.pneumaticsModule, 
 				  RobotMap.doubleSolenoidForward, 
 				  RobotMap.doubleSolenoidReverse);
-        binGrabberValue = Value.kOff;
+        binGrabberValue = Value.kReverse;
         
         //setRampDirection(CantTalon.RampDirection.Both);
     }
@@ -108,22 +133,26 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
     	else if(getScaledPot() < MIN_ALLOWED_HEIGHT && speed > 0)
     		speed = 0;
     	
-    	//motors.set(speed);
+    	SmartDashboard.putNumber("Front Elevator Speed", speed);
+    	
     	talon1.set(speed);
     }
     
     public void binGrabberForward()
     {
     	binGrabber.set(Value.kForward);
+    	binGrabberValue = Value.kForward;
     }
     
     public void binGrabberReverse()
     {
     	binGrabber.set(Value.kReverse);
+    	binGrabberValue = Value.kReverse;
     }
     
     public void binGrabberOff(){
 		binGrabber.set(Value.kOff);
+		binGrabberValue = Value.kOff;
 	}
     
     public Value getBinGrabber()
