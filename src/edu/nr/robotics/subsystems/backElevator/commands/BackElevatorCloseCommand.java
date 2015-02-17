@@ -1,31 +1,16 @@
 package edu.nr.robotics.subsystems.backElevator.commands;
 
 import edu.nr.robotics.subsystems.CMD;
+import edu.nr.robotics.subsystems.backElevator.BackElevator;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class BackElevatorCloseCommand extends CMD
+public class BackElevatorCloseCommand extends CommandGroup
 {
-	@Override
-	protected void onStart() 
+	public BackElevatorCloseCommand()
 	{
-		
+		this.addSequential(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_BIN_LOWERED));
+		BackElevatorGoToHeightCommand temp = new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_CLOSED);
+		temp.setMaxSpeed(0.2);
+		this.addSequential(temp);
 	}
-
-	@Override
-	protected void onExecute() 
-	{
-		
-	}
-
-	@Override
-	protected void onEnd(boolean interrupted) 
-	{
-		
-	}
-
-	@Override
-	protected boolean isFinished() 
-	{
-		return false;
-	}
-	
 }

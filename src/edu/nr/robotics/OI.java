@@ -1,10 +1,14 @@
 package edu.nr.robotics;
 
+import edu.nr.robotics.commandgroup.CancelAllCommand;
+import edu.nr.robotics.commandgroup.LowerBinGroup;
 import edu.nr.robotics.commandgroup.StartingConfigurationGroup;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
+import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorCloseCommand;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.drive.commands.*;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
+import edu.nr.robotics.subsystems.frontElevator.FrontElevatorStateMachine;
 import edu.nr.robotics.subsystems.frontElevator.commands.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -17,13 +21,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class OI 
 {	
 	public static boolean USING_ARCADE = true;
-	public static boolean USING_COFFIN = false;
+	public static boolean USING_COFFIN = true;
 	
 	private static OI singleton;
 	
 	Joystick stickTankLeft;
 	Joystick stickTankRight;
-	Joystick coffin;
+	Joystick coffin2, coffin3;
+	
 	//joystick for Arcade goes in 0, left joystick for tank goes in 2, right joystick for tank goes in 3
 
 	public static int H_DRIVE_BUTTON = 2;
@@ -35,34 +40,72 @@ public class OI
 
 		if(USING_COFFIN)
 		{
-			coffin = new Joystick(1);
+			coffin2 = new Joystick(2);
+			coffin3 = new Joystick(3);
 			//Front Elevator Buttons
-			new JoystickButton(coffin, 1).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE));
-			new JoystickButton(coffin, 2).whenPressed(new FirstToteTwoGroup());
-			new JoystickButton(coffin, 3).whenPressed(new ToteTwoToWaitGroup());
-			new JoystickButton(coffin, 4).whenPressed(new ToteTwoToScoreGroup());
-			new JoystickButton(coffin, 5).whenPressed(new ToteOneToScoreGroup());
-			new JoystickButton(coffin, 6).whenPressed(new ScoreGroup());	
-			new JoystickButton(coffin, 7).whenPressed(new ToggleBinCommand());
-			//TODO new JoystickButton(coffin, 8).whenPressed(new FrontElevatorGoToHeightCommand());
+			new JoystickButton(coffin3, 9).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_HOLD));
+			new JoystickButton(coffin3, 8).whenPressed(new LowerBinGroup());
+			new JoystickButton(coffin3, 7).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_STEP));
+			new JoystickButton(coffin3, 6).whenPressed(new BackElevatorCloseCommand());
+			
+			new JoystickButton(coffin3, 5).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_WAITING));
+			new JoystickButton(coffin3, 4).whenPressed(new AdjustRecycleGroup());
+			new JoystickButton(coffin3, 10).whenPressed(new ToteTwoToWaitGroup());
+			new JoystickButton(coffin3, 2).whenPressed(new ToteOneToScoreGroup());
+			new JoystickButton(coffin3, 1).whenPressed(new ScoreGroup());
+			new JoystickButton(coffin2, 8).whenPressed(new PickupBarrelAndRaiseGroup());
+			
+			new JoystickButton(coffin2, 5).whenPressed(new ToggleBinCommand());
+			new JoystickButton(coffin2, 6).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE));
+			new JoystickButton(coffin2, 7).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_BIN_LOWERED));
+			
+			new JoystickButton(coffin3, 1).whenPressed(new CancelAllCommand());
+			new JoystickButton(coffin2, 4).whenPressed(new EmptyCommand("Next")
+			{
+				@Override
+				protected void onStart() {
+				}
+				@Override
+				protected void onExecute() 
+				{
+					FrontElevatorStateMachine.getNextCommand().start();
+				}
+				
+			});
+			
+			new JoystickButton(coffin2, 3).whenPressed(new EmptyCommand("Redo Step")
+	        {
+				@Override
+				protected void onStart() 
+				{
+					
+				}
 
-		    //Back Elevator Buttons
-			new JoystickButton(coffin, 9).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_HOLD));
-			new JoystickButton(coffin, 10).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_STEP));
-			new JoystickButton(coffin, 11).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_FLOOR));
-			new JoystickButton(coffin, 12).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_CLOSED));
+				@Override
+				protected void onExecute() 
+				{
+					FrontElevatorStateMachine.redoLastCommand().start();
+				}
+	        });
+	        
+			new JoystickButton(coffin2, 2).whenPressed(new EmptyCommand("Reset")
+	        {
+				@Override
+				protected void onStart() {
+				}
+
+				@Override
+				protected void onExecute() 
+				{
+					FrontElevatorStateMachine.reset();
+				}
+	        });
+			
 		}
 		else
 		{
-			new JoystickButton(stickTankLeft, 3).whenPressed(new ToggleBinCommand());
-			new JoystickButton(stickTankLeft, 5).whenPressed(new GrabBinCommand());
-			new JoystickButton(stickTankLeft, 4).whenPressed(new ReleaseBinCommand());
-			new JoystickButton(stickTankRight, 5).whenPressed(new PickupBarrelAndRaiseGroup());
 			new JoystickButton(stickTankRight, 10).whenPressed(new StartingConfigurationGroup());
 		}
-		
-		//new JoystickButton(buttonAssignmentStick, 3).whenPressed(new DrivePositionCommand(true));
-		//new JoystickButton(buttonAssignmentStick, 4).whenPressed(new DriveJoystickArcadeCommand());
 	}
 	
 	public static OI getInstance()
@@ -83,34 +126,25 @@ public class OI
 		{
 			return -stickTankLeft.getY();
 		}
-		else
-		{
-			return 0;
-		}
+		
+		return 0;
 	}
 	
 	public double getArcadeTurnValue()
 	{
-		if(useFrontElevatorManual() || useRearElevatorManual())
-			return 0;
-		
 		if(USING_ARCADE)
 		{
-			//Right stick controls the H drive if this button is held
-			if(!stickTankRight.getRawButton(H_DRIVE_BUTTON))
-				return -stickTankRight.getX();
+			return -stickTankRight.getX();
 		}
 		
 		return 0;
 	}
 	
-	//TODO make this compatible with the coffin 'dinky' joystick (so a tank drive system can go sideways as well)
 	public double getHDriveValue()
 	{
-		if(USING_ARCADE)
+		if(USING_COFFIN)
 		{
-			if(stickTankRight.getRawButton(H_DRIVE_BUTTON))
-				return -stickTankRight.getX();
+			return snap(-coffin2.getRawAxis(0));
 		}
 		
 		return 0;
@@ -118,42 +152,29 @@ public class OI
 	
 	public double getFrontElevatorManual()
 	{
-		if(USING_ARCADE)
+		if(USING_COFFIN)
 		{
-			if(stickTankRight.getRawButton(3))
-				return -stickTankRight.getY();
+			return snap(-coffin3.getRawAxis(1));
 		}
 		
 		return 0;
 	}
 	
-	public boolean useFrontElevatorManual()
-	{
-		return stickTankRight.getRawButton(3);
-	}
-	
 	public double getRearElevatorManual()
 	{
-		if(USING_ARCADE)
+		if(USING_COFFIN)
 		{
-			if(stickTankRight.getRawButton(4))
-				return -stickTankRight.getY();
+			return snap(-(coffin3.getRawAxis(0)-.1));
 		}
 		return 0;
 	}
 	
-	public boolean useRearElevatorManual()
+	private double snap(double value)
 	{
-		return stickTankRight.getRawButton(4);
-	}
-
-	public boolean useHDrive()
-	{
-		if(USING_ARCADE)
-		{
-			return stickTankRight.getRawButton(H_DRIVE_BUTTON);
-		}
-		return false;
+		if(value > -0.1 && value < 0.1)
+			return 0;
+		
+		return (value-0.1) / 0.9;
 	}
 	
 	public double getTankLeftValue()
@@ -185,24 +206,6 @@ public class OI
 	public double getDecreaseValue()
 	{
 		return 1;
-	}
-	
-	public double getFrontElevatorJoy()
-	{
-		if(USING_COFFIN)
-		{
-			return coffin.getRawAxis(1);//TODO THIS NEEDS TO BE SET
-		}
-		return 0;
-	}
-	
-	public double getBackElevatorJoy()
-	{
-		if(USING_COFFIN)
-		{
-			return coffin.getRawAxis(1);//TODO THIS NEEDS TO BE SET
-		}
-		return 0;
 	}
 	
 	/**

@@ -8,11 +8,12 @@ public class AdjustRecycleGroup extends CommandGroup
 {
 	public AdjustRecycleGroup()
 	{
-		this.addSequential(new FrontElevatorGoToAdjustHeightWithHalfwayRelease(FrontElevator.HEIGHT_ADJUST_BIN));
+		this.addSequential(new FrontElevatorGoToAdjustHeightWithHalfwayRelease());
 		//this.addSequential(new ReleaseBinCommand());
-		this.addSequential(new WaitCommand(1));
+		this.addSequential(new WaitCommand(0.5));
 		this.addSequential(new GrabBinCommand());
-		this.addSequential(new WaitCommand(1));
+		this.addSequential(new WaitCommand(0.5));
 		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_WAITING));
 	}
 }
+		

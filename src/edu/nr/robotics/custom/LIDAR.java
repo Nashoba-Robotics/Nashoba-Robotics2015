@@ -101,7 +101,7 @@ public class LIDAR
 			}
 			
 			int newValue = (int)Integer.toUnsignedLong(distance[0] << 8) + Byte.toUnsignedInt(distance[1]);
-			savedValues[savedValuesIndex % 4] = newValue;
+			savedValues[savedValuesIndex % savedValues.length] = newValue;
 			savedValuesIndex++;
 			
 			

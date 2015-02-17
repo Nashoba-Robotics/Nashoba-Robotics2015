@@ -78,14 +78,7 @@ public class DriveJoystickArcadeCommand extends CMD
     		gyroCorrection.clearInitialValue();
     	}
     	
-    	if(OI.getInstance().useHDrive())
-    	{
-    		Drive.getInstance().setHDrive(OI.getInstance().getHDriveValue());
-    	}
-    	else
-    	{
-    		Drive.getInstance().setHDrive(0);
-    	}
+		Drive.getInstance().setHDrive(OI.getInstance().getHDriveValue());
     	
     	SmartDashboard.putNumber("Drive Magnitude", driveMagnitude);
     	SmartDashboard.putNumber("Turn", turn);    	

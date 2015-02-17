@@ -21,7 +21,7 @@ public class FrontElevatorGoToHeightCommand extends CMD
         requires(FrontElevator.getInstance());
         
         this.height = height;
-        pid = new PID(0, 0.01, 0, FrontElevator.getInstance(), FrontElevator.getInstance());
+        pid = new PID(0, 0, 0, FrontElevator.getInstance(), FrontElevator.getInstance());
     }
     
     boolean goingDown;
@@ -47,6 +47,11 @@ public class FrontElevatorGoToHeightCommand extends CMD
 			pid.setPID(2, 0.05, pid.getD());
 		}
 	}
+    
+    public void setPI(double p, double i)
+    {
+    	pid.setPID(p, i, pid.getD());
+    }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
@@ -66,6 +71,7 @@ public class FrontElevatorGoToHeightCommand extends CMD
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
+    	
     	if(Math.abs(pid.getError()) < 6d/12)
     	{
 			FrontElevator.getInstance().setTalonRampRate(0);
@@ -75,13 +81,13 @@ public class FrontElevatorGoToHeightCommand extends CMD
     		pid.resetTotalError();
     	}
     	
-        return Math.abs(pid.getError()) < 0.3/12d;
+        return Math.abs(pid.getError()) < 0.2/12d;
     }
 
     @Override
 	protected void onEnd(boolean interrupted) 
     {
-    	pid.disable();
+    	pid.reset();
     	FrontElevator.getInstance().setElevatorSpeed(0);
 	}
 }

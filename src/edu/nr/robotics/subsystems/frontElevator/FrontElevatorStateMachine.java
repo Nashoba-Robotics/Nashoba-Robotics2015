@@ -6,6 +6,7 @@ import edu.nr.robotics.subsystems.frontElevator.commands.ScoreGroup;
 import edu.nr.robotics.subsystems.frontElevator.commands.ToteOneToScoreGroup;
 import edu.nr.robotics.subsystems.frontElevator.commands.ToteTwoToWaitGroup;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class FrontElevatorStateMachine 
 {
@@ -13,6 +14,8 @@ public class FrontElevatorStateMachine
 	
 	private static Command[] commands = 
 		{
+			new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BEFORE_TOTE_ADJUST),
+			new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE),
 			new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_WAITING),
 			new AdjustRecycleGroup(),//One tote in elevator, one at bottom
 			new ToteTwoToWaitGroup(),//Two totes in elevator, one at bottom
@@ -29,6 +32,7 @@ public class FrontElevatorStateMachine
 		Command cmd = commands[stepCount];
 		stepCount++;
 		
+		SmartDashboard.putNumber("StepCount", stepCount);
 		return cmd;
 	}
 	
@@ -42,5 +46,6 @@ public class FrontElevatorStateMachine
 	public static void reset()
 	{
 		stepCount = 0;
+		SmartDashboard.putNumber("StepCount", stepCount);
 	}
 }

@@ -4,12 +4,15 @@ package edu.nr.robotics;
 import edu.nr.robotics.commandgroup.AutonShortDistanceGroup;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
+import edu.nr.robotics.subsystems.camera.CameraOffCommand;
+import edu.nr.robotics.subsystems.camera.CameraOnCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.commands.AutonDriveShortDistance;
 import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveIdleCommand;
 import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
+import edu.nr.robotics.subsystems.frontElevator.FrontElevatorStateMachine;
 import edu.nr.robotics.subsystems.frontElevator.commands.AdjustRecycleGroup;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.frontElevator.commands.ScoreGroup;
@@ -100,7 +103,50 @@ public class Robot extends IterativeRobot
         SmartDashboard.putData(new DrivePositionCommand(false));
         SmartDashboard.putData(new ToteOneToScoreGroup());
         SmartDashboard.putData(new ScoreGroup());
-		
+        
+        SmartDashboard.putData(new CameraOnCommand());
+        SmartDashboard.putData(new CameraOffCommand());
+        
+        SmartDashboard.putData(new EmptyCommand("Next Step")
+        {
+			@Override
+			protected void onStart() {
+			}
+
+			@Override
+			protected void onExecute() 
+			{
+				FrontElevatorStateMachine.getNextCommand().start();
+			}
+        	
+        });
+        
+        SmartDashboard.putData(new EmptyCommand("Redo Step")
+        {
+			@Override
+			protected void onStart() {
+			}
+
+			@Override
+			protected void onExecute() 
+			{
+				FrontElevatorStateMachine.redoLastCommand().start();
+			}
+        });
+        
+        SmartDashboard.putData(new EmptyCommand("Reset")
+        {
+			@Override
+			protected void onStart() {
+			}
+
+			@Override
+			protected void onExecute() 
+			{
+				FrontElevatorStateMachine.reset();
+			}
+        });
+        
         // instantiate the command used for the autonomous period
         autonomousCommand = new DriveIdleCommand();
     }
