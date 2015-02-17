@@ -14,7 +14,11 @@ public class PickupBarrelAndRaiseGroup extends CommandGroup
 		temp.setRoughStopDistance(0.1);
 		temp.setIParams(0.5, 0.01);
 		this.addSequential(temp);
-		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_WAITING));
+		
+		FrontElevatorGoToHeightCommand temp2 = new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_OBTAIN_NOODLE);
+		temp2.setPI(4, 0.1);
+		
+		this.addSequential(temp2);
 	}
 	
 	@Override

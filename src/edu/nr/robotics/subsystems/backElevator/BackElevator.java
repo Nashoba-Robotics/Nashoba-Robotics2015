@@ -17,12 +17,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 {
 
+	private static final double SLIP_OFFSET = 0.00;
+	
 	//These needs to be set
-	public static final double HEIGHT_HOLD = 2;
-	public static final double HEIGHT_OBTAIN_STEP = 1.08;
-	public static final double HEIGHT_OBTAIN_FLOOR = 0;
-	public static final double HEIGHT_SLOW_DOWN = 0.73;
-	public static final double HEIGHT_CLOSED = 0;
+	public static final double HEIGHT_HOLD = 2 + SLIP_OFFSET;
+	public static final double HEIGHT_OBTAIN_STEP = 1.08 + SLIP_OFFSET;
+	public static final double HEIGHT_OBTAIN_FLOOR = 0 + SLIP_OFFSET;
+	public static final double HEIGHT_SLOW_DOWN = 0.73 + SLIP_OFFSET;
+	public static final double HEIGHT_CLOSED = 0 + SLIP_OFFSET;
+	
+	public static final double HEIGHT_BINS_GRAZE_GROUND = 1.5 + SLIP_OFFSET;
+	public static final double HEIGHT_BIN_LOWERED = 0.67 + SLIP_OFFSET;
 
 	private static BackElevator singleton;
     

@@ -1,10 +1,14 @@
 package edu.nr.robotics;
 
+import edu.nr.robotics.commandgroup.CancelAllCommand;
+import edu.nr.robotics.commandgroup.LowerBinGroup;
 import edu.nr.robotics.commandgroup.StartingConfigurationGroup;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
+import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorCloseCommand;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.drive.commands.*;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
+import edu.nr.robotics.subsystems.frontElevator.FrontElevatorStateMachine;
 import edu.nr.robotics.subsystems.frontElevator.commands.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -24,6 +28,8 @@ public class OI
 	Joystick stickTankLeft;
 	Joystick stickTankRight;
 	Joystick coffin;
+	
+	Joystick rezza;
 	//joystick for Arcade goes in 0, left joystick for tank goes in 2, right joystick for tank goes in 3
 
 	public static int H_DRIVE_BUTTON = 2;
@@ -32,6 +38,7 @@ public class OI
 	{
 		stickTankLeft = new Joystick(0);
 		stickTankRight = new Joystick(1);
+		rezza = new Joystick(2);
 
 		if(USING_COFFIN)
 		{
@@ -54,13 +61,63 @@ public class OI
 		}
 		else
 		{
-			new JoystickButton(stickTankLeft, 3).whenPressed(new ToggleBinCommand());
-			new JoystickButton(stickTankLeft, 5).whenPressed(new GrabBinCommand());
-			new JoystickButton(stickTankLeft, 4).whenPressed(new ReleaseBinCommand());
-			new JoystickButton(stickTankRight, 5).whenPressed(new PickupBarrelAndRaiseGroup());
+			//new JoystickButton(stickTankLeft, 3).whenPressed(new ToggleBinCommand());
+			//new JoystickButton(stickTankLeft, 5).whenPressed(new GrabBinCommand());
+			//new JoystickButton(stickTankLeft, 4).whenPressed(new ReleaseBinCommand());
+			//new JoystickButton(stickTankRight, 5).whenPressed(new PickupBarrelAndRaiseGroup());
 			new JoystickButton(stickTankRight, 10).whenPressed(new StartingConfigurationGroup());
 		}
 		
+		new JoystickButton(rezza, 1).whenPressed(new CancelAllCommand());
+		new JoystickButton(rezza, 2).whenPressed(new EmptyCommand("Next")
+		{
+			@Override
+			protected void onStart() {
+			}
+			@Override
+			protected void onExecute() 
+			{
+				FrontElevatorStateMachine.getNextCommand().start();
+			}
+			
+		});
+		
+		new JoystickButton(rezza, 11).whenPressed(new EmptyCommand("Redo Step")
+        {
+			@Override
+			protected void onStart() 
+			{
+				
+			}
+
+			@Override
+			protected void onExecute() 
+			{
+				FrontElevatorStateMachine.redoLastCommand().start();
+			}
+        });
+        
+		new JoystickButton(rezza, 12).whenPressed(new EmptyCommand("Reset")
+        {
+			@Override
+			protected void onStart() {
+			}
+
+			@Override
+			protected void onExecute() 
+			{
+				FrontElevatorStateMachine.reset();
+			}
+        });
+		
+		new JoystickButton(rezza, 9).whenPressed(new ToggleBinCommand());
+		new JoystickButton(rezza, 10).whenPressed(new PickupBarrelAndRaiseGroup());
+		new JoystickButton(rezza, 8).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BOTTOM));
+		
+		new JoystickButton(rezza, 7).whenPressed(new LowerBinGroup());
+		new JoystickButton(rezza, 5).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_HOLD));
+		
+		new JoystickButton(rezza, 6).whenPressed(new BackElevatorCloseCommand());
 		//new JoystickButton(buttonAssignmentStick, 3).whenPressed(new DrivePositionCommand(true));
 		//new JoystickButton(buttonAssignmentStick, 4).whenPressed(new DriveJoystickArcadeCommand());
 	}
@@ -120,8 +177,8 @@ public class OI
 	{
 		if(USING_ARCADE)
 		{
-			if(stickTankRight.getRawButton(3))
-				return -stickTankRight.getY();
+			if(rezza.getRawButton(4))
+				return -rezza.getY();
 		}
 		
 		return 0;
@@ -129,22 +186,22 @@ public class OI
 	
 	public boolean useFrontElevatorManual()
 	{
-		return stickTankRight.getRawButton(3);
+		return rezza.getRawButton(4);
 	}
 	
 	public double getRearElevatorManual()
 	{
 		if(USING_ARCADE)
 		{
-			if(stickTankRight.getRawButton(4))
-				return -stickTankRight.getY();
+			if(rezza.getRawButton(3))
+				return -rezza.getY();
 		}
 		return 0;
 	}
 	
 	public boolean useRearElevatorManual()
 	{
-		return stickTankRight.getRawButton(4);
+		return rezza.getRawButton(3);
 	}
 
 	public boolean useHDrive()

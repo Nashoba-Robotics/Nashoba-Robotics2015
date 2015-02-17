@@ -45,7 +45,7 @@ public class DrivePositionCommand extends CMD
 		final double P = Drive.CENTER_OF_ROTATION_RELATIVE_TO_CAMERA_FEET;
 		
 		double deltaX = P - P * Math.cos(goalAngle);
-		double deltaY = P * Math.sin(goalAngle) ;
+		double deltaY = P * Math.sin(goalAngle);
 		
 		this.goalX += deltaX;
 		this.goalY += deltaY;

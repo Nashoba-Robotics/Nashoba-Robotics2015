@@ -22,15 +22,19 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 {
 	public static FrontElevator singleton;
 	
+	private static double BELT_SKIP_OFFSET = +0.02;
+	
 	//These need to be found
 	//All heights in feet
-	public static final double HEIGHT_ADJUST_TOTE_ONE = 0.33;
-	public static final double HEIGHT_WAITING = 2.93;
-	public static final double HEIGHT_PICK_UP_TOTE_ONE = 0.02;
-	public static final double HEIGHT_PICK_UP_TOTE_TWO = 0.85;
-	public static final double HEIGHT_ADJUST_BIN = 0.44;
-	public static final double HEIGHT_SCORING = 0.5;
-	public static final double HEIGHT_BOTTOM = 0.01;
+	public static final double HEIGHT_ADJUST_TOTE_ONE = 0.33 + BELT_SKIP_OFFSET;
+	public static final double HEIGHT_WAITING = 2.93 + BELT_SKIP_OFFSET;
+	public static final double HEIGHT_PICK_UP_TOTE_ONE = 0.02 + BELT_SKIP_OFFSET;
+	public static final double HEIGHT_OBTAIN_NOODLE = 0.20 + BELT_SKIP_OFFSET;
+	public static final double HEIGHT_PICK_UP_TOTE_TWO = 0.85 + BELT_SKIP_OFFSET;
+	public static final double HEIGHT_ADJUST_BIN = 0.44 + BELT_SKIP_OFFSET;
+	public static final double HEIGHT_SCORING = 0.5 + BELT_SKIP_OFFSET;
+	public static final double HEIGHT_BOTTOM = 0.01 + BELT_SKIP_OFFSET;
+	public static final double HEIGHT_BEFORE_TOTE_ADJUST = 1.14 + BELT_SKIP_OFFSET;
 	
 	public static final double BARREL_ABOVE_FIRST_TOTE = 1.22;
 	
@@ -205,24 +209,6 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
         	return getScaledPot();
         }
 	}
-	
-	/*public void setRampEnabled(boolean enabled)
-	{
-		if(enabled)
-			motors.enableCantTalonRamping();
-		else
-			motors.disableCantTalonRamping();
-	}
-	
-	public void setRampRate(double percentPerSecond)
-	{
-		motors.setCantTalonRampRate(percentPerSecond);
-	}
-	
-	public void setRampDirection(CantTalon.RampDirection direction)
-	{
-		motors.setCantTalonRampDirection(direction);
-	}*/
 	
 	private double getScaledPot()
 	{
