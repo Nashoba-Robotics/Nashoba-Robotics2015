@@ -56,11 +56,11 @@ public class OI
 			new JoystickButton(coffin2, 8).whenPressed(new PickupBarrelAndRaiseGroup());
 			
 			new JoystickButton(coffin2, 5).whenPressed(new ToggleBinCommand());
-			new JoystickButton(coffin2, 6).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE));
-			new JoystickButton(coffin2, 7).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_BIN_LOWERED));
+			new JoystickButton(coffin2, 7).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE));
+			new JoystickButton(coffin2, 6).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BEFORE_TOTE_ADJUST));
 			
 			new JoystickButton(coffin3, 1).whenPressed(new CancelAllCommand());
-			new JoystickButton(coffin2, 4).whenPressed(new EmptyCommand("Next")
+			/*new JoystickButton(coffin2, 4).whenPressed(new EmptyCommand("Next")
 			{
 				@Override
 				protected void onStart() {
@@ -71,35 +71,15 @@ public class OI
 					FrontElevatorStateMachine.getNextCommand().start();
 				}
 				
-			});
+			});*/
 			
-			new JoystickButton(coffin2, 3).whenPressed(new EmptyCommand("Redo Step")
-	        {
-				@Override
-				protected void onStart() 
-				{
-					
-				}
-
-				@Override
-				protected void onExecute() 
-				{
-					FrontElevatorStateMachine.redoLastCommand().start();
-				}
-	        });
+			new JoystickButton(coffin2, 3).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_SCORING));
 	        
-			new JoystickButton(coffin2, 2).whenPressed(new EmptyCommand("Reset")
-	        {
-				@Override
-				protected void onStart() {
-				}
-
-				@Override
-				protected void onExecute() 
-				{
-					FrontElevatorStateMachine.reset();
-				}
-	        });
+			new JoystickButton(coffin2, 2).whenPressed(new ToteTwoToScoreGroup());
+			
+			JoystickButton fighter = new JoystickButton(coffin2, 9);
+			fighter.whenPressed(new DumbDriveCommand());
+			fighter.whenReleased(new SmartDriveCommand());
 			
 		}
 		else
@@ -144,7 +124,14 @@ public class OI
 	{
 		if(USING_COFFIN)
 		{
-			return snap(-coffin2.getRawAxis(0));
+			if(stickTankRight.getRawButton(2))
+			{
+				return -stickTankRight.getX();
+			}
+			else
+			{
+				return snap(-coffin2.getRawAxis(0));
+			}
 		}
 		
 		return 0;

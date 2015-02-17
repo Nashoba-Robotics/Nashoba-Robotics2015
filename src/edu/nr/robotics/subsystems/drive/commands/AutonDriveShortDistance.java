@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutonDriveShortDistance extends CMD implements PIDOutput
 {
-	private final double distance = -58d/12;
+	private final double distance = -59d/12;
 	private PID pid;
 	AngleGyroCorrection gyroCorrection;
 	double currentSetSpeed = 0;
@@ -25,7 +25,6 @@ public class AutonDriveShortDistance extends CMD implements PIDOutput
 		pid = new PID(0.1, 0.001, 0, encoderSource, this);
 		pid.setSetpoint(distance);
 		gyroCorrection = new AngleGyroCorrection();
-		Drive.getInstance().setTalonRampRate(24);
 	}
 	
 	@Override
@@ -35,6 +34,7 @@ public class AutonDriveShortDistance extends CMD implements PIDOutput
 		gyroCorrection.clearInitialValue();
 		pid.resetTotalError();
 		encoderSource.resetInitialValue();
+		Drive.getInstance().setTalonRampRate(24);
 	}
 
 	@Override
@@ -62,7 +62,8 @@ public class AutonDriveShortDistance extends CMD implements PIDOutput
 	@Override
 	protected void onEnd(boolean interrupted) 
 	{
-		pid.disable();
+		pid.reset();
 		Drive.getInstance().arcadeDrive(0,0);
+		Drive.getInstance().setTalonRampRate(0);
 	}
 }

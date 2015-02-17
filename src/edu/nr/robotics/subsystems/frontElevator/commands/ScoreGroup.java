@@ -22,8 +22,8 @@ public class ScoreGroup extends CommandGroup {
     	addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BOTTOM));
     	addSequential(new ReleaseBinCommand());
     	
-    	DriveDistanceCommand pushForward = new DriveDistanceCommand(0.6, 0.25, 0.3);
-    	pushForward.setIParams(0.7, 0.007);
+    	DriveDistanceCommand pushForward = new DriveDistanceCommand(0.8, 0.25, 0.3);
+    	pushForward.setIParams(0.7, 0.01);
    
     	addSequential(pushForward);
     	

@@ -12,6 +12,7 @@ public class PickupBarrelAndRaiseGroup extends CommandGroup
 		
 		DriveDistanceCommand temp = new DriveDistanceCommand(-0.5, 0.25, 0.5);
 		temp.setRoughStopDistance(0.1);
+		temp.setP(1);
 		temp.setIParams(0.5, 0.01);
 		this.addSequential(temp);
 	}

@@ -200,9 +200,15 @@ public class Drive extends Subsystem
         SmartDashboard.putNumber("Arcade Left Motors", leftMotorSpeed);
         SmartDashboard.putNumber("Arcade Right Motors", rightMotorSpeed);
         
-        
-    	leftPid.setSetpoint(leftMotorSpeed);
-        rightPid.setSetpoint(rightMotorSpeed);
+        if(leftPid.isEnable() && rightPid.isEnable())
+        {
+        	leftPid.setSetpoint(leftMotorSpeed);
+            rightPid.setSetpoint(rightMotorSpeed);
+        }
+        else
+        {
+        	setRawMotorSpeed(leftMotorSpeed, -rightMotorSpeed);
+        }
 	}
 	
 	public void setHDrive(double value)
