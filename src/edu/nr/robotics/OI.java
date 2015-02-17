@@ -53,6 +53,7 @@ public class OI
 			new JoystickButton(coffin3, 10).whenPressed(new ToteTwoToWaitGroup());
 			new JoystickButton(coffin3, 2).whenPressed(new ToteOneToScoreGroup());
 			new JoystickButton(coffin3, 1).whenPressed(new ScoreGroup());
+			new JoystickButton(coffin2, 8).whenPressed(new PickupBarrelAndRaiseGroup());
 			
 			new JoystickButton(coffin2, 5).whenPressed(new ToggleBinCommand());
 			new JoystickButton(coffin2, 6).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE));
@@ -143,7 +144,7 @@ public class OI
 	{
 		if(USING_COFFIN)
 		{
-			return coffin2.getRawAxis(0);
+			return snap(-coffin2.getRawAxis(0));
 		}
 		
 		return 0;
@@ -153,7 +154,7 @@ public class OI
 	{
 		if(USING_COFFIN)
 		{
-			return coffin3.getRawAxis(1);
+			return snap(-coffin3.getRawAxis(1));
 		}
 		
 		return 0;
@@ -163,18 +164,17 @@ public class OI
 	{
 		if(USING_COFFIN)
 		{
-			return coffin3.getRawAxis(0);
+			return snap(-(coffin3.getRawAxis(0)-.1));
 		}
 		return 0;
 	}
 	
-	public boolean useHDrive()
+	private double snap(double value)
 	{
-		if(USING_ARCADE)
-		{
-			return stickTankRight.getRawButton(H_DRIVE_BUTTON);
-		}
-		return false;
+		if(value > -0.1 && value < 0.1)
+			return 0;
+		
+		return (value-0.1) / 0.9;
 	}
 	
 	public double getTankLeftValue()

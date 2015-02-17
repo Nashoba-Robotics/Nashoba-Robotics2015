@@ -4,12 +4,11 @@ import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 
 public class FrontElevatorGoToAdjustHeightWithHalfwayRelease extends FrontElevatorGoToHeightCommand
 {
-	private double releaseHeight;
 	private boolean released = false;
 	
-	public FrontElevatorGoToAdjustHeightWithHalfwayRelease(double height) 
+	public FrontElevatorGoToAdjustHeightWithHalfwayRelease() 
 	{
-		super(height);
+		super(FrontElevator.HEIGHT_ADJUST_BIN);
 	}
 
 	@Override
@@ -17,7 +16,6 @@ public class FrontElevatorGoToAdjustHeightWithHalfwayRelease extends FrontElevat
 	{
 		super.onStart();
 		released = false;
-		releaseHeight = (FrontElevator.getInstance().pidGet() - height)/2;
 	}
 	
 	@Override
@@ -25,7 +23,7 @@ public class FrontElevatorGoToAdjustHeightWithHalfwayRelease extends FrontElevat
 	{
 		super.onExecute();
 		
-		if(FrontElevator.getInstance().pidGet() < releaseHeight && !released)
+		if(FrontElevator.getInstance().pidGet() < FrontElevator.HEIGHT_RELEASE_BIN_WHILE_GOING_DOWN && !released)
 		{
 			released = true;
 			FrontElevator.getInstance().binGrabberReverse();
