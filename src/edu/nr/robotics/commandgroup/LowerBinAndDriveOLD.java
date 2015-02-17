@@ -5,9 +5,9 @@ import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 
-public class LowerBinAndDrive extends BackElevatorGoToHeightCommand
+public class LowerBinAndDriveOLD extends BackElevatorGoToHeightCommand
 {
-	public LowerBinAndDrive()
+	public LowerBinAndDriveOLD()
 	{
 		super(BackElevator.HEIGHT_BIN_LOWERED);
 		this.requires(Drive.getInstance());

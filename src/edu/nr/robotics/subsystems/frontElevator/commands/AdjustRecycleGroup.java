@@ -16,3 +16,4 @@ public class AdjustRecycleGroup extends CommandGroup
 		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_WAITING));
 	}
 }
+		
