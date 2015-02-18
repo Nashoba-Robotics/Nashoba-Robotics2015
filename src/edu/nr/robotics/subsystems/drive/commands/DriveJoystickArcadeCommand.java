@@ -72,7 +72,7 @@ public class DriveJoystickArcadeCommand extends CMD
         		rawTurn += deadZone;
         		rawTurn *= (1 / (1 - deadZone));
         	}
-    		turn = rawTurn / 2 * OI.getInstance().getAmplifyMultiplyer();
+    		turn = Math.pow(rawTurn*0.9, 2) * Math.signum(rawTurn);// / 2 * OI.getInstance().getAmplifyMultiplyer();
     		
     		
     		gyroCorrection.clearInitialValue();

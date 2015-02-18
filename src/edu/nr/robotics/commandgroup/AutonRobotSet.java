@@ -7,6 +7,8 @@ import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorHeightWithSh
 import edu.nr.robotics.subsystems.drive.commands.AutonDriveShortDistance;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.EndAutoStall;
+import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
+import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
@@ -26,6 +28,7 @@ public class AutonRobotSet extends CommandGroup
 		this.addSequential(new BackElevatorHeightWithShare(BackElevator.HEIGHT_HOLD, share));
 		
 		this.addSequential(new DriveDistanceCommand(9.9, 1.5, 0.5));
+		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BOTTOM));
 	}
 	
 	protected void end()

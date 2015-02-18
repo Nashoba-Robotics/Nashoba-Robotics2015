@@ -3,13 +3,14 @@ package edu.nr.robotics.subsystems.frontElevator.commands;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 
 public class PickupBarrelAndRaiseGroup extends CommandGroup
 {
 	public PickupBarrelAndRaiseGroup()
 	{
 		this.addSequential(new GrabBinCommand());
-		
+		this.addSequential(new WaitCommand(.5));
 		DriveDistanceCommand temp = new DriveDistanceCommand(-0.5, 0.25, 0.5);
 		temp.setRoughStopDistance(0.1);
 		temp.setP(1);

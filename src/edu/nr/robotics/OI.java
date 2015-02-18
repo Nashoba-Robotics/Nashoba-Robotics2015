@@ -77,6 +77,8 @@ public class OI
 	        
 			new JoystickButton(coffin2, 2).whenPressed(new ToteTwoToScoreGroup());
 			
+			new JoystickButton(coffin2, 4).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BOTTOM));
+			
 			JoystickButton fighter = new JoystickButton(coffin2, 9);
 			fighter.whenPressed(new DumbDriveCommand());
 			fighter.whenReleased(new SmartDriveCommand());
@@ -141,7 +143,8 @@ public class OI
 	{
 		if(USING_COFFIN)
 		{
-			return snap(-coffin3.getRawAxis(1));
+			double value = snap(-coffin3.getRawAxis(1));
+			return Math.pow(value, 2) * Math.signum(value);
 		}
 		
 		return 0;
@@ -151,7 +154,8 @@ public class OI
 	{
 		if(USING_COFFIN)
 		{
-			return snap(-(coffin3.getRawAxis(0)-.1));
+			double value = snap(-(coffin3.getRawAxis(0)-.1));
+			return Math.pow(value, 2) * Math.signum(value);
 		}
 		return 0;
 	}
