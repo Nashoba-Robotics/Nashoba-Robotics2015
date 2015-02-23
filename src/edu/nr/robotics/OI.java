@@ -141,6 +141,12 @@ public class OI
 		return 0;
 	}
 	
+	//Reversing drive direction makes it easy to maneuver in reverse
+	public boolean reverseDriveDirection()
+	{
+		return stickTankLeft.getRawButton(1);
+	}
+	
 	public double getFrontElevatorManual()
 	{
 		if(USING_COFFIN)

@@ -30,10 +30,12 @@ public class DriveJoystickArcadeCommand extends CMD
     @Override
     protected void onExecute()
     {
-    	double rawMoveValue = OI.getInstance().getArcadeMoveValue();
+    	double moveValue = OI.getInstance().getArcadeMoveValue();
+    	double driveMagnitude = Math.pow(moveValue, 2) * Math.signum(moveValue);
     	
+    	if(OI.getInstance().reverseDriveDirection())
+    		driveMagnitude *= -1;
     	
-    	double driveMagnitude = Math.pow(rawMoveValue, 2) * Math.signum(rawMoveValue);
     	double turn;
     	
     	if(OI.getInstance().useGyroCorrection())
