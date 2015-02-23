@@ -1,7 +1,9 @@
 
 package edu.nr.robotics;
 
-import edu.nr.robotics.commandgroup.AutonShortDistanceGroup;
+import edu.nr.robotics.commandgroup.AutonRecycleSet;
+import edu.nr.robotics.commandgroup.AutonRobotSet;
+import edu.nr.robotics.commandgroup.StartingConfigurationGroup;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.camera.CameraOffCommand;
@@ -9,6 +11,7 @@ import edu.nr.robotics.subsystems.camera.CameraOnCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.commands.AutonDriveShortDistance;
 import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
+import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveIdleCommand;
 import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
@@ -22,12 +25,14 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot 
 {
     Command autonomousCommand;
     PowerDistributionPanel pdp;
+    SendableChooser autoDistanceChooser;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -41,6 +46,11 @@ public class Robot extends IterativeRobot
 		Drive.init();
 		FrontElevator.init();
 		BackElevator.init();
+		
+		autoDistanceChooser = new SendableChooser();
+		autoDistanceChooser.addDefault("Robot Set", new AutonRobotSet());
+		autoDistanceChooser.addObject("Recycle Set", new AutonRecycleSet());
+		SmartDashboard.putData("Autonomous Chooser", autoDistanceChooser);
 		
 		SmartDashboard.putData(FrontElevator.getInstance());
 		SmartDashboard.putData(Drive.getInstance());
@@ -96,8 +106,6 @@ public class Robot extends IterativeRobot
         }
         
         SmartDashboard.putData("Adjust Recycle Group", new AdjustRecycleGroup());
-        SmartDashboard.putData(new AutonDriveShortDistance());
-        SmartDashboard.putData(new AutonShortDistanceGroup());
         SmartDashboard.putData(new ToteTwoToWaitGroup());
 		
         SmartDashboard.putData(new DrivePositionCommand(false));
@@ -106,55 +114,14 @@ public class Robot extends IterativeRobot
         
         SmartDashboard.putData(new CameraOnCommand());
         SmartDashboard.putData(new CameraOffCommand());
-        
-        SmartDashboard.putData(new EmptyCommand("Next Step")
-        {
-			@Override
-			protected void onStart() {
-			}
-
-			@Override
-			protected void onExecute() 
-			{
-				FrontElevatorStateMachine.getNextCommand().start();
-			}
-        	
-        });
-        
-        SmartDashboard.putData(new EmptyCommand("Redo Step")
-        {
-			@Override
-			protected void onStart() {
-			}
-
-			@Override
-			protected void onExecute() 
-			{
-				FrontElevatorStateMachine.redoLastCommand().start();
-			}
-        });
-        
-        SmartDashboard.putData(new EmptyCommand("Reset")
-        {
-			@Override
-			protected void onStart() {
-			}
-
-			@Override
-			protected void onExecute() 
-			{
-				FrontElevatorStateMachine.reset();
-			}
-        });
-        
-        // instantiate the command used for the autonomous period
-        autonomousCommand = new DriveIdleCommand();
+        SmartDashboard.putData(new StartingConfigurationGroup());
     }
 	
     public void autonomousInit() 
     {
-        // schedule the autonomous command (example)
-        if (autonomousCommand != null) autonomousCommand.start();
+    	// instantiate the command used for the autonomous period
+        autonomousCommand =(Command) autoDistanceChooser.getSelected();
+        autonomousCommand.start();
     }
 
     /**

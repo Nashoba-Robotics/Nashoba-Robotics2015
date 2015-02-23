@@ -17,34 +17,15 @@ public class DriveJoystickTankCommand extends CMD {
     protected void initialize() {
     }
     
-    private final double deadZone = 0.05;
-
     // Called repeatedly when this Command is scheduled to run
-    protected void onExecute() {
+    protected void onExecute() 
+    {
     	double left = OI.getInstance().getTankLeftValue();
     	double right = OI.getInstance().getTankRightValue();
     	
-    	// make sure that the control is actual human input, rather than garbage data
-    	if(Math.abs(left) < deadZone)
-    	{
-    		left = 0;
-    	}
-    	if(Math.abs(right) < deadZone)
-    	{
-    		right = 0;
-    	}
-    	
     	// square the inputs (while preserving the sign) to increase fine control while permitting full power
-        if (right >= 0.0) {
-            right = (right * right);
-        } else {
-            right = -(right * right);
-        }
-        if (left >= 0.0) {
-            left = (left * left);
-        } else {
-            left = -(left * left);
-        }
+        right = right*right * Math.signum(right);
+        left = left*left * Math.signum(left);
         
     	Drive.getInstance().tankDrive(left, right);
     }

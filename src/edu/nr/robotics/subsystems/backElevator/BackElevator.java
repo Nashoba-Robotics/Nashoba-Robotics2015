@@ -17,23 +17,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 {
 
-	private static final double SLIP_OFFSET = 0.00;
-	
 	//These needs to be set
-	public static final double HEIGHT_HOLD = 2 + SLIP_OFFSET;
-	public static final double HEIGHT_OBTAIN_STEP = 1.08 + SLIP_OFFSET;
-	public static final double HEIGHT_SLOW_DOWN = 0.73 + SLIP_OFFSET;
-	public static final double HEIGHT_CLOSED = 0 + SLIP_OFFSET;
+	public static final double HEIGHT_HOLD = 3;
+	public static final double HEIGHT_OBTAIN_STEP = 1.08;
+	public static final double HEIGHT_SLOW_DOWN = 0.73;
+	public static final double HEIGHT_CLOSED = 0;
 	
-	public static final double HEIGHT_BINS_GRAZE_GROUND = 1.5 + SLIP_OFFSET;
-	public static final double HEIGHT_BIN_LOWERED = 0.67 + SLIP_OFFSET;
+	public static final double HEIGHT_BINS_GRAZE_GROUND = 1.5;
+	public static final double HEIGHT_BIN_LOWERED = 0.675;
 
 	private static BackElevator singleton;
     
 	AnalogPotentiometer potentiometer;
-	private final double POT_MIN = 1 - 0.84;
-	private final double POT_MAX = 1 - 0.4;
-	private final double POT_RANGE = 26/12; //Range between max and min in feet
+	private final double POT_MIN = 1 - 0.967;
+	private final double POT_MAX = 1 - 0.358;
+	private final double POT_RANGE = (36 + 1/8)/12; //Range between max and min in feet
 	
 	CantTalon talon1;
 	CantTalon talon2;

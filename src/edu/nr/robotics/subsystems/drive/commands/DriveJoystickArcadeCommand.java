@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class DriveJoystickArcadeCommand extends CMD 
 {
-	AngleGyroCorrection gyroCorrection;
+	private AngleGyroCorrection gyroCorrection;
+	private boolean hDriveActivated = false;
 	
     public DriveJoystickArcadeCommand() 
     {
@@ -24,56 +25,38 @@ public class DriveJoystickArcadeCommand extends CMD
     {
 		
 	}
-
-    private final double deadZone = 0.05;
     
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void onExecute()
     {
-    	double rawMoveValue = OI.getInstance().getArcadeMoveValue();
-    	if(rawMoveValue < deadZone && rawMoveValue > -deadZone)
-    	{
-    		rawMoveValue = 0;
-    	}
-    	else if(rawMoveValue > 0)
-    	{
-    		rawMoveValue -= deadZone;
-    		rawMoveValue *= (1 / (1 - deadZone));
-    	}
-    	else
-    	{
-    		rawMoveValue += deadZone;
-    		rawMoveValue *= (1 / (1 - deadZone));
-    	}
+    	double moveValue = OI.getInstance().getArcadeMoveValue();
+    	double driveMagnitude = Math.pow(moveValue, 2) * Math.signum(moveValue);
     	
-    	double driveMagnitude = rawMoveValue/2d * OI.getInstance().getAmplifyMultiplyer();
+    	if(OI.getInstance().reverseDriveDirection())
+    		driveMagnitude *= -1;
+    	
     	double turn;
     	
     	if(OI.getInstance().useGyroCorrection())
     	{
+    		hDriveActivated = true;
     		turn = gyroCorrection.getTurnValue();
     	}
     	else
     	{
     		//Use the joystick to get turn value
     		double rawTurn = OI.getInstance().getArcadeTurnValue();
-    		if(rawTurn < deadZone && rawTurn > -deadZone)
-        	{
-    			rawTurn = 0;
-        	}
-        	else if(rawTurn > 0)
-        	{
-        		rawTurn -= deadZone;
-        		rawTurn *= (1 / (1 - deadZone));
-        	}
-        	else
-        	{
-        		rawTurn += deadZone;
-        		rawTurn *= (1 / (1 - deadZone));
-        	}
-    		turn = rawTurn /2 * OI.getInstance().getAmplifyMultiplyer();
     		
+    		//Wait until joystick returns to rest before switching controls to turning
+    		if(rawTurn == 0)
+    			hDriveActivated = false;
+    		
+    		if(hDriveActivated)
+    			rawTurn = 0;
+    		
+    		//Scale down the turn value intensity and square it
+    		turn = Math.pow(rawTurn*0.9, 2) * Math.signum(rawTurn);
     		
     		gyroCorrection.clearInitialValue();
     	}

@@ -55,7 +55,11 @@ public class DriveDistanceCommand extends CMD implements PIDOutput
     	startCountingIError = startCountingErr;
     	useI = true;
     }
-
+    
+    public void setP(double value)
+    {
+    	pid.setPID(value, pid.getI(), pid.getD());
+    }
 	@Override
 	protected void onStart() 
 	{
@@ -70,6 +74,16 @@ public class DriveDistanceCommand extends CMD implements PIDOutput
 	public void pidWrite(double output) 
 	{
 		currentSetThrust = output;
+	}
+	
+	protected void setSetpoint(double value)
+	{
+		pid.setSetpoint(value);
+	}
+	
+	protected void resetEncoderSource()
+	{
+		encoderSource.resetInitialValue();
 	}
 
     @Override
@@ -110,6 +124,7 @@ public class DriveDistanceCommand extends CMD implements PIDOutput
 		Drive.getInstance().arcadeDrive(0, 0);
     	gyroCorrection.clearInitialValue();
     	Drive.getInstance().setTalonRampRate(0);
-    	Drive.getInstance().setDriveP(Drive.JOYSTICK_DRIVE_P);		
+    	Drive.getInstance().setDriveP(Drive.JOYSTICK_DRIVE_P);	
+    	pid.reset();
 	}
 }
