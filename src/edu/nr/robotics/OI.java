@@ -23,6 +23,8 @@ public class OI
 	public static boolean USING_ARCADE = true;
 	public static boolean USING_COFFIN = true;
 	
+	private final double JOYSTICK_DEAD_ZONE = 0.05;
+	
 	private static OI singleton;
 	
 	Joystick stickTankLeft;
@@ -106,7 +108,7 @@ public class OI
 	{
 		if(USING_ARCADE)
 		{
-			return -stickTankLeft.getY();
+			return -snapDriveJoysticks(stickTankLeft.getY());
 		}
 		
 		return 0;
@@ -116,7 +118,7 @@ public class OI
 	{
 		if(USING_ARCADE)
 		{
-			return -stickTankRight.getX();
+			return -snapDriveJoysticks(stickTankRight.getX());
 		}
 		
 		return 0;
@@ -132,7 +134,7 @@ public class OI
 			}
 			else
 			{
-				return snap(-coffin2.getRawAxis(0));
+				return snapCoffinJoysticks(-coffin2.getRawAxis(0));
 			}
 		}
 		
@@ -143,7 +145,7 @@ public class OI
 	{
 		if(USING_COFFIN)
 		{
-			double value = snap(-coffin3.getRawAxis(1));
+			double value = snapCoffinJoysticks(-coffin3.getRawAxis(1));
 			return Math.pow(value, 2) * Math.signum(value);
 		}
 		
@@ -154,26 +156,20 @@ public class OI
 	{
 		if(USING_COFFIN)
 		{
-			double value = snap(-(coffin3.getRawAxis(0)-.1));
+			double value = snapCoffinJoysticks(-(coffin3.getRawAxis(0)-.1));
 			return Math.pow(value, 2) * Math.signum(value);
 		}
 		return 0;
 	}
 	
-	private double snap(double value)
-	{
-		if(value > -0.1 && value < 0.1)
-			return 0;
-		
-		return (value-0.1) / 0.9;
-	}
+	
 	
 	public double getTankLeftValue()
 	{
 		if(USING_ARCADE)
 			return 0;
 		
-		return -stickTankLeft.getY();
+		return -snapDriveJoysticks(stickTankLeft.getY());
 	}
 
 	public double getTankRightValue()
@@ -181,22 +177,34 @@ public class OI
 		if(USING_ARCADE)
 			return 0;
 		
-		return stickTankRight.getY();
+		return snapDriveJoysticks(stickTankRight.getY());
 	}
 	
-	public double getAmplifyMultiplyer()
+	private double snapDriveJoysticks(double value)
 	{
-		if(USING_ARCADE)
-		{
-			return stickTankRight.getRawButton(1)?2:1;
-		}
+		if(Math.abs(value) < JOYSTICK_DEAD_ZONE)
+    	{
+			value = 0;
+    	}
+    	else if(value > 0)
+    	{
+    		value -= JOYSTICK_DEAD_ZONE;
+    	}
+    	else
+    	{
+    		value += JOYSTICK_DEAD_ZONE;
+    	}
+		value /=  (1 - JOYSTICK_DEAD_ZONE);
 		
-		return 1;
+		return value;
 	}
-		
-	public double getDecreaseValue()
+	
+	private double snapCoffinJoysticks(double value)
 	{
-		return 1;
+		if(value > -0.1 && value < 0.1)
+			return 0;
+		
+		return (value-0.1) / 0.9;
 	}
 	
 	/**
