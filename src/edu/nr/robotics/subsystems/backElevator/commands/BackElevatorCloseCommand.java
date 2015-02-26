@@ -4,6 +4,10 @@ import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
+/**
+ * A GroupCommand for closing the backElevator at an appropriate speed
+ *
+ */
 public class BackElevatorCloseCommand extends CommandGroup
 {
 	public BackElevatorCloseCommand()

@@ -9,7 +9,7 @@ import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCo
 import edu.nr.robotics.subsystems.camera.CameraOffCommand;
 import edu.nr.robotics.subsystems.camera.CameraOnCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.commands.AutonDriveShortDistance;
+import edu.nr.robotics.subsystems.drive.commands.AutonDriveToStepShort;
 import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveIdleCommand;
@@ -32,7 +32,7 @@ public class Robot extends IterativeRobot
 {
     Command autonomousCommand;
     PowerDistributionPanel pdp;
-    SendableChooser autoDistanceChooser;
+    SendableChooser autoCommandChooser;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -47,10 +47,10 @@ public class Robot extends IterativeRobot
 		FrontElevator.init();
 		BackElevator.init();
 		
-		autoDistanceChooser = new SendableChooser();
-		autoDistanceChooser.addDefault("Robot Set", new AutonRobotSet());
-		autoDistanceChooser.addObject("Recycle Set", new AutonRecycleSet());
-		SmartDashboard.putData("Autonomous Chooser", autoDistanceChooser);
+		autoCommandChooser = new SendableChooser();
+		autoCommandChooser.addDefault("Robot Set", new AutonRobotSet());
+		autoCommandChooser.addObject("Recycle Set", new AutonRecycleSet());
+		SmartDashboard.putData("Autonomous Chooser", autoCommandChooser);
 		
 		SmartDashboard.putData(FrontElevator.getInstance());
 		SmartDashboard.putData(Drive.getInstance());
@@ -120,7 +120,7 @@ public class Robot extends IterativeRobot
     public void autonomousInit() 
     {
     	// instantiate the command used for the autonomous period
-        autonomousCommand =(Command) autoDistanceChooser.getSelected();
+        autonomousCommand =(Command) autoCommandChooser.getSelected();
         autonomousCommand.start();
     }
 
@@ -141,7 +141,6 @@ public class Robot extends IterativeRobot
 
     public void teleopInit() 
     {
-    	previousTime = System.currentTimeMillis();
 		// This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
@@ -149,17 +148,13 @@ public class Robot extends IterativeRobot
         if (autonomousCommand != null) autonomousCommand.cancel();
     }
     
-    long previousTime = 0;
     /**
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() 
     {
-    	SmartDashboard.putNumber("dt", System.currentTimeMillis() - previousTime);
-    	previousTime = System.currentTimeMillis();
     	//FieldCentric should come first in periodic functions, so the commands run by the scheduler
     	//aren't using stale location data
-    	
     	Fieldcentric.getRobotInstance().update();
     	
         Scheduler.getInstance().run();

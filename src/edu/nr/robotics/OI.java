@@ -82,7 +82,7 @@ public class OI
 			new JoystickButton(coffin2, 4).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BOTTOM));
 			
 			JoystickButton fighter = new JoystickButton(coffin2, 9);
-			fighter.whenPressed(new DumbDriveCommand());
+			fighter.whenPressed(new ActivateDumbDriveCommand());
 			fighter.whenReleased(new SmartDriveCommand());
 			
 		}

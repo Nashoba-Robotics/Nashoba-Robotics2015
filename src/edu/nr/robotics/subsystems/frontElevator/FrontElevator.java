@@ -1,10 +1,6 @@
 package edu.nr.robotics.subsystems.frontElevator;
 
 import edu.nr.robotics.RobotMap;
-import edu.nr.robotics.custom.CantTalon;
-import edu.nr.robotics.custom.I2C;
-import edu.nr.robotics.custom.LIDAR;
-import edu.nr.robotics.custom.MotorPair;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorIdleCommand;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.CANTalon;
@@ -22,12 +18,8 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 {
 	public static FrontElevator singleton;
 	
-	private static double BELT_SKIP_OFFSET = +0.02;
+	private static double BELT_SKIP_OFFSET = 0.02;
 	
-	//TODO 
-	
-	//These need to be found
-	//All heights in feet
 	public static final double HEIGHT_ADJUST_TOTE_ONE = 0.33 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_WAITING = 2.93 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_PICK_UP_TOTE_ONE = 0.02 + BELT_SKIP_OFFSET;
@@ -70,9 +62,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	public static final boolean USING_LASER = false;
 	
 	AnalogPotentiometer potentiometer;
-	LIDAR laser;
     CANTalon talon1;
-    //MotorPair motors;
     
     private final double MAX_ALLOWED_HEIGHT = 4.2;
     private final double MIN_ALLOWED_HEIGHT = 0.03;
@@ -87,16 +77,6 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
     	slave.changeControlMode(CANTalon.ControlMode.Follower);
     	slave.set(talon1.getDeviceID());
     	
-    	
-    	//talon1.setVoltageRampRate(1);
-    	//talon2.setVoltageRampRate(1);
-    	
-    	//motors = new MotorPair(talon1, talon2);
-    	//motors.enableDebug();
-    	
-		laser = new LIDAR(I2C.Port.kMXP);
-		laser.start(); //Start polling
-		
 		potentiometer = new AnalogPotentiometer(RobotMap.POTENTIOMETER_FRONT_ELEVATOR);
 		        
         binGrabber = new DoubleSolenoid(RobotMap.pneumaticsModule, 
@@ -168,30 +148,9 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
     	return binGrabberValue;
     }
     
-    public void startLaserPolling()
-	{
-		laser.start(100);
-	}
-	
-	public void stopLaserPolling()
-	{
-		laser.stop();
-	}
-	
-	public double getLaserDistanceFeet()
-	{
-		return laser.getDistanceFeet();
-	}
-	
-	public double getLaserDistanceInches()
-	{
-		return laser.getDistanceInches();
-	}
-	
     public void putSmartDashboardInfo()
     {
-    	SmartDashboard.putNumber("Laser Distance", (getLaserDistanceInches()));
-    	SmartDashboard.putNumber("Potentiometer", getScaledPot());
+    	SmartDashboard.putNumber("Front Potentiometer", getScaledPot());
     }
 
 	@Override
@@ -204,14 +163,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	@Override
 	public double pidGet() 
 	{
-		if(USING_LASER)
-        {
-        	return laser.getDistanceCentimeters();
-        }
-        else
-        {
-        	return getScaledPot();
-        }
+    	return getScaledPot();
 	}
 	
 	private double getScaledPot()

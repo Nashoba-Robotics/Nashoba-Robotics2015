@@ -16,25 +16,21 @@ public class CancelAllCommand extends CMD
 	
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	protected void onExecute() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	protected void onEnd(boolean interrupted) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 

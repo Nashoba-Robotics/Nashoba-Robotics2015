@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class AutonDriveShortDistance extends CMD implements PIDOutput
+public class AutonDriveToStepShort extends CMD implements PIDOutput
 {
 	private final double distance = -59d/12;
 	private PID pid;
@@ -17,7 +17,7 @@ public class AutonDriveShortDistance extends CMD implements PIDOutput
 	double currentSetSpeed = 0;
 	EncoderPIDSource encoderSource;
 	
-	public AutonDriveShortDistance()
+	public AutonDriveToStepShort()
 	{
 		requires(Drive.getInstance());
 		encoderSource = new EncoderPIDSource();

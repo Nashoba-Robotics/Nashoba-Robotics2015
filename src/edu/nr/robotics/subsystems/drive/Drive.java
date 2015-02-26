@@ -3,8 +3,6 @@ package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
-import edu.nr.robotics.custom.CantTalon;
-import edu.nr.robotics.custom.MotorPair;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickTankCommand;
 import edu.nr.robotics.subsystems.drive.mxp.NavX;
@@ -123,6 +121,9 @@ public class Drive extends Subsystem
 		rightTalon.enableLimitSwitch(true, true);
 	}
 	
+	/**
+	 * @param value Maximum change in voltage, in volts / sec.
+	 */
 	public void setTalonRampRate(double value)
 	{
 		leftTalon.setVoltageRampRate(value);
