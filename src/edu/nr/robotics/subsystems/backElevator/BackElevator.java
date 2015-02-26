@@ -1,13 +1,11 @@
 package edu.nr.robotics.subsystems.backElevator;
 
 import edu.nr.robotics.RobotMap;
-import edu.nr.robotics.custom.CantTalon;
-import edu.nr.robotics.custom.MotorPair;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorIdleCommand;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -33,18 +31,19 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 	private final double POT_MAX = 1 - 0.358;
 	private final double POT_RANGE = (36 + 1/8)/12; //Range between max and min in feet
 	
-	CantTalon talon1;
-	CantTalon talon2;
-	MotorPair motors;
+	CANTalon talon1, talon2;
     
-    public BackElevator() {
+    public BackElevator() 
+    {
     	super("Back Elevator");
-        // setSetpoint() -  Sets where the PID controller should move the system to
-    	talon1 = CantTalon.newCantTalon(RobotMap.backElevatorTalon1);
-    	talon2 = CantTalon.newCantTalon(RobotMap.backElevatorTalon2);
-    	motors = new MotorPair(talon1, talon2);
     	
-    	motors.enableCantTalonLimitSwitch(true, true);
+    	talon1 = new CANTalon(RobotMap.backElevatorTalon1);
+    	talon1.enableLimitSwitch(true, true);
+    	
+    	talon2 = new CANTalon(RobotMap.backElevatorTalon2);
+    	talon2.enableLimitSwitch(true, true);
+    	talon2.changeControlMode(CANTalon.ControlMode.Follower);
+    	talon2.set(RobotMap.backElevatorTalon1);
     	
 		potentiometer = new AnalogPotentiometer(RobotMap.POTENTIOMETER_BACK_ELEVATOR);
     }
@@ -54,13 +53,9 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
     	setDefaultCommand(new BackElevatorIdleCommand());
     }
     
-    protected double returnPIDInput() 
+    protected void usePIDOutput(double output)
     {
-        return potentiometer.get();
-    }
-    
-    protected void usePIDOutput(double output) {
-        motors.set(output);
+        talon1.set(output);
     }
 	public static BackElevator getInstance()
     {
@@ -70,8 +65,7 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 	
     public void setElevatorSpeed(double speed)
     {
-    	SmartDashboard.putNumber("Commanded Back Elevator", -speed);
-    	motors.set(-speed);
+    	talon1.set(speed);
     }
 	
 	public static void init()
@@ -91,9 +85,10 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 	
 	public double getScaledPot()
 	{
-		double value = 1- potentiometer.get();
+		//Back Elevator pot is reversed (elevator going up means potentiometer is going down)
+		double value = 1 - potentiometer.get();
     	value -= POT_MIN;
-    	value = value/(POT_MAX-POT_MIN) * POT_RANGE;
+    	value = value/(POT_MAX - POT_MIN) * POT_RANGE;
     	return value;
 	}
 

@@ -4,7 +4,7 @@ import edu.nr.robotics.custom.IsFinishedShare;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorHeightWithShare;
-import edu.nr.robotics.subsystems.drive.commands.AutonDriveShortDistance;
+import edu.nr.robotics.subsystems.drive.commands.AutonDriveToStepShort;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.EndAutoStall;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
@@ -20,7 +20,7 @@ public class AutonRecycleSet extends CommandGroup
 	public AutonRecycleSet()
 	{
 		this.addParallel(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_STEP));
-		this.addSequential(new AutonDriveShortDistance());
+		this.addSequential(new AutonDriveToStepShort());
 		this.addSequential(new WaitCommand(0.2));
 		
 		share = new IsFinishedShare();
