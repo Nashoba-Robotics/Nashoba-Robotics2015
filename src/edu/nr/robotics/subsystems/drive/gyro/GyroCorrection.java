@@ -13,7 +13,7 @@ public abstract class GyroCorrection
 			initialized = true;
 		}
 		
-		double turn = getAngleError() * ANGLE_CORRECTION_INTENSITY;
+		double turn = getAngleErrorDegrees() * ANGLE_CORRECTION_INTENSITY;
     	if(turn<0)
     		turn = Math.max(-MAX_ANGLE_CORRECTION_SPEED, turn);
     	else
@@ -22,7 +22,7 @@ public abstract class GyroCorrection
     	return turn;
 	}
 	
-	protected abstract double getAngleError();
+	protected abstract double getAngleErrorDegrees();
 	public abstract void reset();
 	
 	/**

@@ -6,7 +6,7 @@ public class AngleGyroCorrection extends GyroCorrection
 {
 	private double initialAngle;
 	
-	public double getAngleError()
+	public double getAngleErrorDegrees()
 	{
 		//Error is just based off initial angle
     	return (Drive.getInstance().getAngleDegrees() - initialAngle);

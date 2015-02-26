@@ -8,13 +8,10 @@ import edu.nr.robotics.subsystems.drive.commands.DriveJoystickTankCommand;
 import edu.nr.robotics.subsystems.drive.mxp.NavX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.CANTalon.ControlMode;
 import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
 
@@ -45,22 +42,16 @@ public class Drive extends Subsystem
 	private Drive()
 	{
 		leftTalon = new CANTalon(RobotMap.leftDriveTalon1);
-		leftTalon.enableLimitSwitch(true, true);
 		
 		CANTalon tempLeftTalon = new CANTalon(RobotMap.leftDriveTalon2);
 		tempLeftTalon.changeControlMode(ControlMode.Follower);
 		tempLeftTalon.set(leftTalon.getDeviceID());
-		tempLeftTalon.enableLimitSwitch(true, true);
 		
 		rightTalon = new CANTalon(RobotMap.rightDriveTalon1);
-		rightTalon.enableLimitSwitch(true, true);
 		
 		CANTalon tempRightTalon = new CANTalon(RobotMap.rightDriveTalon2);
 		tempRightTalon.changeControlMode(ControlMode.Follower);
 		tempRightTalon.set(rightTalon.getDeviceID());
-		tempRightTalon.enableLimitSwitch(true, true);
-		
-		setTalonProperties();
 		
 		leftEnc = new Encoder(RobotMap.ENCODER_LEFT_A, RobotMap.ENCODER_LEFT_B);
 		rightEnc = new Encoder(RobotMap.ENCODER_RIGHT_A, RobotMap.ENCODER_RIGHT_B);
@@ -91,10 +82,6 @@ public class Drive extends Subsystem
 		NavX.init();
 		
         SmartDashboard.putBoolean("Joystick Arcade?", OI.USING_ARCADE);
-        
-        SmartDashboard.putNumber("Goal X", 0);
-		SmartDashboard.putNumber("Goal Y", 0);
-		SmartDashboard.putNumber("Goal Angle", 0);
 	}
 	
 	public static Drive getInstance()
@@ -110,15 +97,6 @@ public class Drive extends Subsystem
 			singleton = new Drive();
 			SmartDashboard.putData("Drive Subsystem", singleton);
 		}
-	}
-	
-	public void setTalonProperties()
-	{
-		//leftTalon.enableBrakeMode(true);
-		
-		
-		//rightTalon.enableBrakeMode(true);
-		rightTalon.enableLimitSwitch(true, true);
 	}
 	
 	/**

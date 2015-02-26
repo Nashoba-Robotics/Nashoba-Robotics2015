@@ -33,6 +33,7 @@ public class DriveJoystickArcadeCommand extends CMD
     	double moveValue = OI.getInstance().getArcadeMoveValue();
     	double driveMagnitude = Math.pow(moveValue, 2) * Math.signum(moveValue);
     	
+    	//TODO Test direction reversing
     	if(OI.getInstance().reverseDriveDirection())
     		driveMagnitude *= -1;
     	
@@ -48,6 +49,7 @@ public class DriveJoystickArcadeCommand extends CMD
     		//Use the joystick to get turn value
     		double rawTurn = OI.getInstance().getArcadeTurnValue();
     		
+    		//TODO Test new H-Drive controls
     		//Wait until joystick returns to rest before switching controls to turning
     		if(rawTurn == 0)
     			hDriveActivated = false;

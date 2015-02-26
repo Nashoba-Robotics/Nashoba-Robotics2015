@@ -83,7 +83,7 @@ public class OI
 			
 			JoystickButton fighter = new JoystickButton(coffin2, 9);
 			fighter.whenPressed(new ActivateDumbDriveCommand());
-			fighter.whenReleased(new SmartDriveCommand());
+			fighter.whenReleased(new ActivateSmartDriveCommand());
 			
 		}
 		else

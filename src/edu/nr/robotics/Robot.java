@@ -1,9 +1,9 @@
 
 package edu.nr.robotics;
 
-import edu.nr.robotics.commandgroup.AutonRecycleSet;
-import edu.nr.robotics.commandgroup.AutonRobotSet;
+import edu.nr.robotics.commandgroup.AutonRedeemGroup;
 import edu.nr.robotics.commandgroup.StartingConfigurationGroup;
+import edu.nr.robotics.commandgroup.AutonRedeemGroup.AutonType;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.camera.CameraOffCommand;
@@ -47,9 +47,10 @@ public class Robot extends IterativeRobot
 		FrontElevator.init();
 		BackElevator.init();
 		
+		//TODO Test these autonomous commands
 		autoCommandChooser = new SendableChooser();
-		autoCommandChooser.addDefault("Robot Set", new AutonRobotSet());
-		autoCommandChooser.addObject("Recycle Set", new AutonRecycleSet());
+		autoCommandChooser.addDefault("Robot Set", new AutonRedeemGroup(AutonType.ShortDistanceRobotSet));
+		autoCommandChooser.addObject("Recycle Set", new AutonRedeemGroup(AutonType.ShortDistanceRecycleSet));
 		SmartDashboard.putData("Autonomous Chooser", autoCommandChooser);
 		
 		SmartDashboard.putData(FrontElevator.getInstance());

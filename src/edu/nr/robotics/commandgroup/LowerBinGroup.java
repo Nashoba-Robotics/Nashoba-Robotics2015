@@ -10,13 +10,16 @@ public class LowerBinGroup extends CommandGroup
 {
 	public LowerBinGroup()
 	{
+		//Lower the elevator util the bins just touch the ground
 		addSequential(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_BINS_GRAZE_GROUND));
-		/*addSequential(new WaitCommand(0.2));
-		addSequential(new LowerBinAndDrive());*/
+		
+		//Drive forward while lowering the elevator slowly
 		addParallel(new DriveDistanceCommand(.5, 0.6, 0.3));
 		BackElevatorGoToHeightCommand temp = new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_BIN_LOWERED);
 		temp.setMaxSpeed(0.4);
 		addSequential(temp);
+		
+		//Finally, drive forward to finish the release
 		addSequential(new DriveDistanceCommand(1, 1.1, 0.4));
 	}
 }
