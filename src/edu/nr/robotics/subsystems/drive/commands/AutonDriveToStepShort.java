@@ -17,8 +17,9 @@ public class AutonDriveToStepShort extends CMD implements PIDOutput
 	double currentSetSpeed = 0;
 	EncoderPIDSource encoderSource;
 	
-	public AutonDriveToStepShort()
+	public AutonDriveToStepShort(double timeout)
 	{
+		super(timeout);
 		requires(Drive.getInstance());
 		encoderSource = new EncoderPIDSource();
 		

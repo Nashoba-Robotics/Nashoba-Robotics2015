@@ -1,8 +1,8 @@
 package edu.nr.robotics.subsystems.frontElevator;
 
+import edu.nr.robotics.commandgroup.ScoreGroup;
 import edu.nr.robotics.subsystems.frontElevator.commands.AdjustRecycleGroup;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
-import edu.nr.robotics.subsystems.frontElevator.commands.ScoreGroup;
 import edu.nr.robotics.subsystems.frontElevator.commands.ToteOneToScoreGroup;
 import edu.nr.robotics.subsystems.frontElevator.commands.ToteTwoToWaitGroup;
 import edu.wpi.first.wpilibj.command.Command;

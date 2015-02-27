@@ -2,6 +2,7 @@ package edu.nr.robotics;
 
 import edu.nr.robotics.commandgroup.CancelAllCommand;
 import edu.nr.robotics.commandgroup.LowerBinGroup;
+import edu.nr.robotics.commandgroup.ScoreGroup;
 import edu.nr.robotics.commandgroup.StartingConfigurationGroup;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorCloseCommand;

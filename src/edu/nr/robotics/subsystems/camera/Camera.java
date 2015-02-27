@@ -33,22 +33,26 @@ public class Camera extends Subsystem
     
     public void cameraOn()
     {
-    	cameraLight.set(true);
     	if(state == false)
     	{
+    		cameraLight.set(true);
     		state = true;
-    		SmartDashboard.putNumber("RealmsCommandRecieved", 1);
     	}
     }
     
     public void cameraOff()
     {
-    	cameraLight.set(false);
     	if(state == true)
-		{
+    	{
+    		cameraLight.set(false);
     		state = false;
-    		SmartDashboard.putNumber("RealmsCommandRecieved", 1);
-		}
+    	}
+    }
+    
+    public void toggleCamera()
+    {
+    	state = !state;
+    	cameraLight.set(state);
     }
 }
 

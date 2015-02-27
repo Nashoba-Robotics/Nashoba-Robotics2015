@@ -22,6 +22,16 @@ public abstract class CMD extends Command
 		super(name);
 	}
 	
+	public CMD(String name, double timeout)
+	{
+		super(name, timeout);
+	}
+	
+	public CMD(double timeout)
+	{
+		super(timeout);
+	}
+	
 	private boolean reset = true;
 	
 	/**

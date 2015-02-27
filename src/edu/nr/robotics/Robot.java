@@ -2,6 +2,7 @@
 package edu.nr.robotics;
 
 import edu.nr.robotics.commandgroup.AutonRedeemGroup;
+import edu.nr.robotics.commandgroup.ScoreGroup;
 import edu.nr.robotics.commandgroup.StartingConfigurationGroup;
 import edu.nr.robotics.commandgroup.AutonRedeemGroup.AutonType;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
@@ -13,12 +14,10 @@ import edu.nr.robotics.subsystems.drive.commands.AutonDriveToStepShort;
 import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveIdleCommand;
-import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevatorStateMachine;
 import edu.nr.robotics.subsystems.frontElevator.commands.AdjustRecycleGroup;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
-import edu.nr.robotics.subsystems.frontElevator.commands.ScoreGroup;
 import edu.nr.robotics.subsystems.frontElevator.commands.ToteOneToScoreGroup;
 import edu.nr.robotics.subsystems.frontElevator.commands.ToteTwoToWaitGroup;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -107,12 +106,7 @@ public class Robot extends IterativeRobot
         }
         
         SmartDashboard.putData("Adjust Recycle Group", new AdjustRecycleGroup());
-        SmartDashboard.putData(new ToteTwoToWaitGroup());
 		
-        SmartDashboard.putData(new DrivePositionCommand(false));
-        SmartDashboard.putData(new ToteOneToScoreGroup());
-        SmartDashboard.putData(new ScoreGroup());
-        
         SmartDashboard.putData(new CameraOnCommand());
         SmartDashboard.putData(new CameraOffCommand());
         SmartDashboard.putData(new StartingConfigurationGroup());
