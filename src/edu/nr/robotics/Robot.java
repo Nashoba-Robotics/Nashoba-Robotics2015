@@ -1,10 +1,10 @@
 
 package edu.nr.robotics;
 
-import edu.nr.robotics.commandgroup.AutonRedeemGroup;
+import edu.nr.robotics.auton.AutonRedeemGroup;
+import edu.nr.robotics.auton.AutonRedeemGroup.AutonType;
 import edu.nr.robotics.commandgroup.ScoreGroup;
 import edu.nr.robotics.commandgroup.StartingConfigurationGroup;
-import edu.nr.robotics.commandgroup.AutonRedeemGroup.AutonType;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.camera.CameraOffCommand;
@@ -107,9 +107,9 @@ public class Robot extends IterativeRobot
         
         SmartDashboard.putData("Adjust Recycle Group", new AdjustRecycleGroup());
 		
-        SmartDashboard.putData(new CameraOnCommand());
-        SmartDashboard.putData(new CameraOffCommand());
-        SmartDashboard.putData(new StartingConfigurationGroup());
+        SmartDashboard.putData("Camera Light On", new CameraOnCommand());
+        SmartDashboard.putData("Camera Light Off", new CameraOffCommand());
+        SmartDashboard.putData("Starting Configuration", new StartingConfigurationGroup());
     }
 	
     public void autonomousInit() 
