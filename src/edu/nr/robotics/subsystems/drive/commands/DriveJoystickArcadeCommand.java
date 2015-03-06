@@ -51,7 +51,7 @@ public class DriveJoystickArcadeCommand extends CMD
     		
     		//TODO Test new H-Drive controls
     		//Wait until joystick returns to rest before switching controls to turning
-    		if(rawTurn == 0)
+    		if(Math.abs(rawTurn) < 0.2)
     			hDriveActivated = false;
     		
     		if(hDriveActivated)

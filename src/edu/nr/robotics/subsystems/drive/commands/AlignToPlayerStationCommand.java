@@ -18,7 +18,10 @@ public class AlignToPlayerStationCommand extends CMD
 	protected void onStart()
 	{
 		epsilon = -1;
+		count = 0;
 	}
+	
+	private double count;
 
 	@Override
 	protected void onExecute()
@@ -28,19 +31,27 @@ public class AlignToPlayerStationCommand extends CMD
 		epsilon = Math.abs(dx);
 		
 		double defaultDriveSpeed = 0.3;
-		double pSpeed = Math.abs(dx) / 100 * defaultDriveSpeed;
+		double pSpeed = Math.abs(dx) / 50 * defaultDriveSpeed;
 		double driveSpeed = Math.min(defaultDriveSpeed, pSpeed) * Math.signum(dx);
 		
 		if(!isVisible)
 			driveSpeed = 0;
 		
+		driveSpeed = -driveSpeed;
+		
+		if(epsilon < 40)
+			count++;
+		driveSpeed += (Math.signum(driveSpeed) * count * 0.001);
+		
+		SmartDashboard.putNumber("Align Player Station Drive Speed", driveSpeed);
 		Drive.getInstance().setHDrive(driveSpeed);
 	}
 
 	@Override
 	protected boolean isFinished()
 	{
-		return epsilon < 20 && epsilon > 0;
+		SmartDashboard.putNumber("Align Player Station Epsilon", epsilon);
+		return epsilon < 10 && epsilon > 0;
 	}
 	
 	@Override

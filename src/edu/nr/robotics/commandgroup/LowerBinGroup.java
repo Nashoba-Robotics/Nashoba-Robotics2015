@@ -15,7 +15,7 @@ public class LowerBinGroup extends CommandGroup
 		
 		//Drive forward while lowering the elevator slowly
 		addParallel(new DriveDistanceCommand(.5, 0.6, 0.3));
-		BackElevatorGoToHeightCommand temp = new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_BIN_LOWERED);
+		BackElevatorGoToHeightCommand temp = new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_BIN_LOWERED_FULLY);
 		temp.setMaxSpeed(0.4);
 		addSequential(temp);
 		

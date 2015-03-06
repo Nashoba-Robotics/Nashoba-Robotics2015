@@ -18,7 +18,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 {
 	public static FrontElevator singleton;
 	
-	private static double BELT_SKIP_OFFSET = 0.02;
+	private static double BELT_SKIP_OFFSET = 0.33;
 	
 	public static final double HEIGHT_ADJUST_TOTE_ONE = 0.33 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_WAITING = 2.93 + BELT_SKIP_OFFSET;
@@ -31,6 +31,9 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	public static final double HEIGHT_BEFORE_TOTE_ADJUST = 1.14 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_RELEASE_BIN_WHILE_GOING_DOWN = 1.7 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_LIFT_4_STACK = 1.299 + BELT_SKIP_OFFSET;
+	
+	private final double MAX_ALLOWED_HEIGHT = 4.2 + BELT_SKIP_OFFSET;
+    private final double MIN_ALLOWED_HEIGHT = 0.03 + BELT_SKIP_OFFSET;
 	
 	public static final double BARREL_ABOVE_FIRST_TOTE = 1.22;
 	
@@ -63,9 +66,6 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	
 	AnalogPotentiometer potentiometer;
     CANTalon talon1;
-    
-    private final double MAX_ALLOWED_HEIGHT = 4.2;
-    private final double MIN_ALLOWED_HEIGHT = 0.03;
     
     private DoubleSolenoid binGrabber;
     private Value binGrabberValue;

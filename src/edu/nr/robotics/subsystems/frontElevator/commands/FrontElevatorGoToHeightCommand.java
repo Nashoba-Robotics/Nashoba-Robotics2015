@@ -25,6 +25,8 @@ public class FrontElevatorGoToHeightCommand extends CMD
     }
     
     boolean goingDown;
+    private double maxDownSpeedMagnitude = 0.9;
+    private boolean talonRampGoingDownFast = false;
     
     @Override
 	protected void onStart() 
@@ -37,17 +39,31 @@ public class FrontElevatorGoToHeightCommand extends CMD
 		
 		if(goingDown)
 		{
-			FrontElevator.getInstance().setTalonRampRate(20);
+			if(talonRampGoingDownFast)
+				FrontElevator.getInstance().setTalonRampRate(24);
+			else
+				FrontElevator.getInstance().setTalonRampRate(20);
+			
 			pid.setPID(1, 0.03, pid.getD());
-			pid.setOutputRange(-0.9, 0.9);
+			pid.setOutputRange(-maxDownSpeedMagnitude, maxDownSpeedMagnitude);
 		}
 		else
 		{
-			FrontElevator.getInstance().setTalonRampRate(-24);
+			FrontElevator.getInstance().setTalonRampRate(-48);
 			pid.setPID(2, 0.05, pid.getD());
 			pid.setOutputRange(-1, 1);
 		}
 	}
+    
+    public void setGoingDownMaxRange(double maxDownSpeedMagnitude)
+    {
+    	maxDownSpeedMagnitude = Math.abs(maxDownSpeedMagnitude);
+    }
+    
+    public void setTalonRamp(boolean fast)
+    {
+    	talonRampGoingDownFast = fast;
+    }
     
     public void setPI(double p, double i)
     {
@@ -68,7 +84,14 @@ public class FrontElevatorGoToHeightCommand extends CMD
     			cancel();
     	}
     }
-
+    
+    private double epsilon = 0.2/12d;
+    
+    public void setEpsilon(double value)
+    {
+    	epsilon = Math.abs(value);
+    }
+    
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
@@ -82,7 +105,7 @@ public class FrontElevatorGoToHeightCommand extends CMD
     		pid.resetTotalError();
     	}
     	
-        return Math.abs(pid.getError()) < 0.2/12d;
+        return Math.abs(pid.getError()) < epsilon;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package edu.nr.robotics;
 
+import edu.nr.robotics.commandgroup.AlignToPlayerStationGroup;
 import edu.nr.robotics.commandgroup.CancelAllCommand;
 import edu.nr.robotics.commandgroup.LowerBinGroup;
 import edu.nr.robotics.commandgroup.ScoreGroup;
@@ -53,28 +54,23 @@ public class OI
 			
 			new JoystickButton(coffin3, 5).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_WAITING));
 			new JoystickButton(coffin3, 4).whenPressed(new AdjustRecycleGroup());
+			
 			new JoystickButton(coffin3, 10).whenPressed(new ToteTwoToWaitGroup());
+			
 			new JoystickButton(coffin3, 2).whenPressed(new ToteOneToScoreGroup());
 			new JoystickButton(coffin3, 1).whenPressed(new ScoreGroup());
 			new JoystickButton(coffin2, 8).whenPressed(new PickupBarrelAndRaiseGroup());
 			
 			new JoystickButton(coffin2, 5).whenPressed(new ToggleBinCommand());
-			new JoystickButton(coffin2, 7).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE));
+			
+			FrontElevatorGoToHeightCommand adjust = new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE);
+			adjust.setGoingDownMaxRange(1);
+			adjust.setTalonRamp(true);
+			new JoystickButton(coffin2, 7).whenPressed(adjust);
+			
 			new JoystickButton(coffin2, 6).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BEFORE_TOTE_ADJUST));
 			
 			new JoystickButton(coffin3, 1).whenPressed(new CancelAllCommand());
-			/*new JoystickButton(coffin2, 4).whenPressed(new EmptyCommand("Next")
-			{
-				@Override
-				protected void onStart() {
-				}
-				@Override
-				protected void onExecute() 
-				{
-					FrontElevatorStateMachine.getNextCommand().start();
-				}
-				
-			});*/
 			
 			new JoystickButton(coffin2, 3).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_SCORING));
 	        
@@ -86,10 +82,11 @@ public class OI
 			fighter.whenPressed(new ActivateDumbDriveCommand());
 			fighter.whenReleased(new ActivateSmartDriveCommand());
 			
+			new JoystickButton(stickTankRight, 3).whenPressed(new AlignToPlayerStationGroup());
+			new JoystickButton(stickTankLeft, 1).whenPressed(new CancelAllCommand());
 		}
 		else
 		{
-			new JoystickButton(stickTankRight, 10).whenPressed(new StartingConfigurationGroup());
 		}
 	}
 	
@@ -145,7 +142,7 @@ public class OI
 	//Reversing drive direction makes it easy to maneuver in reverse
 	public boolean reverseDriveDirection()
 	{
-		return stickTankLeft.getRawButton(1);
+		return stickTankRight.getRawButton(1);
 	}
 	
 	public double getFrontElevatorManual()
