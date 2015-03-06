@@ -42,16 +42,20 @@ public class Drive extends Subsystem
 	private Drive()
 	{
 		leftTalon = new CANTalon(RobotMap.leftDriveTalon1);
+		leftTalon.enableBrakeMode(true);
 		
 		CANTalon tempLeftTalon = new CANTalon(RobotMap.leftDriveTalon2);
 		tempLeftTalon.changeControlMode(ControlMode.Follower);
 		tempLeftTalon.set(leftTalon.getDeviceID());
+		tempLeftTalon.enableBrakeMode(true);
 		
 		rightTalon = new CANTalon(RobotMap.rightDriveTalon1);
+		rightTalon.enableBrakeMode(true);
 		
 		CANTalon tempRightTalon = new CANTalon(RobotMap.rightDriveTalon2);
 		tempRightTalon.changeControlMode(ControlMode.Follower);
 		tempRightTalon.set(rightTalon.getDeviceID());
+		tempRightTalon.enableBrakeMode(true);
 		
 		leftEnc = new Encoder(RobotMap.ENCODER_LEFT_A, RobotMap.ENCODER_LEFT_B);
 		rightEnc = new Encoder(RobotMap.ENCODER_RIGHT_A, RobotMap.ENCODER_RIGHT_B);
@@ -247,7 +251,7 @@ public class Drive extends Subsystem
 	
 	public double getAngleRadians()
 	{
-		return getAngleDegrees() * (Math.PI)/180;
+		return getAngleDegrees() * (Math.PI)/180d;
 	}
 	
 	public double getEncoderAve()

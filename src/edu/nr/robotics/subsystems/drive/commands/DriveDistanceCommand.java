@@ -114,7 +114,7 @@ public class DriveDistanceCommand extends CMD implements PIDOutput
 		}
 		else
 		{
-			return pid.getError() < 2d/12;
+			return Math.abs(pid.getError()) < 2d/12;
 		}
     }
 

@@ -12,6 +12,7 @@ import edu.nr.robotics.subsystems.camera.CameraOnCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.commands.AutonDriveToStepShort;
 import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
+import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommandNew;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveIdleCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
@@ -50,10 +51,15 @@ public class Robot extends IterativeRobot
 		autoCommandChooser = new SendableChooser();
 		autoCommandChooser.addDefault("Robot Set", new AutonRedeemGroup(AutonType.ShortDistanceRobotSet));
 		autoCommandChooser.addObject("Recycle Set", new AutonRedeemGroup(AutonType.ShortDistanceRecycleSet));
+		autoCommandChooser.addObject("Redeem Left", new AutonRedeemGroup(AutonType.ShortDistanceDriveLeft));
+		autoCommandChooser.addObject("Redeem Right", new AutonRedeemGroup(AutonType.ShortDistanceDriveRight));
 		SmartDashboard.putData("Autonomous Chooser", autoCommandChooser);
 		
 		SmartDashboard.putData(FrontElevator.getInstance());
 		SmartDashboard.putData(Drive.getInstance());
+		
+		SmartDashboard.putData("Drive Pi/2", new DriveAngleCommand(Math.PI/2, false));
+		SmartDashboard.putData("Drive -Pi/2", new DriveAngleCommand(-Math.PI/2, false));
 		
 		SmartDashboard.putNumber("ElevatorHeightSet", 1);
 		
@@ -68,7 +74,7 @@ public class Robot extends IterativeRobot
 			protected void onStart(){}
         });
         
-        SmartDashboard.putNumber("Smart Angle", 0.262);
+        SmartDashboard.putNumber("Smart Angle", 1.57);
         SmartDashboard.putData(new EmptyCommand("Drive to smartdash angle")
         {
 			@Override
@@ -79,7 +85,7 @@ public class Robot extends IterativeRobot
 			@Override
 			protected void onExecute() 
 			{
-				new DriveAngleCommand(SmartDashboard.getNumber("Smart Angle"), false).start();
+				new DriveAngleCommandNew(SmartDashboard.getNumber("Smart Angle")).start();
 			}
         });
         

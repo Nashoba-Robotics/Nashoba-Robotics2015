@@ -22,8 +22,9 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 	public static final double HEIGHT_CLOSED = 0;
 	
 	public static final double HEIGHT_BINS_GRAZE_GROUND = 1.5;
-	public static final double HEIGHT_BIN_LOWERED = 0.675;
-
+	public static final double HEIGHT_BIN_LOWERED_FULLY = 0.675;
+	public static final double HEIGHT_BIN_JUST_ABOVE_GROUND = 2;
+	
 	private static BackElevator singleton;
     
 	AnalogPotentiometer potentiometer;
@@ -65,7 +66,7 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 	
     public void setElevatorSpeed(double speed)
     {
-    	talon1.set(speed);
+    	talon1.set(-speed);
     }
 	
 	public static void init()

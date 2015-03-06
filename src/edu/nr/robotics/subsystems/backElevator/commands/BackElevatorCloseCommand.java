@@ -12,7 +12,7 @@ public class BackElevatorCloseCommand extends CommandGroup
 {
 	public BackElevatorCloseCommand()
 	{
-		this.addSequential(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_BIN_LOWERED));
+		this.addSequential(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_BIN_LOWERED_FULLY));
 		BackElevatorGoToHeightCommand temp = new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_CLOSED);
 		temp.setMaxSpeed(0.2);
 		this.addSequential(temp);
