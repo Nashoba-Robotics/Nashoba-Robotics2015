@@ -40,13 +40,14 @@ public class DriveDistanceCommand extends CMD implements PIDOutput
     	
     	usualErrorSign = Math.signum(pid.getError());
     	totalDistance = distanceFeet;
-    	this.maxSpeed = maxSpeed;
+    	this.stopRampDistance = stopRampDistance;
+    	this.maxSpeed = Math.abs(maxSpeed);
     }
     
     public void setRoughStopDistance(double roughDistance)
     {
     	roughEnabled = true;
-    	roughStopDistance = roughDistance;
+    	roughStopDistance = Math.abs(roughDistance);
     }
     
     public void setIParams(double startCountingErr, double i)
