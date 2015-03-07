@@ -83,6 +83,10 @@ public class OI
 			
 			new JoystickButton(stickTankRight, 3).whenPressed(new AlignToPlayerStationGroup());
 			new JoystickButton(stickTankLeft, 1).whenPressed(new CancelAllCommand());
+			
+			DriveDistanceCommand driveWithTote = new DriveDistanceCommand(4, 3, 0.25);
+			driveWithTote.setRoughStopDistance(.5);
+			new JoystickButton(stickTankLeft, 5).whenPressed(driveWithTote);
 		}
 		else
 		{

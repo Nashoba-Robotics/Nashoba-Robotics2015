@@ -11,15 +11,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutonDriveToStepShort extends CMD implements PIDOutput
 {
-	private final double distance = -71d/12;
+	private final double distance = -59d/12;
 	private PID pid;
 	AngleGyroCorrection gyroCorrection;
 	double currentSetSpeed = 0;
 	EncoderPIDSource encoderSource;
+	private double timeoutMillis;
+	private double startTime;
 	
 	public AutonDriveToStepShort(double timeout)
 	{
 		super(timeout);
+		timeoutMillis = timeout * 1000;
 		requires(Drive.getInstance());
 		encoderSource = new EncoderPIDSource();
 		
@@ -36,6 +39,7 @@ public class AutonDriveToStepShort extends CMD implements PIDOutput
 		pid.resetTotalError();
 		encoderSource.resetInitialValue();
 		Drive.getInstance().setTalonRampRate(24);
+		startTime = System.currentTimeMillis();
 	}
 
 	@Override
@@ -60,7 +64,7 @@ public class AutonDriveToStepShort extends CMD implements PIDOutput
 	@Override
 	protected boolean isFinished() 
 	{
-		return (Drive.getInstance().getBumper1() && Drive.getInstance().getBumper2());
+		return (Drive.getInstance().getBumper1() && Drive.getInstance().getBumper2()) || this.isTimedOut();
 	}
 
 	@Override

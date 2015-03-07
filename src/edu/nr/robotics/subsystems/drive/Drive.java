@@ -75,9 +75,6 @@ public class Drive extends Subsystem
 		leftPid.enable();
 		rightPid.enable();
 
-		SmartDashboard.putData("Left Side PID", leftPid);
-		SmartDashboard.putData("Right Side PID", rightPid);
-		
 		hDrive = new CANTalon(RobotMap.HDriveTalon);
 		
 		bumperButtonLeft = new DigitalInput(RobotMap.BUMPER_BUTTON_LEFT);
@@ -99,7 +96,6 @@ public class Drive extends Subsystem
 		if(singleton == null)
 		{
 			singleton = new Drive();
-			SmartDashboard.putData("Drive Subsystem", singleton);
 		}
 	}
 	
@@ -307,6 +303,8 @@ public class Drive extends Subsystem
 		
 		//SmartDashboard.putNumber("Gyro", getAngleDegrees());
 		
+		
+		SmartDashboard.putNumber("Encoders", this.getEncoderAve());
 		SmartDashboard.putBoolean("Bumper 1", this.getBumper1());
 		SmartDashboard.putBoolean("Bumper 2", this.getBumper2());
 	}

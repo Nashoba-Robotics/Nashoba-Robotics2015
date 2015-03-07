@@ -1,6 +1,8 @@
 
 package edu.nr.robotics;
 
+import edu.nr.robotics.auton.AutonCloseAndLift;
+import edu.nr.robotics.auton.AutonDoNothingCommand;
 import edu.nr.robotics.auton.AutonRedeemGroup;
 import edu.nr.robotics.auton.AutonRedeemGroup.AutonType;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
@@ -30,10 +32,12 @@ public class Robot extends IterativeRobot
 		
 		//TODO Test these autonomous commands
 		autoCommandChooser = new SendableChooser();
-		autoCommandChooser.addDefault("Robot Set", new AutonRedeemGroup(AutonType.ShortDistanceRobotSet));
-		autoCommandChooser.addObject("Recycle Set", new AutonRedeemGroup(AutonType.ShortDistanceRecycleSet));
+		autoCommandChooser.addDefault("Recycle Set", new AutonRedeemGroup(AutonType.ShortDistanceRecycleSet));
+		autoCommandChooser.addObject("Robot Set", new AutonRedeemGroup(AutonType.ShortDistanceRobotSet));
 		autoCommandChooser.addObject("Redeem Left", new AutonRedeemGroup(AutonType.ShortDistanceDriveLeft));
 		autoCommandChooser.addObject("Redeem Right", new AutonRedeemGroup(AutonType.ShortDistanceDriveRight));
+		autoCommandChooser.addObject("Pickup Bin And Lift", new AutonCloseAndLift());
+		autoCommandChooser.addObject("Do Nothing", new AutonDoNothingCommand());
 		SmartDashboard.putData("Autonomous Chooser", autoCommandChooser);
 		
 		SmartDashboard.putData(FrontElevator.getInstance());

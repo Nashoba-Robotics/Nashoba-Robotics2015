@@ -28,7 +28,6 @@ public class DriveAngleCommand extends CMD
     	gyroSource = new GyroPIDSource();
     	
     	pidController = new PID(0.1, 0.0001, 0, gyroSource, new RotationPIDOutput());
-    	SmartDashboard.putData("Angle PID", pidController);
     	
     	this.absolute = absolute;
     	this.targetAngleRadians = targetAngleRadians;
