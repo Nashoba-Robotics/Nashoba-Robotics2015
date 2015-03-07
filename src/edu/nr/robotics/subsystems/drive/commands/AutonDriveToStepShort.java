@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutonDriveToStepShort extends CMD implements PIDOutput
 {
-	private final double distance = -59d/12;
+	private final double distance = -71d/12;
 	private PID pid;
 	AngleGyroCorrection gyroCorrection;
 	double currentSetSpeed = 0;
@@ -45,6 +45,9 @@ public class AutonDriveToStepShort extends CMD implements PIDOutput
 			Drive.getInstance().setTalonRampRate(0);
 		double turn = gyroCorrection.getTurnValue();
 		SmartDashboard.putNumber("Auton Current Set Speed", currentSetSpeed);
+		
+		currentSetSpeed = Math.max(Math.abs(currentSetSpeed), 0.25) * Math.signum(currentSetSpeed);
+		
 		Drive.getInstance().arcadeDrive(currentSetSpeed, turn);
 	}
 	

@@ -37,33 +37,10 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	
 	public static final double BARREL_ABOVE_FIRST_TOTE = 1.22;
 	
-	public static final ToteHeightPair[] commandedHeights = 
-		{
-		new ToteHeightPair("Waiting Height", HEIGHT_WAITING),
-		new ToteHeightPair("Bottom Height", HEIGHT_BOTTOM),
-		new ToteHeightPair("Pickup Tote Two", HEIGHT_PICK_UP_TOTE_TWO),
-		new ToteHeightPair("Recycle above tote  Height", BARREL_ABOVE_FIRST_TOTE),
-		new ToteHeightPair("Adjust Tote Height", HEIGHT_ADJUST_TOTE_ONE)
-		};
-	
-	//A utility class for putting batch commands to smartdashboard for these heights
-	public static class ToteHeightPair
-	{
-		public final String cmdName;
-		public final double height;
-		public ToteHeightPair(String cmdName, double height)
-		{
-			this.cmdName = cmdName;
-			this.height = height;
-		}
-	}
-	
 	private final double POT_MAX = 0.80; //potentiometer voltage at max position
 	private final double POT_MIN = 0.08;//potentiometer voltage at min value
 	private final double POT_RANGE = (51)/12d; //Range between max and min in feet
 
-	public static final boolean USING_LASER = false;
-	
 	AnalogPotentiometer potentiometer;
     CANTalon talon1;
     

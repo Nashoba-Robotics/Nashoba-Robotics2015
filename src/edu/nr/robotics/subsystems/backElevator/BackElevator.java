@@ -74,7 +74,6 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 		if(singleton == null)
 		{
 			singleton = new BackElevator();
-			SmartDashboard.putData("Back Elevator Subsystem", singleton);
 		}
 	}
 

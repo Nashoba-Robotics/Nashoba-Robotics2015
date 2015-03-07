@@ -302,15 +302,10 @@ public class Drive extends Subsystem
 	
 	public void putSmartDashboardInfo()
 	{
-		SmartDashboard.putNumber("Encoder 1", getEncoder1Distance());
-		SmartDashboard.putNumber("Encoder 2", getEncoder2Distance());
-		SmartDashboard.putNumber("Encoder Average", getEncoderAve());
-		SmartDashboard.putNumber("Encoder Rate", getEncoderAverageSpeed());
+		//SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
+		//SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
 		
-		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
-		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
-		
-		SmartDashboard.putNumber("Gyro", getAngleDegrees());
+		//SmartDashboard.putNumber("Gyro", getAngleDegrees());
 		
 		SmartDashboard.putBoolean("Bumper 1", this.getBumper1());
 		SmartDashboard.putBoolean("Bumper 2", this.getBumper2());

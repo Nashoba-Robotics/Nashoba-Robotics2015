@@ -10,7 +10,6 @@ import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorCloseCommand
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.drive.commands.*;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
-import edu.nr.robotics.subsystems.frontElevator.FrontElevatorStateMachine;
 import edu.nr.robotics.subsystems.frontElevator.commands.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
