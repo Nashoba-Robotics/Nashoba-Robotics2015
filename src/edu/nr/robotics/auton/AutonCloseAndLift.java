@@ -13,6 +13,6 @@ public class AutonCloseAndLift extends CommandGroup
 		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BOTTOM));
 		this.addSequential(new GrabBinCommand());
 		this.addSequential(new WaitCommand(2));
-		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_WAITING));
+		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BEFORE_TOTE_ADJUST));
 	}
 }

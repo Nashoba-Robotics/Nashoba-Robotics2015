@@ -44,10 +44,10 @@ public class DriveDistanceCommand extends CMD implements PIDOutput
     	this.maxSpeed = Math.abs(maxSpeed);
     }
     
-    public void setRoughStopDistance(double roughDistance)
+    public void setRoughStopDistance(double roughDistanceFromTarget)
     {
     	roughEnabled = true;
-    	roughStopDistance = Math.abs(roughDistance);
+    	roughStopDistance = Math.abs(roughDistanceFromTarget);
     }
     
     public void setIParams(double startCountingErr, double i)

@@ -37,6 +37,7 @@ public class Robot extends IterativeRobot
 		autoCommandChooser.addObject("Redeem Left", new AutonRedeemGroup(AutonType.ShortDistanceDriveLeft));
 		autoCommandChooser.addObject("Redeem Right", new AutonRedeemGroup(AutonType.ShortDistanceDriveRight));
 		autoCommandChooser.addObject("Pickup Bin And Lift", new AutonCloseAndLift());
+		autoCommandChooser.addObject("Redeem + Lower Bins and Close", new AutonRedeemGroup(AutonType.ShortDistancePutBinsDown));
 		autoCommandChooser.addObject("Do Nothing", new AutonDoNothingCommand());
 		SmartDashboard.putData("Autonomous Chooser", autoCommandChooser);
 		

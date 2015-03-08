@@ -18,7 +18,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 {
 	public static FrontElevator singleton;
 	
-	private static double BELT_SKIP_OFFSET = 0.33;
+	private static double BELT_SKIP_OFFSET = 0.31;
 	
 	public static final double HEIGHT_ADJUST_TOTE_ONE = 0.33 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_WAITING = 2.93 + BELT_SKIP_OFFSET;
