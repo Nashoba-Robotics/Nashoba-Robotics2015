@@ -10,7 +10,6 @@ import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorCloseCommand
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.drive.commands.*;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
-import edu.nr.robotics.subsystems.frontElevator.FrontElevatorStateMachine;
 import edu.nr.robotics.subsystems.frontElevator.commands.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -84,6 +83,10 @@ public class OI
 			
 			new JoystickButton(stickTankRight, 3).whenPressed(new AlignToPlayerStationGroup());
 			new JoystickButton(stickTankLeft, 1).whenPressed(new CancelAllCommand());
+			
+			DriveDistanceCommand driveWithTote = new DriveDistanceCommand(4, 3, 0.25);
+			driveWithTote.setRoughStopDistance(.5);
+			new JoystickButton(stickTankLeft, 5).whenPressed(driveWithTote);
 		}
 		else
 		{

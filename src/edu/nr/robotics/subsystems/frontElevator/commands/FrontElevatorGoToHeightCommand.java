@@ -57,7 +57,7 @@ public class FrontElevatorGoToHeightCommand extends CMD
     
     public void setGoingDownMaxRange(double maxDownSpeedMagnitude)
     {
-    	maxDownSpeedMagnitude = Math.abs(maxDownSpeedMagnitude);
+    	this.maxDownSpeedMagnitude = Math.abs(maxDownSpeedMagnitude);
     }
     
     public void setTalonRamp(boolean fast)

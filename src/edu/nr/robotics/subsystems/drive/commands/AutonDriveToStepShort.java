@@ -16,10 +16,13 @@ public class AutonDriveToStepShort extends CMD implements PIDOutput
 	AngleGyroCorrection gyroCorrection;
 	double currentSetSpeed = 0;
 	EncoderPIDSource encoderSource;
+	private double timeoutMillis;
+	private double startTime;
 	
 	public AutonDriveToStepShort(double timeout)
 	{
 		super(timeout);
+		timeoutMillis = timeout * 1000;
 		requires(Drive.getInstance());
 		encoderSource = new EncoderPIDSource();
 		
@@ -36,6 +39,7 @@ public class AutonDriveToStepShort extends CMD implements PIDOutput
 		pid.resetTotalError();
 		encoderSource.resetInitialValue();
 		Drive.getInstance().setTalonRampRate(24);
+		startTime = System.currentTimeMillis();
 	}
 
 	@Override
@@ -45,6 +49,9 @@ public class AutonDriveToStepShort extends CMD implements PIDOutput
 			Drive.getInstance().setTalonRampRate(0);
 		double turn = gyroCorrection.getTurnValue();
 		SmartDashboard.putNumber("Auton Current Set Speed", currentSetSpeed);
+		
+		currentSetSpeed = Math.max(Math.abs(currentSetSpeed), 0.25) * Math.signum(currentSetSpeed);
+		
 		Drive.getInstance().arcadeDrive(currentSetSpeed, turn);
 	}
 	
@@ -57,7 +64,7 @@ public class AutonDriveToStepShort extends CMD implements PIDOutput
 	@Override
 	protected boolean isFinished() 
 	{
-		return (Drive.getInstance().getBumper1() && Drive.getInstance().getBumper2());
+		return (Drive.getInstance().getBumper1() && Drive.getInstance().getBumper2()) || this.isTimedOut();
 	}
 
 	@Override

@@ -74,7 +74,6 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 		if(singleton == null)
 		{
 			singleton = new BackElevator();
-			SmartDashboard.putData("Back Elevator Subsystem", singleton);
 		}
 	}
 
@@ -90,7 +89,8 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 		double value = 1 - potentiometer.get();
     	value -= POT_MIN;
     	value = value/(POT_MAX - POT_MIN) * POT_RANGE;
-    	return value;
+    	
+    	return value - 0.6;
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 	
 	public void dashboardInfo()
 	{
-		SmartDashboard.putNumber("Rear pot raw", potentiometer.get());
+		//SmartDashboard.putNumber("Rear pot raw", potentiometer.get());
 		SmartDashboard.putNumber("Rear Pot Scaled", getScaledPot());
 	}
 }
