@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AlignToPlayerStationCommand extends CMD
 {
 	//TODO Test player station alignment
-	double epsilon;
+	double centeringEpsilon, angleEpsilon;
 	
 	AngleGyroCorrection gyroCorrection;
 	
@@ -21,7 +21,7 @@ public class AlignToPlayerStationCommand extends CMD
 	@Override
 	protected void onStart()
 	{
-		epsilon = -1;
+		centeringEpsilon = -1;
 		count = 0;
 	}
 	
@@ -43,7 +43,7 @@ public class AlignToPlayerStationCommand extends CMD
 		try
 		{
 			double dx = SmartDashboard.getNumber("TargetX");
-			epsilon = Math.abs(dx);
+			centeringEpsilon = Math.abs(dx);
 			
 			double defaultDriveSpeed = 0.3;
 			double pSpeed = Math.abs(dx) / 50 * defaultDriveSpeed;
@@ -54,12 +54,36 @@ public class AlignToPlayerStationCommand extends CMD
 			
 			driveSpeed = -driveSpeed;
 			
-			if(epsilon < 40)
+			if(centeringEpsilon < 40)
 				count++;
 			driveSpeed += (Math.signum(driveSpeed) * count * 0.001);
 			
+			double angle = SmartDashboard.getNumber("Key");
+			if(angle > 90)
+				angle -= 360;
+			angleEpsilon = Math.abs(angle);
+			
+			double imageWidth = SmartDashboard.getNumber("IMAGE_WIDTH");
+			
+			double angleSpeed = 0;
+			//We don't want to rotate too fast, or the target will go off screen, so stop rotating when we are 3/4
+			//from the center to the edge of the display
+			if(dx < (imageWidth/2) * 3/4 && dx > (-imageWidth/2) * 3/4)
+			{
+				//Start slowing down at 3 degrees
+				angleSpeed = Math.min(Math.abs(angle/3) * 0.2, 0.2);
+				angleSpeed *= Math.signum(angle);
+				SmartDashboard.putNumber("Target Angle Speed", angleSpeed);
+				SmartDashboard.putBoolean("Using Target Angle", true);
+			}
+			else
+			{
+				SmartDashboard.putNumber("Target Angle Speed", 0);
+				SmartDashboard.putBoolean("Using Target Angle", false);
+			}
+			
 			Drive.getInstance().setHDrive(driveSpeed);
-			Drive.getInstance().arcadeDrive(0, gyroCorrection.getTurnValue());
+			Drive.getInstance().arcadeDrive(0, angleSpeed);
 		}
 		catch(Exception e)
 		{
@@ -71,8 +95,9 @@ public class AlignToPlayerStationCommand extends CMD
 	@Override
 	protected boolean isFinished()
 	{
-		SmartDashboard.putNumber("Align Player Station Epsilon", epsilon);
-		return epsilon < 10 && epsilon > 0;
+		SmartDashboard.putNumber("Align Player Station Epsilon", centeringEpsilon);
+		SmartDashboard.putNumber("Angle Epsilon", angleEpsilon);
+		return centeringEpsilon < 10 && centeringEpsilon > 0 && angleEpsilon < 2;
 	}
 	
 	@Override
