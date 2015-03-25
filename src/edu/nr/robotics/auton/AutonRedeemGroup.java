@@ -42,6 +42,10 @@ public class AutonRedeemGroup extends CommandGroup
 		{
 			this.addSequential(new DriveDistanceCommand(DISTANCE_STEP_TO_ROBOT_SET, 1.5, 0.5));
 		}
+		else if(type == AutonType.ShortDistancePutBinsDown)
+		{
+			this.addSequential(new DriveDistanceCommand(DISTANCE_STEP_TO_ROBOT_SET+0.3, 1.5, 0.5));
+		}
 		else if(type == AutonType.ShortDistanceRecycleSet || type == AutonType.ShortDistanceDriveLeft || type == AutonType.ShortDistanceDriveRight)
 		{
 			this.addSequential(new DriveDistanceCommand(DISTANCE_STEP_TO_RECYCLE_SET, 1, 0.5));
@@ -70,13 +74,26 @@ public class AutonRedeemGroup extends CommandGroup
 			this.addSequential(new LowerBinGroup());
 		}
 		
+		if(type == AutonType.ShortDistancePutBinsDown)
+		{
+			this.addSequential(new LowerBinGroup());
+			
+			this.addSequential(new WaitCommand(0.1));
+			
+			DriveDistanceCommand driveAway = new DriveDistanceCommand(2, 1, 0.3);
+			driveAway.setRoughStopDistance(0.5);
+			this.addSequential(driveAway);
+			
+			this.addSequential(new BackElevatorCloseCommand());
+		}
+		
 		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BOTTOM));
 		
 	}
 	
 	public enum AutonType
 	{
-		ShortDistanceRecycleSet, ShortDistanceRobotSet, ShortDistanceDriveLeft, ShortDistanceDriveRight
+		ShortDistanceRecycleSet, ShortDistanceRobotSet, ShortDistanceDriveLeft, ShortDistanceDriveRight, ShortDistancePutBinsDown
 	}
 	
 	protected void end()

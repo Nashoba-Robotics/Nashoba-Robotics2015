@@ -29,7 +29,7 @@ public class PickupBarrelAndRaiseGroup extends CommandGroup
 	{
 		System.out.println("Command ended peacefully");
 		
-		FrontElevatorGoToHeightCommand temp2 = new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_OBTAIN_NOODLE);
+		FrontElevatorGoToHeightCommand temp2 = new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BEFORE_TOTE_ADJUST);
 		temp2.setPI(4, 0.1);
 		
 		temp2.start();

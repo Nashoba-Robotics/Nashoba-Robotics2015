@@ -1,5 +1,6 @@
 package edu.nr.robotics.subsystems.frontElevator.commands;
 
+import edu.nr.robotics.OI;
 import edu.nr.robotics.custom.PID;
 import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.drive.mxp.NavX;
@@ -57,7 +58,7 @@ public class FrontElevatorGoToHeightCommand extends CMD
     
     public void setGoingDownMaxRange(double maxDownSpeedMagnitude)
     {
-    	maxDownSpeedMagnitude = Math.abs(maxDownSpeedMagnitude);
+    	this.maxDownSpeedMagnitude = Math.abs(maxDownSpeedMagnitude);
     }
     
     public void setTalonRamp(boolean fast)
@@ -70,13 +71,36 @@ public class FrontElevatorGoToHeightCommand extends CMD
     	pid.setPID(p, i, pid.getD());
     }
 
+    
+    private boolean joystickIsZero = false;
+    private long joystickZeroStartTime = -1;
+    
     // Called repeatedly when this Command is scheduled to run
     @Override
 	protected void onExecute()
     {
     	SmartDashboard.putNumber("Elevator Err", pid.getError());
     	
-    	if(NavX.getInstance().getPitch() < -3)
+    	/*if(OI.getInstance().getArcadeMoveValue() == 0)
+    	{
+    		if(joystickZeroStartTime == -1 && !joystickIsZero)
+    		{
+    			joystickZeroStartTime = System.currentTimeMillis();
+    		}
+    		
+    		if(joystickZeroStartTime != -1 && System.currentTimeMillis() - joystickZeroStartTime > 750)
+    		{
+    			joystickIsZero = true;
+    			joystickZeroStartTime = -1;
+    		}
+    	}
+    	else
+    	{
+    		joystickIsZero = false;
+    		joystickZeroStartTime = -1;
+    	}*/
+    	
+    	if(NavX.getInstance().getPitch() < -3 && OI.getInstance().getArcadeMoveValue() == 0)
     	{
     		if(this.getGroup() != null)
     			this.getGroup().cancel();

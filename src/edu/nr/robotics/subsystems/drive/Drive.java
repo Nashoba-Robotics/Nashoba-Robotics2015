@@ -75,9 +75,6 @@ public class Drive extends Subsystem
 		leftPid.enable();
 		rightPid.enable();
 
-		SmartDashboard.putData("Left Side PID", leftPid);
-		SmartDashboard.putData("Right Side PID", rightPid);
-		
 		hDrive = new CANTalon(RobotMap.HDriveTalon);
 		
 		bumperButtonLeft = new DigitalInput(RobotMap.BUMPER_BUTTON_LEFT);
@@ -99,7 +96,6 @@ public class Drive extends Subsystem
 		if(singleton == null)
 		{
 			singleton = new Drive();
-			SmartDashboard.putData("Drive Subsystem", singleton);
 		}
 	}
 	
@@ -302,18 +298,16 @@ public class Drive extends Subsystem
 	
 	public void putSmartDashboardInfo()
 	{
-		SmartDashboard.putNumber("Encoder 1", getEncoder1Distance());
-		SmartDashboard.putNumber("Encoder 2", getEncoder2Distance());
-		SmartDashboard.putNumber("Encoder Average", getEncoderAve());
-		SmartDashboard.putNumber("Encoder Rate", getEncoderAverageSpeed());
+		//SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
+		//SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
 		
-		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
-		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
+		//SmartDashboard.putNumber("Gyro", getAngleDegrees());
 		
-		SmartDashboard.putNumber("Gyro", getAngleDegrees());
 		
+		SmartDashboard.putNumber("Encoders", this.getEncoderAve());
 		SmartDashboard.putBoolean("Bumper 1", this.getBumper1());
 		SmartDashboard.putBoolean("Bumper 2", this.getBumper2());
+		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
 	}
 }
 

@@ -18,7 +18,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 {
 	public static FrontElevator singleton;
 	
-	private static double BELT_SKIP_OFFSET = 0.33;
+	private static double BELT_SKIP_OFFSET = 0.31;
 	
 	public static final double HEIGHT_ADJUST_TOTE_ONE = 0.33 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_WAITING = 2.93 + BELT_SKIP_OFFSET;
@@ -31,39 +31,17 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	public static final double HEIGHT_BEFORE_TOTE_ADJUST = 1.14 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_RELEASE_BIN_WHILE_GOING_DOWN = 1.7 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_LIFT_4_STACK = 1.299 + BELT_SKIP_OFFSET;
+	public static final double HEIGHT_BEFORE_TOTE_LOWERING = 0.00;
 	
 	private final double MAX_ALLOWED_HEIGHT = 4.2 + BELT_SKIP_OFFSET;
     private final double MIN_ALLOWED_HEIGHT = 0.03 + BELT_SKIP_OFFSET;
 	
 	public static final double BARREL_ABOVE_FIRST_TOTE = 1.22;
 	
-	public static final ToteHeightPair[] commandedHeights = 
-		{
-		new ToteHeightPair("Waiting Height", HEIGHT_WAITING),
-		new ToteHeightPair("Bottom Height", HEIGHT_BOTTOM),
-		new ToteHeightPair("Pickup Tote Two", HEIGHT_PICK_UP_TOTE_TWO),
-		new ToteHeightPair("Recycle above tote  Height", BARREL_ABOVE_FIRST_TOTE),
-		new ToteHeightPair("Adjust Tote Height", HEIGHT_ADJUST_TOTE_ONE)
-		};
-	
-	//A utility class for putting batch commands to smartdashboard for these heights
-	public static class ToteHeightPair
-	{
-		public final String cmdName;
-		public final double height;
-		public ToteHeightPair(String cmdName, double height)
-		{
-			this.cmdName = cmdName;
-			this.height = height;
-		}
-	}
-	
 	private final double POT_MAX = 0.80; //potentiometer voltage at max position
 	private final double POT_MIN = 0.08;//potentiometer voltage at min value
 	private final double POT_RANGE = (51)/12d; //Range between max and min in feet
 
-	public static final boolean USING_LASER = false;
-	
 	AnalogPotentiometer potentiometer;
     CANTalon talon1;
     
@@ -138,14 +116,15 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
     	binGrabberValue = Value.kReverse;
     }
     
-    public void binGrabberOff(){
+    public void binGrabberOff()
+    {
 		binGrabber.set(Value.kOff);
 		binGrabberValue = Value.kOff;
 	}
     
     public Value getBinGrabber()
     {
-    	return binGrabberValue;
+    	return binGrabber.get();//binGrabberValue;
     }
     
     public void putSmartDashboardInfo()

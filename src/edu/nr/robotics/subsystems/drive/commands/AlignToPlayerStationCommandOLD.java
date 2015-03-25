@@ -5,14 +5,15 @@ import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrection;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class AlignToPlayerStationCommand extends CMD
+public class AlignToPlayerStationCommandOLD extends CMD
 {
 	//TODO Test player station alignment
 	double centeringEpsilon, angleEpsilon;
+	double angleError = 5;
 	
 	AngleGyroCorrection gyroCorrection;
 	
-	public AlignToPlayerStationCommand()
+	public AlignToPlayerStationCommandOLD()
 	{
 		this.requires(Drive.getInstance());
 		gyroCorrection = new AngleGyroCorrection();
@@ -54,12 +55,18 @@ public class AlignToPlayerStationCommand extends CMD
 			
 			driveSpeed = -driveSpeed;
 			
-			if(centeringEpsilon < 40)
+			if(centeringEpsilon < 20)
 				count++;
 			else
 				count = 0;
-			driveSpeed += (Math.signum(driveSpeed) * count * 0.001);
+			driveSpeed += (Math.signum(driveSpeed) * count * 0.0005);
 			
+			double angle = SmartDashboard.getNumber("TargetAngleEpsilon");
+			angleError = angle;
+			
+			double angleSpeed = Math.max(Math.abs(angle) * 1/6d, 0.01) * Math.signum(angle);
+			if(angle == 0)
+				angleSpeed = 0;
 			/*We don't want to rotate too fast, or the target will go off screen, so stop rotating when we are 3/4
 			//from the center to the edge of the display
 			if(dx < (imageWidth/2) * 3/4 && dx > (-imageWidth/2) * 3/4)
@@ -77,7 +84,7 @@ public class AlignToPlayerStationCommand extends CMD
 			}*/
 			
 			Drive.getInstance().setHDrive(driveSpeed);
-			Drive.getInstance().arcadeDrive(0, gyroCorrection.getTurnValue(0.08));
+			Drive.getInstance().arcadeDrive(0.15, angleSpeed);
 		}
 		catch(Exception e)
 		{
@@ -91,7 +98,7 @@ public class AlignToPlayerStationCommand extends CMD
 	{
 		SmartDashboard.putNumber("Align Player Station Epsilon", centeringEpsilon);
 		//SmartDashboard.putNumber("Angle Epsilon", angleEpsilon);
-		return centeringEpsilon < 10 && centeringEpsilon > 0 && Math.abs(gyroCorrection.getAngleErrorDegrees()) < 5;//gyroCorrection.getAngleErrorDegrees() < 4;// && angleEpsilon < 2;
+		return centeringEpsilon < 10 && centeringEpsilon > 0 && angleError == 0;//gyroCorrection.getAngleErrorDegrees() < 4;// && angleEpsilon < 2;
 	}
 	
 	@Override
