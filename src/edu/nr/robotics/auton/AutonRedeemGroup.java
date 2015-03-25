@@ -38,9 +38,13 @@ public class AutonRedeemGroup extends CommandGroup
 		this.addParallel(new EndAutoStall(share));
 		this.addSequential(new BackElevatorHeightWithShare(BackElevator.HEIGHT_HOLD, share));
 		
-		if(type == AutonType.ShortDistanceRobotSet || type == AutonType.ShortDistancePutBinsDown)
+		if(type == AutonType.ShortDistanceRobotSet)
 		{
 			this.addSequential(new DriveDistanceCommand(DISTANCE_STEP_TO_ROBOT_SET, 1.5, 0.5));
+		}
+		else if(type == AutonType.ShortDistancePutBinsDown)
+		{
+			this.addSequential(new DriveDistanceCommand(DISTANCE_STEP_TO_ROBOT_SET+0.3, 1.5, 0.5));
 		}
 		else if(type == AutonType.ShortDistanceRecycleSet || type == AutonType.ShortDistanceDriveLeft || type == AutonType.ShortDistanceDriveRight)
 		{

@@ -9,6 +9,7 @@ import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -18,6 +19,7 @@ public class Robot extends IterativeRobot
 {
     Command autonomousCommand;
     SendableChooser autoCommandChooser;
+    PowerDistributionPanel pdp;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -44,6 +46,8 @@ public class Robot extends IterativeRobot
 		SmartDashboard.putData(FrontElevator.getInstance());
 		SmartDashboard.putData(Drive.getInstance());
 		SmartDashboard.putData(BackElevator.getInstance());
+		
+		pdp = new PowerDistributionPanel();
 		
 		/* Angle Testing
         SmartDashboard.putNumber("Smart Angle", 1.57);

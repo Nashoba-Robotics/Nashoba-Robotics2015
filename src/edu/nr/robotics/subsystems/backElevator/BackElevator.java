@@ -103,5 +103,7 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 	{
 		//SmartDashboard.putNumber("Rear pot raw", potentiometer.get());
 		SmartDashboard.putNumber("Rear Pot Scaled", getScaledPot());
+		SmartDashboard.putNumber("Talon 1 Current", talon1.getOutputCurrent());
+		SmartDashboard.putNumber("Talon 2 Current", talon2.getOutputCurrent());
 	}
 }

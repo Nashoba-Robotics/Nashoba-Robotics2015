@@ -116,14 +116,15 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
     	binGrabberValue = Value.kReverse;
     }
     
-    public void binGrabberOff(){
+    public void binGrabberOff()
+    {
 		binGrabber.set(Value.kOff);
 		binGrabberValue = Value.kOff;
 	}
     
     public Value getBinGrabber()
     {
-    	return binGrabberValue;
+    	return binGrabber.get();//binGrabberValue;
     }
     
     public void putSmartDashboardInfo()
