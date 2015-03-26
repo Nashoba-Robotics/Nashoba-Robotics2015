@@ -1,6 +1,7 @@
 
 package edu.nr.robotics;
 
+import edu.nr.robotics.auton.AutonCloseAndDrive;
 import edu.nr.robotics.auton.AutonCloseAndLift;
 import edu.nr.robotics.auton.AutonDoNothingCommand;
 import edu.nr.robotics.auton.AutonRedeemGroup;
@@ -36,11 +37,12 @@ public class Robot extends IterativeRobot
 		autoCommandChooser = new SendableChooser();
 		autoCommandChooser.addDefault("Recycle Set", new AutonRedeemGroup(AutonType.ShortDistanceRecycleSet));
 		autoCommandChooser.addObject("Robot Set", new AutonRedeemGroup(AutonType.ShortDistanceRobotSet));
-		autoCommandChooser.addObject("Redeem Left", new AutonRedeemGroup(AutonType.ShortDistanceDriveLeft));
-		autoCommandChooser.addObject("Redeem Right", new AutonRedeemGroup(AutonType.ShortDistanceDriveRight));
+		//autoCommandChooser.addObject("Redeem Left", new AutonRedeemGroup(AutonType.ShortDistanceDriveLeft));
+		//autoCommandChooser.addObject("Redeem Right", new AutonRedeemGroup(AutonType.ShortDistanceDriveRight));
 		autoCommandChooser.addObject("Pickup Bin And Lift", new AutonCloseAndLift());
 		autoCommandChooser.addObject("Redeem + Lower Bins and Close", new AutonRedeemGroup(AutonType.ShortDistancePutBinsDown));
 		autoCommandChooser.addObject("Do Nothing", new AutonDoNothingCommand());
+		autoCommandChooser.addObject("Pickup + Drive to Auto Zone", new AutonCloseAndDrive());
 		SmartDashboard.putData("Autonomous Chooser", autoCommandChooser);
 		
 		SmartDashboard.putData(FrontElevator.getInstance());
