@@ -15,6 +15,6 @@ public class AutonCloseAndDrive extends CommandGroup
 		this.addSequential(new WaitCommand(2));
 		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BEFORE_TOTE_ADJUST));
 		this.addSequential(new WaitCommand(1));
-		this.addSequential(new DriveDistanceCommand(-5, 1, 0.4));
+		this.addSequential(new DriveDistanceCommand(-8, 1, 0.4));
 	}
 }

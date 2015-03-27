@@ -50,6 +50,10 @@ public class AutonRedeemGroup extends CommandGroup
 		{
 			this.addSequential(new DriveDistanceCommand(DISTANCE_STEP_TO_RECYCLE_SET, 1, 0.5));
 		}
+		else if(type == AutonType.ShortDistanceDriveShort)
+		{
+			this.addSequential(new DriveDistanceCommand(3, 1, 0.5));
+		}
 		else
 			System.out.println("Error: Couldn't add a final drive command to autonomous");
 		
@@ -85,15 +89,16 @@ public class AutonRedeemGroup extends CommandGroup
 			this.addSequential(driveAway);
 			
 			this.addSequential(new BackElevatorCloseCommand());
+			this.addSequential(new DriveDistanceCommand(-3, 0.5, 0.5));
 		}
 		
-		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BOTTOM));
+		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BEFORE_TOTE_ADJUST));
 		
 	}
 	
 	public enum AutonType
 	{
-		ShortDistanceRecycleSet, ShortDistanceRobotSet, ShortDistanceDriveLeft, ShortDistanceDriveRight, ShortDistancePutBinsDown
+		ShortDistanceRecycleSet, ShortDistanceRobotSet, ShortDistanceDriveLeft, ShortDistanceDriveRight, ShortDistancePutBinsDown, ShortDistanceDriveShort
 	}
 	
 	protected void end()

@@ -8,7 +8,9 @@ import edu.nr.robotics.auton.AutonRedeemGroup;
 import edu.nr.robotics.auton.AutonRedeemGroup.AutonType;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.drive.Drive;
+import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
+import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
@@ -43,11 +45,34 @@ public class Robot extends IterativeRobot
 		autoCommandChooser.addObject("Redeem + Lower Bins and Close", new AutonRedeemGroup(AutonType.ShortDistancePutBinsDown));
 		autoCommandChooser.addObject("Do Nothing", new AutonDoNothingCommand());
 		autoCommandChooser.addObject("Pickup + Drive to Auto Zone", new AutonCloseAndDrive());
+		autoCommandChooser.addObject("Redeem + Drive Short", new AutonRedeemGroup(AutonType.ShortDistanceDriveShort));
 		SmartDashboard.putData("Autonomous Chooser", autoCommandChooser);
 		
 		SmartDashboard.putData(FrontElevator.getInstance());
 		SmartDashboard.putData(Drive.getInstance());
 		SmartDashboard.putData(BackElevator.getInstance());
+		
+		SmartDashboard.putData("Front Elevator Starting Height", new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_STARTING_CONFIGURATION));
+		
+		SmartDashboard.putNumber("Angle Chooser", Math.PI/4);
+		SmartDashboard.putData("", new EmptyCommand("")
+		{
+			@Override
+			protected void onStart() {
+				new DriveAngleCommand(SmartDashboard.getNumber("Angle Chooser"), false).start();
+			}
+
+			@Override
+			protected void onExecute() {
+				
+			}
+			
+		});
+		DriveAngleCommand cmd = new DriveAngleCommand(Math.PI, false);
+		SmartDashboard.putData("Rotate 180", cmd);
+		
+		DriveAngleCommand cmd2 = new DriveAngleCommand(-Math.PI, false);
+		SmartDashboard.putData("Rotate -180", cmd2);
 		
 		pdp = new PowerDistributionPanel();
 		

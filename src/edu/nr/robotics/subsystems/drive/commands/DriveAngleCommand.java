@@ -27,10 +27,15 @@ public class DriveAngleCommand extends CMD
     	requires(Drive.getInstance());
     	gyroSource = new GyroPIDSource();
     	
-    	pidController = new PID(0.1, 0.0001, 0, gyroSource, new RotationPIDOutput());
+    	pidController = new PID(0.5, 0.01, 0, gyroSource, new RotationPIDOutput());
     	
     	this.absolute = absolute;
     	this.targetAngleRadians = targetAngleRadians;
+    }
+    
+    public void setP(double p)
+    {
+    	pidController.setPID(p, pidController.getI(), pidController.getD());
     }
 
     @Override
@@ -53,15 +58,16 @@ public class DriveAngleCommand extends CMD
     protected void onExecute() 
     {
     	SmartDashboard.putNumber("Drive Angle Command err", pidController.getError());
-    	if(Math.abs(pidController.getError())  > .09)
+    	if(Math.abs(pidController.getError())  > .19)
     		pidController.resetTotalError();
+    	SmartDashboard.putNumber("Angle Total Error", pidController.getTotalError());
     }
 
     private double correctCount = 0;
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
-    	if(Math.abs(pidController.getError()) < 0.017)
+    	if(Math.abs(pidController.getError()) < 0.034)
     		correctCount++;
     	else
     		correctCount = 0;

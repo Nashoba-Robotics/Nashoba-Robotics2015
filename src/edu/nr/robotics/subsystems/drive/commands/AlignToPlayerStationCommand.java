@@ -3,6 +3,7 @@ package edu.nr.robotics.subsystems.drive.commands;
 import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrection;
+import edu.nr.robotics.subsystems.drive.gyro.ConstantAngleGyroCorrection;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AlignToPlayerStationCommand extends CMD
@@ -45,7 +46,7 @@ public class AlignToPlayerStationCommand extends CMD
 			double dx = SmartDashboard.getNumber("TargetX");
 			centeringEpsilon = Math.abs(dx);
 			
-			double defaultDriveSpeed = 0.25;
+			double defaultDriveSpeed = 0.35;
 			double pSpeed = Math.abs(dx) / 50 * defaultDriveSpeed;
 			double driveSpeed = Math.min(defaultDriveSpeed, pSpeed) * Math.signum(dx);
 			

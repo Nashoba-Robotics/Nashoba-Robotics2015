@@ -20,7 +20,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	
 	private static double BELT_SKIP_OFFSET = 0.31;
 	
-	public static final double HEIGHT_ADJUST_TOTE_ONE = 0.33 + BELT_SKIP_OFFSET;
+	public static final double HEIGHT_ADJUST_TOTE_ONE = 0.3 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_WAITING = 2.93 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_PICK_UP_TOTE_ONE = 0.02 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_OBTAIN_NOODLE = 0.20 + BELT_SKIP_OFFSET;
@@ -32,6 +32,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	public static final double HEIGHT_RELEASE_BIN_WHILE_GOING_DOWN = 1.7 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_LIFT_4_STACK = 1.299 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_BEFORE_TOTE_LOWERING = 0.00;
+	public static final double HEIGHT_STARTING_CONFIGURATION = 0.342;
 	
 	private final double MAX_ALLOWED_HEIGHT = 4.2 + BELT_SKIP_OFFSET;
     private final double MIN_ALLOWED_HEIGHT = 0.03 + BELT_SKIP_OFFSET;

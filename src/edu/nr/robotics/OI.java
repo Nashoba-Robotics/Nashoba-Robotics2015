@@ -2,6 +2,7 @@ package edu.nr.robotics;
 
 import edu.nr.robotics.commandgroup.AlignToPlayerStationGroup;
 import edu.nr.robotics.commandgroup.CancelAllCommand;
+import edu.nr.robotics.commandgroup.DriveAndGetStationAngle;
 import edu.nr.robotics.commandgroup.LowerBinGroup;
 import edu.nr.robotics.commandgroup.ScoreGroup;
 import edu.nr.robotics.commandgroup.StartingConfigurationGroup;
@@ -25,6 +26,8 @@ public class OI
 	public static boolean USING_COFFIN = true;
 	
 	private final double JOYSTICK_DEAD_ZONE = 0.05;
+	
+	public double gyroValueforPlayerStation = 0;
 	
 	private static OI singleton;
 	
@@ -84,9 +87,8 @@ public class OI
 			new JoystickButton(stickTankRight, 3).whenPressed(new AlignToPlayerStationGroup());
 			new JoystickButton(stickTankLeft, 1).whenPressed(new CancelAllCommand());
 			
-			DriveDistanceCommand driveWithTote = new DriveDistanceCommand(4, 3, 0.25);
-			driveWithTote.setRoughStopDistance(.5);
-			new JoystickButton(stickTankLeft, 5).whenPressed(driveWithTote);
+			
+			new JoystickButton(stickTankLeft, 5).whenPressed(new DriveAndGetStationAngle());
 		}
 		else
 		{
