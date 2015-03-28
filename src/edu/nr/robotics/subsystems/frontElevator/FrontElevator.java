@@ -18,7 +18,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 {
 	public static FrontElevator singleton;
 	
-	private static double BELT_SKIP_OFFSET = 0.31;
+	private static double BELT_SKIP_OFFSET = 0.325;
 	
 	public static final double HEIGHT_ADJUST_TOTE_ONE = 0.3 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_WAITING = 2.93 + BELT_SKIP_OFFSET;
@@ -31,13 +31,13 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	public static final double HEIGHT_BEFORE_TOTE_ADJUST = 1.14 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_RELEASE_BIN_WHILE_GOING_DOWN = 1.7 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_LIFT_4_STACK = 1.299 + BELT_SKIP_OFFSET;
-	public static final double HEIGHT_BEFORE_TOTE_LOWERING = 0.00;
-	public static final double HEIGHT_STARTING_CONFIGURATION = 0.342;
+	public static final double HEIGHT_BEFORE_TOTE_LOWERING = 0.00 + BELT_SKIP_OFFSET;
+	public static final double HEIGHT_STARTING_CONFIGURATION = 0.342 + BELT_SKIP_OFFSET;
 	
 	private final double MAX_ALLOWED_HEIGHT = 4.2 + BELT_SKIP_OFFSET;
     private final double MIN_ALLOWED_HEIGHT = 0.03 + BELT_SKIP_OFFSET;
 	
-	public static final double BARREL_ABOVE_FIRST_TOTE = 1.22;
+	//public static final double BARREL_ABOVE_FIRST_TOTE = 1.22 + BELT_SKIP_OFFSET;
 	
 	private final double POT_MAX = 0.80; //potentiometer voltage at max position
 	private final double POT_MIN = 0.08;//potentiometer voltage at min value

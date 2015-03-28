@@ -17,7 +17,7 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 
 	//These needs to be set
 	public static final double HEIGHT_HOLD = 3;
-	public static final double HEIGHT_OBTAIN_STEP = 1.08;
+	public static final double HEIGHT_OBTAIN_STEP = 1.31;
 	public static final double HEIGHT_SLOW_DOWN = 0.73;
 	public static final double HEIGHT_CLOSED = 0;
 	

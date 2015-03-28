@@ -46,7 +46,7 @@ public class AlignToPlayerStationCommand extends CMD
 			double dx = SmartDashboard.getNumber("TargetX");
 			centeringEpsilon = Math.abs(dx);
 			
-			double defaultDriveSpeed = 0.35;
+			double defaultDriveSpeed = 0.3;
 			double pSpeed = Math.abs(dx) / 50 * defaultDriveSpeed;
 			double driveSpeed = Math.min(defaultDriveSpeed, pSpeed) * Math.signum(dx);
 			
@@ -78,7 +78,8 @@ public class AlignToPlayerStationCommand extends CMD
 			}*/
 			
 			Drive.getInstance().setHDrive(driveSpeed);
-			Drive.getInstance().arcadeDrive(0, gyroCorrection.getTurnValue(0.08));
+			double turnSpeed = (isVisible)? gyroCorrection.getTurnValue(0.08) : 0;
+			Drive.getInstance().arcadeDrive(0, turnSpeed);
 		}
 		catch(Exception e)
 		{
@@ -87,12 +88,19 @@ public class AlignToPlayerStationCommand extends CMD
 		}
 	}
 
+	private int correctCount = 0;
+	
 	@Override
 	protected boolean isFinished()
 	{
 		SmartDashboard.putNumber("Align Player Station Epsilon", centeringEpsilon);
 		//SmartDashboard.putNumber("Angle Epsilon", angleEpsilon);
-		return centeringEpsilon < 10 && centeringEpsilon > 0 && Math.abs(gyroCorrection.getAngleErrorDegrees()) < 5;//gyroCorrection.getAngleErrorDegrees() < 4;// && angleEpsilon < 2;
+		if(centeringEpsilon < 10 && centeringEpsilon > 0 && Math.abs(gyroCorrection.getAngleErrorDegrees()) < 5)
+				correctCount++;
+		else
+			correctCount = 0;
+		
+		return correctCount > 3;
 	}
 	
 	@Override
@@ -100,5 +108,6 @@ public class AlignToPlayerStationCommand extends CMD
 	{
 		Drive.getInstance().setHDrive(0);
 		gyroCorrection.clearInitialValue();
+		correctCount = 0;
 	}
 }
