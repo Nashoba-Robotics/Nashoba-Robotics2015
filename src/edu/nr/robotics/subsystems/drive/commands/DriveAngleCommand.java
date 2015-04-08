@@ -33,6 +33,12 @@ public class DriveAngleCommand extends CMD
     	this.targetAngleRadians = targetAngleRadians;
     }
     
+    public void setTargetAngle(double targetAngleRadians, boolean absolute)
+    {
+    	this.targetAngleRadians = targetAngleRadians;
+    	this.absolute = absolute;
+    }
+    
     public void setP(double p)
     {
     	pidController.setPID(p, pidController.getI(), pidController.getD());
