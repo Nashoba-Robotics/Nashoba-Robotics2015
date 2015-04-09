@@ -33,6 +33,7 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	public static final double HEIGHT_LIFT_4_STACK = 1.299 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_BEFORE_TOTE_LOWERING = 0.00 + BELT_SKIP_OFFSET;
 	public static final double HEIGHT_STARTING_CONFIGURATION = 0.342 + BELT_SKIP_OFFSET;
+	public static final double HEIGHT_RECEiVE_FIRST_TOTE = 1.985 + BELT_SKIP_OFFSET;
 	
 	private final double MAX_ALLOWED_HEIGHT = 4.2 + BELT_SKIP_OFFSET;
     private final double MIN_ALLOWED_HEIGHT = 0.03 + BELT_SKIP_OFFSET;

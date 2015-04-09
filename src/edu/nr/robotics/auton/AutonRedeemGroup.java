@@ -92,7 +92,7 @@ public class AutonRedeemGroup extends CommandGroup
 			this.addSequential(new DriveDistanceCommand(-3, 0.5, 0.5));
 		}
 		
-		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BEFORE_TOTE_ADJUST));
+		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BOTTOM));
 		
 	}
 	

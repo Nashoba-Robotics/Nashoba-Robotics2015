@@ -13,8 +13,10 @@ import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.commands.AlignAnglePlayerStation;
 import edu.nr.robotics.subsystems.drive.commands.AlignHorizontalToPlayerStationCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
+import edu.nr.robotics.subsystems.drive.commands.DriveToPlayerStationDistance;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
+import edu.nr.robotics.subsystems.frontfingers.FrontFingers;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
@@ -38,6 +40,7 @@ public class Robot extends IterativeRobot
 		Drive.init();
 		FrontElevator.init();
 		BackElevator.init();
+		FrontFingers.init();
 		
 		//TODO Test these autonomous commands
 		autoCommandChooser = new SendableChooser();
@@ -73,11 +76,12 @@ public class Robot extends IterativeRobot
 			
 		});
 		
-		SmartDashboard.putData("Align Camera Angle", new AlignAnglePlayerStation());
-		SmartDashboard.putData("Align Camera Center", new AlignHorizontalToPlayerStationCommand());
+		SmartDashboard.putData("Align Camera Angle", new AlignAnglePlayerStation(false));
+		SmartDashboard.putData("Align Camera Center", new AlignHorizontalToPlayerStationCommand(false));
 		
 		SmartDashboard.putData(new CameraOnCommand());
 		SmartDashboard.putData(new CameraOffCommand());
+		SmartDashboard.putData(new DriveToPlayerStationDistance(3, true));
 		
 		DriveAngleCommand cmd = new DriveAngleCommand(Math.PI, false);
 		SmartDashboard.putData("Rotate 180", cmd);

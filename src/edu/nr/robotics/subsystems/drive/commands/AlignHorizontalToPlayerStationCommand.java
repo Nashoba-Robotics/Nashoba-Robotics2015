@@ -10,14 +10,16 @@ public class AlignHorizontalToPlayerStationCommand extends CMD
 {
 	//TODO Test player station alignment
 	double centeringError, angleEpsilon;
-	double epsilon = 3;
+	double epsilon = 10;
+	private boolean withTote = false;
 	
 	AngleGyroCorrection gyroCorrection;
 	
-	public AlignHorizontalToPlayerStationCommand()
+	public AlignHorizontalToPlayerStationCommand(boolean withTote)
 	{
 		this.requires(Drive.getInstance());
 		gyroCorrection = new AngleGyroCorrection();
+		this.withTote = withTote;
 	}
 	
 	@Override
@@ -48,7 +50,7 @@ public class AlignHorizontalToPlayerStationCommand extends CMD
 			centeringError = Math.abs(dx);
 			
 			double defaultDriveSpeed = 0.3;
-			double pSpeed = Math.abs(dx) / 50 * defaultDriveSpeed;
+			double pSpeed = Math.abs(dx) / 60 * defaultDriveSpeed;
 			double driveSpeed = Math.min(defaultDriveSpeed, pSpeed) * Math.signum(dx);
 			
 			if(!isVisible)
@@ -60,7 +62,7 @@ public class AlignHorizontalToPlayerStationCommand extends CMD
 				count++;
 			else
 				count = 0;
-			driveSpeed += (Math.signum(driveSpeed) * count * 0.001);
+			driveSpeed += (Math.signum(driveSpeed) * count * 0.0001);
 			
 			/*We don't want to rotate too fast, or the target will go off screen, so stop rotating when we are 3/4
 			//from the center to the edge of the display
@@ -79,7 +81,14 @@ public class AlignHorizontalToPlayerStationCommand extends CMD
 			}*/
 			
 			Drive.getInstance().setHDrive(driveSpeed);
-			double turnSpeed = (isVisible)? gyroCorrection.getTurnValue(0.08) : 0;
+			double turnSpeed = 0;
+			if(isVisible)
+			{
+				if(withTote)
+					turnSpeed = gyroCorrection.getTurnValue(0.08);
+				else
+					turnSpeed = gyroCorrection.getTurnValue(0.03);
+			}
 			Drive.getInstance().arcadeDrive(0, turnSpeed);
 		}
 		catch(Exception e)

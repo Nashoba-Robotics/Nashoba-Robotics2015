@@ -11,19 +11,17 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class AlignToPlayerStationGroup extends CommandGroup
 {
-	public AlignToPlayerStationGroup()
+	public AlignToPlayerStationGroup(boolean withTote)
 	{
 		this.addSequential(new CameraOffCommand());
 		
 		for(int i = 0; i < 3; i++)
 		{
-			AlignHorizontalToPlayerStationCommand cmd = new AlignHorizontalToPlayerStationCommand();
-			if(i == 0)
-				cmd.setEpsilon(10);
+			AlignHorizontalToPlayerStationCommand cmd = new AlignHorizontalToPlayerStationCommand(withTote);
 			this.addSequential(cmd);
-			this.addSequential(new AlignAnglePlayerStation());
+			this.addSequential(new AlignAnglePlayerStation(withTote));
 		}
-		this.addSequential(new DriveTimeCommand(0.3, 0.5));
+		//this.addSequential(new DriveTimeCommand(0.3, 0.5));
 		this.addSequential(new EmptyCommand("Camera Strobe")
 		{
 			@Override

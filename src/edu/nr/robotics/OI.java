@@ -12,6 +12,8 @@ import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCo
 import edu.nr.robotics.subsystems.drive.commands.*;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.*;
+import edu.nr.robotics.subsystems.frontfingers.FrontFingersCloseCommand;
+import edu.nr.robotics.subsystems.frontfingers.FrontFingersOpenCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -84,11 +86,15 @@ public class OI
 			fighter.whenPressed(new ActivateDumbDriveCommand());
 			fighter.whenReleased(new ActivateSmartDriveCommand());
 			
-			new JoystickButton(stickTankRight, 3).whenPressed(new AlignToPlayerStationGroup());
+			new JoystickButton(stickTankRight, 3).whenPressed(new AlignToPlayerStationGroup(false));
+			//new JoystickButton(stickTankRight, 4).whenPressed(new AlignToPlayerStationGroup(true));
+			
 			new JoystickButton(stickTankLeft, 1).whenPressed(new CancelAllCommand());
 			
 			
-			new JoystickButton(stickTankLeft, 5).whenPressed(new DriveAndGetStationAngle());
+			//new JoystickButton(stickTankLeft, 5).whenPressed(new DriveAndGetStationAngle());
+			new JoystickButton(stickTankRight, 4).whenPressed(new FrontFingersCloseCommand());
+			new JoystickButton(stickTankRight, 5).whenPressed(new FrontFingersOpenCommand());
 		}
 		else
 		{
