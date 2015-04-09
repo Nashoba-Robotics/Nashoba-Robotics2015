@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AlignHorizontalToPlayerStationCommand extends CMD
 {
 	//TODO Test player station alignment
-	double centeringEpsilon, angleEpsilon;
+	double centeringError, angleEpsilon;
+	double epsilon = 3;
 	
 	AngleGyroCorrection gyroCorrection;
 	
@@ -22,7 +23,7 @@ public class AlignHorizontalToPlayerStationCommand extends CMD
 	@Override
 	protected void onStart()
 	{
-		centeringEpsilon = -1;
+		centeringError = -1;
 		count = 0;
 	}
 	
@@ -44,7 +45,7 @@ public class AlignHorizontalToPlayerStationCommand extends CMD
 		try
 		{
 			double dx = SmartDashboard.getNumber("TargetX");
-			centeringEpsilon = Math.abs(dx);
+			centeringError = Math.abs(dx);
 			
 			double defaultDriveSpeed = 0.3;
 			double pSpeed = Math.abs(dx) / 50 * defaultDriveSpeed;
@@ -55,7 +56,7 @@ public class AlignHorizontalToPlayerStationCommand extends CMD
 			
 			driveSpeed = -driveSpeed;
 			
-			if(centeringEpsilon < 40)
+			if(centeringError < 40)
 				count++;
 			else
 				count = 0;
@@ -90,12 +91,17 @@ public class AlignHorizontalToPlayerStationCommand extends CMD
 
 	private int correctCount = 0;
 	
+	public void setEpsilon(double value)
+	{
+		this.epsilon = Math.abs(value);
+	}
+	
 	@Override
 	protected boolean isFinished()
 	{
-		SmartDashboard.putNumber("Align Player Station Epsilon", centeringEpsilon);
+		SmartDashboard.putNumber("Align Player Station Epsilon", centeringError);
 		//SmartDashboard.putNumber("Angle Epsilon", angleEpsilon);
-		if(centeringEpsilon < 5 && centeringEpsilon > 0 && Math.abs(gyroCorrection.getAngleErrorDegrees()) < 5)
+		if(centeringError < epsilon && centeringError > epsilon && Math.abs(gyroCorrection.getAngleErrorDegrees()) < 5)
 				correctCount++;
 		else
 			correctCount = 0;
