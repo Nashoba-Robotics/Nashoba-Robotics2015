@@ -31,7 +31,7 @@ public class AutonRedeemGroup extends CommandGroup
 		this.addParallel(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_STEP));
 		this.addSequential(new AutonDriveToStepShort(8));
 		
-		this.addSequential(new WaitCommand(1.2));
+		this.addSequential(new BooleanWaitCommand(0.5, "RISKY AUTON", false));
 		
 		//Lift the bins, and keep driving forward into step
 		share = new IsFinishedShare();

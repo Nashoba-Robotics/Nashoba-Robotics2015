@@ -44,13 +44,13 @@ public class Robot extends IterativeRobot
 		
 		//TODO Test these autonomous commands
 		autoCommandChooser = new SendableChooser();
-		autoCommandChooser.addDefault("Recycle Set", new AutonRedeemGroup(AutonType.ShortDistanceRecycleSet));
+		autoCommandChooser.addDefault("Do Nothing", new AutonDoNothingCommand());
+		autoCommandChooser.addObject("Recycle Set", new AutonRedeemGroup(AutonType.ShortDistanceRecycleSet));
 		autoCommandChooser.addObject("Robot Set", new AutonRedeemGroup(AutonType.ShortDistanceRobotSet));
 		//autoCommandChooser.addObject("Redeem Left", new AutonRedeemGroup(AutonType.ShortDistanceDriveLeft));
 		//autoCommandChooser.addObject("Redeem Right", new AutonRedeemGroup(AutonType.ShortDistanceDriveRight));
 		autoCommandChooser.addObject("Pickup Bin And Lift", new AutonCloseAndLift());
 		autoCommandChooser.addObject("Redeem + Lower Bins and Close", new AutonRedeemGroup(AutonType.ShortDistancePutBinsDown));
-		autoCommandChooser.addObject("Do Nothing", new AutonDoNothingCommand());
 		autoCommandChooser.addObject("Pickup + Drive to Auto Zone", new AutonCloseAndDrive());
 		autoCommandChooser.addObject("Redeem + Drive Short", new AutonRedeemGroup(AutonType.ShortDistanceDriveShort));
 		SmartDashboard.putData("Autonomous Chooser", autoCommandChooser);
@@ -58,6 +58,8 @@ public class Robot extends IterativeRobot
 		SmartDashboard.putData(FrontElevator.getInstance());
 		SmartDashboard.putData(Drive.getInstance());
 		SmartDashboard.putData(BackElevator.getInstance());
+		
+		SmartDashboard.putBoolean("RISKY AUTON", false);
 		
 		SmartDashboard.putData("Front Elevator Starting Height", new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_STARTING_CONFIGURATION));
 		

@@ -7,6 +7,7 @@ import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.frontElevator.commands.ReleaseBinCommand;
+import edu.nr.robotics.subsystems.frontfingers.FrontFingersOpenCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 
@@ -25,6 +26,7 @@ public class ScoreGroup extends CommandGroup {
 		 */
     	
     	addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BOTTOM));
+    	addParallel(new FrontFingersOpenCommand());
     	addSequential(new ReleaseBinCommand());
     	
     	DriveDistanceCommand pushForward = new DriveDistanceCommand(0.8, 0.25, 0.3);
