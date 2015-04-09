@@ -95,7 +95,7 @@ public class AlignHorizontalToPlayerStationCommand extends CMD
 	{
 		SmartDashboard.putNumber("Align Player Station Epsilon", centeringEpsilon);
 		//SmartDashboard.putNumber("Angle Epsilon", angleEpsilon);
-		if(centeringEpsilon < 10 && centeringEpsilon > 0 && Math.abs(gyroCorrection.getAngleErrorDegrees()) < 5)
+		if(centeringEpsilon < 5 && centeringEpsilon > 0 && Math.abs(gyroCorrection.getAngleErrorDegrees()) < 5)
 				correctCount++;
 		else
 			correctCount = 0;

@@ -7,7 +7,11 @@ import edu.nr.robotics.auton.AutonDoNothingCommand;
 import edu.nr.robotics.auton.AutonRedeemGroup;
 import edu.nr.robotics.auton.AutonRedeemGroup.AutonType;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
+import edu.nr.robotics.subsystems.camera.CameraOffCommand;
+import edu.nr.robotics.subsystems.camera.CameraOnCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
+import edu.nr.robotics.subsystems.drive.commands.AlignAnglePlayerStation;
+import edu.nr.robotics.subsystems.drive.commands.AlignHorizontalToPlayerStationCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
@@ -68,6 +72,13 @@ public class Robot extends IterativeRobot
 			}
 			
 		});
+		
+		SmartDashboard.putData("Align Camera Angle", new AlignAnglePlayerStation());
+		SmartDashboard.putData("Align Camera Center", new AlignHorizontalToPlayerStationCommand());
+		
+		SmartDashboard.putData(new CameraOnCommand());
+		SmartDashboard.putData(new CameraOffCommand());
+		
 		DriveAngleCommand cmd = new DriveAngleCommand(Math.PI, false);
 		SmartDashboard.putData("Rotate 180", cmd);
 		

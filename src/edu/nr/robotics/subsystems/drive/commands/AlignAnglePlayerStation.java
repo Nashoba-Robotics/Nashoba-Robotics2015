@@ -7,6 +7,8 @@ public class AlignAnglePlayerStation extends DriveAngleCommand
 	public AlignAnglePlayerStation()
 	{
 		super(0, false);
+		this.setP(1);
+		this.setI(0.04);
 	}
 
 	@Override

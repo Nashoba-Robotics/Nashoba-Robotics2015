@@ -43,11 +43,17 @@ public class DriveAngleCommand extends CMD
     {
     	pidController.setPID(p, pidController.getI(), pidController.getD());
     }
+    
+    public void setI(double i)
+    {
+    	pidController.setPID(pidController.getP(), i, pidController.getD());
+    }
 
     @Override
 	protected void onStart() 
 	{
 		pidController.enable();
+		pidController.resetTotalError();
 		if(absolute)
     	{
     		pidController.setSetpoint(targetAngleRadians);
