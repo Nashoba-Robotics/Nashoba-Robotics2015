@@ -14,12 +14,16 @@ public class LowerBinGroup extends CommandGroup
 		addSequential(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_BINS_GRAZE_GROUND));
 		
 		//Drive forward while lowering the elevator slowly
-		addParallel(new DriveDistanceCommand(.5, 0.6, 0.3));
+		addParallel(new DriveDistanceCommand(1.5, 0.6, 0.45));
 		BackElevatorGoToHeightCommand temp = new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_BIN_LOWERED_FULLY);
 		temp.setMaxSpeed(0.3);
 		addSequential(temp);
 		
 		//Finally, drive forward to finish the release
-		addSequential(new DriveDistanceCommand(1.5, 1.1, 0.4));
+		DriveDistanceCommand cmd = new DriveDistanceCommand(.5, 1.1, 0.4);
+		cmd.setRoughStopDistance(0.2);
+		cmd.setP(0.5);
+		//cmd.setIParams(0.25, 0.001);
+		addSequential(cmd);
 	}
 }

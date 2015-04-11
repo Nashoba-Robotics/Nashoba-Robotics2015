@@ -36,7 +36,9 @@ public class AutonRedeemGroup extends CommandGroup
 		//Lift the bins, and keep driving forward into step
 		share = new IsFinishedShare();
 		this.addParallel(new EndAutoStall(share));
-		this.addSequential(new BackElevatorHeightWithShare(BackElevator.HEIGHT_HOLD, share));
+		BackElevatorHeightWithShare sharedLift = new BackElevatorHeightWithShare(BackElevator.HEIGHT_HOLD, share);
+		sharedLift.setEpsilon(1.5/12d);
+		this.addSequential(sharedLift);
 		
 		if(type == AutonType.ShortDistanceRobotSet)
 		{
@@ -44,7 +46,7 @@ public class AutonRedeemGroup extends CommandGroup
 		}
 		else if(type == AutonType.ShortDistancePutBinsDown)
 		{
-			this.addSequential(new DriveDistanceCommand(DISTANCE_STEP_TO_ROBOT_SET+0.3, 1.5, 0.5));
+			this.addSequential(new DriveDistanceCommand(DISTANCE_STEP_TO_ROBOT_SET+0.8, 1.5, 0.5));
 		}
 		else if(type == AutonType.ShortDistanceRecycleSet || type == AutonType.ShortDistanceDriveLeft || type == AutonType.ShortDistanceDriveRight)
 		{
@@ -84,12 +86,12 @@ public class AutonRedeemGroup extends CommandGroup
 			
 			this.addSequential(new WaitCommand(0.1));
 			
-			DriveDistanceCommand driveAway = new DriveDistanceCommand(2, 1, 0.3);
+			DriveDistanceCommand driveAway = new DriveDistanceCommand(1.5, 1, 0.3);
 			driveAway.setRoughStopDistance(0.5);
 			this.addSequential(driveAway);
 			
 			this.addSequential(new BackElevatorCloseCommand());
-			this.addSequential(new DriveDistanceCommand(-3, 0.5, 0.5));
+			this.addSequential(new DriveDistanceCommand(-2, 0.5, 0.5));
 		}
 		
 		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BOTTOM));

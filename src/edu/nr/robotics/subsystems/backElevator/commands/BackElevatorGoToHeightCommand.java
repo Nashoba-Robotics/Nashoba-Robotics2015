@@ -52,10 +52,17 @@ public class BackElevatorGoToHeightCommand extends CMD implements PIDOutput
     	SmartDashboard.putNumber("Back err", pid.getError());
     }
 
+    private double epsilon = 0.25d/12;
+    
+    public void setEpsilon(double valueFeet)
+    {
+    	this.epsilon = valueFeet;
+    }
+    
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
-        return Math.abs(pid.getError()) < 0.25d/12;
+        return Math.abs(pid.getError()) < epsilon;
     }
     
 	@Override

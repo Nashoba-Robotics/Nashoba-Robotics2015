@@ -29,12 +29,12 @@ public class BooleanWaitCommand extends CMD
 		try
 		{
 			if(SmartDashboard.getBoolean(key))
-				cancelEarly = true;
+				this.setTimeout(0.25);
 		}
 		catch(Exception e)
 		{
 			if(defaultValue)
-				cancelEarly = true;
+				this.setTimeout(0.25);
 		}
 	}
 
