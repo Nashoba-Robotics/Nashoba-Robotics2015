@@ -12,6 +12,7 @@ import edu.nr.robotics.subsystems.camera.CameraOnCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.commands.AlignAnglePlayerStation;
 import edu.nr.robotics.subsystems.drive.commands.AlignHorizontalToPlayerStationCommand;
+import edu.nr.robotics.subsystems.drive.commands.AutonDriveToStepShort;
 import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveToPlayerStationDistance;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
@@ -60,7 +61,7 @@ public class Robot extends IterativeRobot
 		SmartDashboard.putData(BackElevator.getInstance());
 		
 		SmartDashboard.putBoolean("RISKY AUTON", false);
-		
+		SmartDashboard.putData(new AutonDriveToStepShort(8));
 		SmartDashboard.putData("Front Elevator Starting Height", new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_STARTING_CONFIGURATION));
 		
 		SmartDashboard.putNumber("Angle Chooser", Math.PI/4);

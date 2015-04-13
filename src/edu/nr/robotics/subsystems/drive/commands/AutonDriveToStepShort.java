@@ -38,7 +38,6 @@ public class AutonDriveToStepShort extends CMD implements PIDOutput
 		gyroCorrection.clearInitialValue();
 		pid.resetTotalError();
 		encoderSource.resetInitialValue();
-		Drive.getInstance().setTalonRampRate(24);
 		startTime = System.currentTimeMillis();
 	}
 

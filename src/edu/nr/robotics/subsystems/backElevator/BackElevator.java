@@ -90,7 +90,6 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
     	value -= POT_MIN;
     	value = value/(POT_MAX - POT_MIN) * POT_RANGE;
     	
-    	return value - 0.6;
 	}
 
 	@Override

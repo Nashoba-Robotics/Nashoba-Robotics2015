@@ -233,5 +233,15 @@ public class OI
 		}
 		return false;
 	}
+	
+	public double getRawMove()
+	{
+		return -stickTankLeft.getY();
+	}
+	
+	public double getRawTurn()
+	{
+		return -stickTankRight.getX();
+	}
 }
 

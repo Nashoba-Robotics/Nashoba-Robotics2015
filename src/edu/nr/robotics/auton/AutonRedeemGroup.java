@@ -28,7 +28,7 @@ public class AutonRedeemGroup extends CommandGroup
 		super(splitCamelCase(type.toString()));
 		
 		//Drive to the step
-		this.addParallel(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_STEP));
+		//this.addParallel(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_STEP));
 		this.addSequential(new AutonDriveToStepShort(8));
 		
 		this.addSequential(new BooleanWaitCommand(0.5, "RISKY AUTON", false));
