@@ -1,4 +1,4 @@
-package edu.nr.robotics.subsystems.frontElevator.commands;
+package edu.nr.robotics.subsystems.binGrabber;
 
 import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
@@ -7,10 +7,10 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 /**
  *
  */
-public class ToggleBinCommand extends CMD {
+public class ToggleBinGrabberCommand extends CMD {
 
-    public ToggleBinCommand() {
-        requires(FrontElevator.getInstance());
+    public ToggleBinGrabberCommand() {
+        requires(BinGrabber.getInstance());
     }
 
     // Called just before this Command runs the first time
@@ -20,18 +20,18 @@ public class ToggleBinCommand extends CMD {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void onExecute() {
-    	Value value = FrontElevator.getInstance().getBinGrabber();
+    	Value value = BinGrabber.getInstance().getBinGrabber();
     	if(value == Value.kForward)
     	{
-    		FrontElevator.getInstance().binGrabberReverse();
+    		BinGrabber.getInstance().binGrabberReverse();
     	}
-    	if(value == Value.kReverse)
+    	else if(value == Value.kReverse)
     	{
-    		FrontElevator.getInstance().binGrabberForward();
+    		BinGrabber.getInstance().binGrabberForward();
     	}
-    	if(value == Value.kOff)
+    	else if(value == Value.kOff)
     	{
-    		FrontElevator.getInstance().binGrabberForward();
+    		BinGrabber.getInstance().binGrabberForward();
     	}
     	
     }

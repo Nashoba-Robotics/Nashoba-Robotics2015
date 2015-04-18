@@ -2,6 +2,7 @@ package edu.nr.robotics;
 
 import edu.nr.robotics.commandgroup.AlignToPlayerStationGroup;
 import edu.nr.robotics.commandgroup.CancelAllCommand;
+import edu.nr.robotics.commandgroup.CloseBinGrabberAndRaiseGroup;
 import edu.nr.robotics.commandgroup.DriveAndGetStationAngle;
 import edu.nr.robotics.commandgroup.LowerBinGroup;
 import edu.nr.robotics.commandgroup.ScoreGroup;
@@ -9,11 +10,10 @@ import edu.nr.robotics.commandgroup.StartingConfigurationGroup;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorCloseCommand;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
+import edu.nr.robotics.subsystems.binGrabber.ToggleBinGrabberCommand;
 import edu.nr.robotics.subsystems.drive.commands.*;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.*;
-import edu.nr.robotics.subsystems.frontfingers.FrontFingersCloseCommand;
-import edu.nr.robotics.subsystems.frontfingers.FrontFingersOpenCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -63,9 +63,9 @@ public class OI
 			
 			new JoystickButton(coffin3, 2).whenPressed(new ToteOneToScoreGroup());
 			new JoystickButton(coffin3, 1).whenPressed(new ScoreGroup());
-			new JoystickButton(coffin2, 8).whenPressed(new PickupBarrelAndRaiseGroup());
+			new JoystickButton(coffin2, 8).whenPressed(new CloseBinGrabberAndRaiseGroup());
 			
-			new JoystickButton(coffin2, 5).whenPressed(new ToggleBinCommand());
+			new JoystickButton(coffin2, 5).whenPressed(new ToggleBinGrabberCommand());
 			
 			FrontElevatorGoToHeightCommand adjust = new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE);
 			adjust.setGoingDownMaxRange(1);
@@ -93,8 +93,6 @@ public class OI
 			
 			
 			//new JoystickButton(stickTankLeft, 5).whenPressed(new DriveAndGetStationAngle());
-			new JoystickButton(stickTankRight, 4).whenPressed(new FrontFingersCloseCommand());
-			new JoystickButton(stickTankRight, 5).whenPressed(new FrontFingersOpenCommand());
 		}
 		else
 		{

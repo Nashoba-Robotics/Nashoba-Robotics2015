@@ -7,6 +7,7 @@ import edu.nr.robotics.auton.AutonDoNothingCommand;
 import edu.nr.robotics.auton.AutonRedeemGroup;
 import edu.nr.robotics.auton.AutonRedeemGroup.AutonType;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
+import edu.nr.robotics.subsystems.binGrabber.BinGrabber;
 import edu.nr.robotics.subsystems.camera.CameraOffCommand;
 import edu.nr.robotics.subsystems.camera.CameraOnCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
@@ -17,7 +18,6 @@ import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveToPlayerStationDistance;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
-import edu.nr.robotics.subsystems.frontfingers.FrontFingers;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot
 		Drive.init();
 		FrontElevator.init();
 		BackElevator.init();
-		FrontFingers.init();
+		BinGrabber.init();
 		
 		//TODO Test these autonomous commands
 		autoCommandChooser = new SendableChooser();
