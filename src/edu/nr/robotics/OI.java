@@ -2,12 +2,15 @@ package edu.nr.robotics;
 
 import edu.nr.robotics.commandgroup.AlignToPlayerStationGroup;
 import edu.nr.robotics.commandgroup.CancelAllCommand;
+import edu.nr.robotics.commandgroup.CloseBinGrabberAndRaiseGroup;
+import edu.nr.robotics.commandgroup.DriveAndGetStationAngle;
 import edu.nr.robotics.commandgroup.LowerBinGroup;
 import edu.nr.robotics.commandgroup.ScoreGroup;
 import edu.nr.robotics.commandgroup.StartingConfigurationGroup;
 import edu.nr.robotics.subsystems.backElevator.BackElevator;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorCloseCommand;
 import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
+import edu.nr.robotics.subsystems.binGrabber.ToggleBinGrabberCommand;
 import edu.nr.robotics.subsystems.drive.commands.*;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.*;
@@ -25,6 +28,8 @@ public class OI
 	public static boolean USING_COFFIN = true;
 	
 	private final double JOYSTICK_DEAD_ZONE = 0.05;
+	
+	public double gyroValueforPlayerStation = 0;
 	
 	private static OI singleton;
 	
@@ -58,9 +63,9 @@ public class OI
 			
 			new JoystickButton(coffin3, 2).whenPressed(new ToteOneToScoreGroup());
 			new JoystickButton(coffin3, 1).whenPressed(new ScoreGroup());
-			new JoystickButton(coffin2, 8).whenPressed(new PickupBarrelAndRaiseGroup());
+			new JoystickButton(coffin2, 8).whenPressed(new CloseBinGrabberAndRaiseGroup());
 			
-			new JoystickButton(coffin2, 5).whenPressed(new ToggleBinCommand());
+			new JoystickButton(coffin2, 5).whenPressed(new ToggleBinGrabberCommand());
 			
 			FrontElevatorGoToHeightCommand adjust = new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE);
 			adjust.setGoingDownMaxRange(1);
@@ -81,12 +86,13 @@ public class OI
 			fighter.whenPressed(new ActivateDumbDriveCommand());
 			fighter.whenReleased(new ActivateSmartDriveCommand());
 			
-			new JoystickButton(stickTankRight, 3).whenPressed(new AlignToPlayerStationGroup());
+			new JoystickButton(stickTankRight, 3).whenPressed(new AlignToPlayerStationGroup(false));
+			//new JoystickButton(stickTankRight, 4).whenPressed(new AlignToPlayerStationGroup(true));
+			
 			new JoystickButton(stickTankLeft, 1).whenPressed(new CancelAllCommand());
 			
-			DriveDistanceCommand driveWithTote = new DriveDistanceCommand(4, 3, 0.25);
-			driveWithTote.setRoughStopDistance(.5);
-			new JoystickButton(stickTankLeft, 5).whenPressed(driveWithTote);
+			
+			//new JoystickButton(stickTankLeft, 5).whenPressed(new DriveAndGetStationAngle());
 		}
 		else
 		{
@@ -224,6 +230,16 @@ public class OI
 			return stickTankRight.getRawButton(H_DRIVE_BUTTON);
 		}
 		return false;
+	}
+	
+	public double getRawMove()
+	{
+		return -stickTankLeft.getY();
+	}
+	
+	public double getRawTurn()
+	{
+		return -stickTankRight.getX();
 	}
 }
 

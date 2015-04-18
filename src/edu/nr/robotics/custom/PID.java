@@ -52,6 +52,11 @@ public class PID implements LiveWindowSendable
     public interface Tolerance {
         public boolean onTarget();
     }
+    
+    public double getTotalError()
+    {
+    	return m_totalError;
+    }
 
     public class PercentageTolerance implements Tolerance {
         double percentage;

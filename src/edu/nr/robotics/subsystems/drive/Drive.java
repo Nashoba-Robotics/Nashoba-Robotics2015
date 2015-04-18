@@ -308,6 +308,7 @@ public class Drive extends Subsystem
 		SmartDashboard.putBoolean("Bumper 1", this.getBumper1());
 		SmartDashboard.putBoolean("Bumper 2", this.getBumper2());
 		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
+		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
 	}
 }
 

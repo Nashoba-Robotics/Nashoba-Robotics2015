@@ -17,12 +17,12 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
 
 	//These needs to be set
 	public static final double HEIGHT_HOLD = 3;
-	public static final double HEIGHT_OBTAIN_STEP = 1.08;
+	public static final double HEIGHT_OBTAIN_STEP = 1.2;//1.31;
 	public static final double HEIGHT_SLOW_DOWN = 0.73;
 	public static final double HEIGHT_CLOSED = 0;
 	
 	public static final double HEIGHT_BINS_GRAZE_GROUND = 1.5;
-	public static final double HEIGHT_BIN_LOWERED_FULLY = 0.675;
+	public static final double HEIGHT_BIN_LOWERED_FULLY = 0.697;
 	public static final double HEIGHT_BIN_JUST_ABOVE_GROUND = 2;
 	
 	private static BackElevator singleton;
@@ -90,7 +90,7 @@ public class BackElevator extends Subsystem implements PIDOutput, PIDSource
     	value -= POT_MIN;
     	value = value/(POT_MAX - POT_MIN) * POT_RANGE;
     	
-    	return value - 0.6;
+    	return value - 0.834;
 	}
 
 	@Override

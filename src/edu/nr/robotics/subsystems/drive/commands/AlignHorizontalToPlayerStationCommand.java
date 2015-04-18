@@ -3,26 +3,29 @@ package edu.nr.robotics.subsystems.drive.commands;
 import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrection;
+import edu.nr.robotics.subsystems.drive.gyro.ConstantAngleGyroCorrection;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class AlignToPlayerStationCommandOLD extends CMD
+public class AlignHorizontalToPlayerStationCommand extends CMD
 {
 	//TODO Test player station alignment
-	double centeringEpsilon, angleEpsilon;
-	double angleError = 5;
+	double centeringError, angleEpsilon;
+	double epsilon = 10;
+	private boolean withTote = false;
 	
 	AngleGyroCorrection gyroCorrection;
 	
-	public AlignToPlayerStationCommandOLD()
+	public AlignHorizontalToPlayerStationCommand(boolean withTote)
 	{
 		this.requires(Drive.getInstance());
 		gyroCorrection = new AngleGyroCorrection();
+		this.withTote = withTote;
 	}
 	
 	@Override
 	protected void onStart()
 	{
-		centeringEpsilon = -1;
+		centeringError = -1;
 		count = 0;
 	}
 	
@@ -34,7 +37,7 @@ public class AlignToPlayerStationCommandOLD extends CMD
 		boolean isVisible = false;
 		try
 		{
-			isVisible = (SmartDashboard.getNumber("TargetVisible") == 0)?false:true;
+			isVisible = (SmartDashboard.getNumber("InsideVisible") == 0)?false:true;
 		}
 		catch(Exception e)
 		{
@@ -44,10 +47,10 @@ public class AlignToPlayerStationCommandOLD extends CMD
 		try
 		{
 			double dx = SmartDashboard.getNumber("TargetX");
-			centeringEpsilon = Math.abs(dx);
+			centeringError = Math.abs(dx);
 			
-			double defaultDriveSpeed = 0.25;
-			double pSpeed = Math.abs(dx) / 50 * defaultDriveSpeed;
+			double defaultDriveSpeed = 0.3;
+			double pSpeed = Math.abs(dx) / 60 * defaultDriveSpeed;
 			double driveSpeed = Math.min(defaultDriveSpeed, pSpeed) * Math.signum(dx);
 			
 			if(!isVisible)
@@ -55,18 +58,12 @@ public class AlignToPlayerStationCommandOLD extends CMD
 			
 			driveSpeed = -driveSpeed;
 			
-			if(centeringEpsilon < 20)
+			if(centeringError < 40)
 				count++;
 			else
 				count = 0;
-			driveSpeed += (Math.signum(driveSpeed) * count * 0.0005);
+			driveSpeed += (Math.signum(driveSpeed) * count * 0.0001);
 			
-			double angle = SmartDashboard.getNumber("TargetAngleEpsilon");
-			angleError = angle;
-			
-			double angleSpeed = Math.max(Math.abs(angle) * 1/6d, 0.01) * Math.signum(angle);
-			if(angle == 0)
-				angleSpeed = 0;
 			/*We don't want to rotate too fast, or the target will go off screen, so stop rotating when we are 3/4
 			//from the center to the edge of the display
 			if(dx < (imageWidth/2) * 3/4 && dx > (-imageWidth/2) * 3/4)
@@ -84,7 +81,15 @@ public class AlignToPlayerStationCommandOLD extends CMD
 			}*/
 			
 			Drive.getInstance().setHDrive(driveSpeed);
-			Drive.getInstance().arcadeDrive(0.15, angleSpeed);
+			double turnSpeed = 0;
+			if(isVisible)
+			{
+				if(withTote)
+					turnSpeed = gyroCorrection.getTurnValue(0.08);
+				else
+					turnSpeed = gyroCorrection.getTurnValue(0.03);
+			}
+			Drive.getInstance().arcadeDrive(0, turnSpeed);
 		}
 		catch(Exception e)
 		{
@@ -93,12 +98,24 @@ public class AlignToPlayerStationCommandOLD extends CMD
 		}
 	}
 
+	private int correctCount = 0;
+	
+	public void setEpsilon(double value)
+	{
+		this.epsilon = Math.abs(value);
+	}
+	
 	@Override
 	protected boolean isFinished()
 	{
-		SmartDashboard.putNumber("Align Player Station Epsilon", centeringEpsilon);
+		SmartDashboard.putNumber("Align Player Station Epsilon", centeringError);
 		//SmartDashboard.putNumber("Angle Epsilon", angleEpsilon);
-		return centeringEpsilon < 10 && centeringEpsilon > 0 && angleError == 0;//gyroCorrection.getAngleErrorDegrees() < 4;// && angleEpsilon < 2;
+		if(centeringError < epsilon && centeringError > epsilon && Math.abs(gyroCorrection.getAngleErrorDegrees()) < 5)
+				correctCount++;
+		else
+			correctCount = 0;
+		
+		return correctCount > 3;
 	}
 	
 	@Override
@@ -106,5 +123,6 @@ public class AlignToPlayerStationCommandOLD extends CMD
 	{
 		Drive.getInstance().setHDrive(0);
 		gyroCorrection.clearInitialValue();
+		correctCount = 0;
 	}
 }

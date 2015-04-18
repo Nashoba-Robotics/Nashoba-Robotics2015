@@ -80,6 +80,8 @@ public class DriveDistanceCommand extends CMD implements PIDOutput
 	protected void setSetpoint(double value)
 	{
 		pid.setSetpoint(value);
+		usualErrorSign = Math.signum(pid.getError());
+    	totalDistance = value;
 	}
 	
 	protected void resetEncoderSource()

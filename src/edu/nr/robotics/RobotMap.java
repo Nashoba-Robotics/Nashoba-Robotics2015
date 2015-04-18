@@ -37,5 +37,8 @@ public class RobotMap
 	public static final int POTENTIOMETER_FRONT_ELEVATOR = 3;
 	public static final int POTENTIOMETER_BACK_ELEVATOR = 0;
 	
+	public static final int FRONT_FINGERS_FORWARD = 6;
+	public static final int FRONT_FINGERS_REVERSE = 7;
+	
 	public static final int CAMERA_DIGITAL_PORT = 3; 
 }

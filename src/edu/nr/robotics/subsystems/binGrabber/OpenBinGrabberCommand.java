@@ -1,4 +1,4 @@
-package edu.nr.robotics.subsystems.frontElevator.commands;
+package edu.nr.robotics.subsystems.binGrabber;
 
 import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
@@ -6,21 +6,19 @@ import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 /**
  *
  */
-public class GrabBinCommand extends CMD {
+public class OpenBinGrabberCommand extends CMD {
 
-    public GrabBinCommand() {
-        requires(FrontElevator.getInstance());
+    public OpenBinGrabberCommand() {
+        requires(BinGrabber.getInstance());
     }
 
     // Called just before this Command runs the first time
-    @Override
     protected void onStart() {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    @Override
     protected void onExecute() {
-    	FrontElevator.getInstance().binGrabberForward();
+    	BinGrabber.getInstance().binGrabberReverse();
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -29,7 +27,6 @@ public class GrabBinCommand extends CMD {
     }
 
     // Called once after isFinished returns true
-    @Override
     protected void onEnd(boolean interrupted) {
     }
 
