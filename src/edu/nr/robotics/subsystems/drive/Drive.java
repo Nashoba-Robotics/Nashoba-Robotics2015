@@ -81,8 +81,6 @@ public class Drive extends Subsystem
 		bumperButtonRight = new DigitalInput(RobotMap.BUMPER_BUTTON_RIGHT);
 		
 		NavX.init();
-		
-        SmartDashboard.putBoolean("Joystick Arcade?", OI.USING_ARCADE);
 	}
 	
 	public static Drive getInstance()

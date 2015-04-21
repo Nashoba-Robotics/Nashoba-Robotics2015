@@ -29,7 +29,6 @@ public class Robot extends IterativeRobot
 {
     Command autonomousCommand;
     SendableChooser autoCommandChooser;
-    PowerDistributionPanel pdp;
     
     /**
      * This function is run when the robot is first started up and should be
@@ -59,6 +58,7 @@ public class Robot extends IterativeRobot
 		SmartDashboard.putData(FrontElevator.getInstance());
 		SmartDashboard.putData(Drive.getInstance());
 		SmartDashboard.putData(BackElevator.getInstance());
+		SmartDashboard.putData(BinGrabber.getInstance());
 		
 		SmartDashboard.putBoolean("RISKY AUTON", false);
 		SmartDashboard.putData(new AutonDriveToStepShort(8));
@@ -91,8 +91,6 @@ public class Robot extends IterativeRobot
 		
 		DriveAngleCommand cmd2 = new DriveAngleCommand(-Math.PI, false);
 		SmartDashboard.putData("Rotate -180", cmd2);
-		
-		pdp = new PowerDistributionPanel();
 		
 		/* Angle Testing
         SmartDashboard.putNumber("Smart Angle", 1.57);
