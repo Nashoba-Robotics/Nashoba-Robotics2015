@@ -25,11 +25,15 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	public static final double HEIGHT_PICK_UP_TOTE_ONE = 0.02;
 	public static final double HEIGHT_OBTAIN_NOODLE = 0.20;
 	public static final double HEIGHT_PICK_UP_TOTE_TWO = 0.85;
-	public static final double HEIGHT_ADJUST_BIN = 0.44;
 	public static final double HEIGHT_SCORING = 0.5;
 	public static final double HEIGHT_BOTTOM = 0.01;
 	public static final double HEIGHT_BEFORE_TOTE_ADJUST = 1.14;
+	
+	//TODO Get these heights for the new adjust method
+	public static final double HEIGHT_ADJUST_BIN = 0.44;
 	public static final double HEIGHT_RELEASE_BIN_WHILE_GOING_DOWN = 1.7;
+	public static final double HEIGHT_TOTE_TWO_ADJUST = 0;
+	
 	public static final double HEIGHT_LIFT_4_STACK = 1.299;
 	public static final double HEIGHT_BEFORE_TOTE_LOWERING = 0.00;
 	public static final double HEIGHT_STARTING_CONFIGURATION = 0.342;
@@ -47,6 +51,8 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 	AnalogPotentiometer potentiometer;
     CANTalon talon1;
     
+    DoubleSolenoid solenoid;
+    
     public FrontElevator() 
     {
     	talon1 = new CANTalon (RobotMap.frontElevatorTalon1);
@@ -55,8 +61,10 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
     	slave.set(talon1.getDeviceID());
     	
 		potentiometer = new AnalogPotentiometer(RobotMap.POTENTIOMETER_FRONT_ELEVATOR);
-		        
-        //setRampDirection(CantTalon.RampDirection.Both);
+		
+		solenoid = new DoubleSolenoid(RobotMap.pneumaticsModule,
+				RobotMap.FRONT_ARMS_FORWARD,
+				RobotMap.FRONT_ARMS_REVERSE);
     }
     
     public static FrontElevator getInstance()
@@ -122,5 +130,27 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
     	value -= POT_MIN;
     	value = value/(POT_MAX-POT_MIN) * POT_RANGE;
     	return value - BELT_SKIP_OFFSET;
+	}
+	
+	public void openArms()
+	{
+		solenoid.set(Value.kReverse);
+	}
+	
+	public void closeArms()
+	{
+		solenoid.set(Value.kForward);
+	}
+	
+	public void toggleArms()
+	{
+		if(solenoid.get().value == Value.kForward_val)
+		{
+			solenoid.set(Value.kReverse);
+		}
+		else
+		{
+			solenoid.set(Value.kForward);
+		}
 	}
 }

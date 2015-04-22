@@ -41,4 +41,16 @@ public class RobotMap
 	public static final int FRONT_FINGERS_REVERSE = 7;
 	
 	public static final int CAMERA_DIGITAL_PORT = 3; 
+	
+	//TODO Get the right solenoid numbers
+	public static final int WHIP_FORWARD = 4;
+	public static final int WHIP_REVERSE = 5;
+	
+	public static final int WHIP_LOCK_FORWARD = 6;
+	public static final int WHIP_LOCK_REVERSE = 7;
+	
+	public static final int FRONT_ARMS_FORWARD = 8;
+	public static final int FRONT_ARMS_REVERSE = 9;
+	
+	
 }

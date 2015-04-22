@@ -25,28 +25,47 @@ public class ArduinoLink
 	{
 	}
 	
-	public void update()
+	public void updateDisabled()
 	{
-		int time = (int)Math.round(DriverStation.getInstance().getMatchTime());
-		
-		if(state.equals(STATE_SCORING))
+		SmartDashboard.putString("ArduinoState", STATE_OFF);
+		SmartDashboard.putNumber("ArduinoArgument", 0);
+	}
+	
+	public void updateAuton()
+	{
+		SmartDashboard.putString("ArduinoState", STATE_OFF);
+		SmartDashboard.putNumber("ArduinoArgument", 0);
+	}
+	
+	public void updateTeleop()
+	{
+		try
 		{
-			if(System.currentTimeMillis() - startedScoringTime > 2000)
-				state = previousState;
+			int time = (int)Math.round(DriverStation.getInstance().getMatchTime());
+			
+			if(state.equals(STATE_SCORING))
+			{
+				if(System.currentTimeMillis() - startedScoringTime > 1000)
+					state = previousState;
+			}
+			
+			if(time <= 16)
+				state = STATE_COUNTDOWN;
+			
+			SmartDashboard.putString("ArduinoState", state);
+			
+			if(state.equalsIgnoreCase(STATE_COUNTDOWN))
+			{
+				SmartDashboard.putNumber("ArduinoArgument", time);
+			}
+			else
+			{
+				SmartDashboard.putNumber("ArduinoArgument", 0);
+			}
 		}
-		
-		if(time <= 16)
-			state = STATE_COUNTDOWN;
-		
-		SmartDashboard.putString("ArduinoState", state);
-		
-		if(state.equalsIgnoreCase(STATE_COUNTDOWN))
+		catch(Exception e)
 		{
-			SmartDashboard.putNumber("ArduinoArgument", time);
-		}
-		else
-		{
-			SmartDashboard.putNumber("ArduinoArgument", 0);
+			System.out.println(e);
 		}
 	}
 	

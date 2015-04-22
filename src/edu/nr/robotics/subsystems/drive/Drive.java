@@ -28,8 +28,6 @@ public class Drive extends Subsystem
 	private Encoder leftEnc, rightEnc;
 	private double ticksPerRev = 256, wheelDiameter = 0.4975;
 	
-	private DigitalInput bumperButtonLeft, bumperButtonRight;
-	
 	private PIDController leftPid, rightPid;
 	
 	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
@@ -76,9 +74,6 @@ public class Drive extends Subsystem
 		rightPid.enable();
 
 		hDrive = new CANTalon(RobotMap.HDriveTalon);
-		
-		bumperButtonLeft = new DigitalInput(RobotMap.BUMPER_BUTTON_LEFT);
-		bumperButtonRight = new DigitalInput(RobotMap.BUMPER_BUTTON_RIGHT);
 		
 		NavX.init();
 	}
@@ -284,16 +279,6 @@ public class Drive extends Subsystem
 		return (getRightEncoderSpeed() + getLeftEncoderSpeed()) / 2;
 	}
 	
-	public boolean getBumper1()
-	{
-		return !bumperButtonLeft.get();
-	}
-	
-	public boolean getBumper2()
-	{
-		return !bumperButtonRight.get();
-	}
-	
 	public void putSmartDashboardInfo()
 	{
 		//SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
@@ -303,8 +288,6 @@ public class Drive extends Subsystem
 		
 		
 		SmartDashboard.putNumber("Encoders", this.getEncoderAve());
-		SmartDashboard.putBoolean("Bumper 1", this.getBumper1());
-		SmartDashboard.putBoolean("Bumper 2", this.getBumper2());
 		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
 		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
 	}

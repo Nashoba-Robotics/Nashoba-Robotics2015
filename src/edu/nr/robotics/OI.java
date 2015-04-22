@@ -1,19 +1,15 @@
 package edu.nr.robotics;
 
-import edu.nr.robotics.commandgroup.AlignToPlayerStationGroup;
 import edu.nr.robotics.commandgroup.CancelAllCommand;
 import edu.nr.robotics.commandgroup.CloseBinGrabberAndRaiseGroup;
 import edu.nr.robotics.commandgroup.DriveAndGetStationAngle;
-import edu.nr.robotics.commandgroup.LowerBinGroup;
 import edu.nr.robotics.commandgroup.ScoreGroup;
-import edu.nr.robotics.commandgroup.StartingConfigurationGroup;
-import edu.nr.robotics.subsystems.backElevator.BackElevator;
-import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorCloseCommand;
-import edu.nr.robotics.subsystems.backElevator.commands.BackElevatorGoToHeightCommand;
 import edu.nr.robotics.subsystems.binGrabber.ToggleBinGrabberCommand;
 import edu.nr.robotics.subsystems.drive.commands.*;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.*;
+import edu.nr.robotics.subsystems.whip.WhipDeployGroup;
+import edu.nr.robotics.subsystems.whip.WhipUndeployGroup;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,11 +46,18 @@ public class OI
 		{
 			coffin2 = new Joystick(2);
 			coffin3 = new Joystick(3);
-			//Front Elevator Buttons
+			
+			/*Old back elevator buttons
 			new JoystickButton(coffin3, 9).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_HOLD));
 			new JoystickButton(coffin3, 8).whenPressed(new LowerBinGroup());
 			new JoystickButton(coffin3, 7).whenPressed(new BackElevatorGoToHeightCommand(BackElevator.HEIGHT_OBTAIN_STEP));
-			new JoystickButton(coffin3, 6).whenPressed(new BackElevatorCloseCommand());
+			new JoystickButton(coffin3, 6).whenPressed(new BackElevatorCloseCommand());*/
+			
+			//TODO Verify these with theresa
+			new JoystickButton(coffin3, 9).whenPressed(new FrontArmsToggleCommand());
+			new JoystickButton(coffin3, 8).whenPressed(new ToteTwoToWaitWithOpeningArmsGroup());
+			new JoystickButton(coffin3, 7).whenPressed(new WhipDeployGroup());
+			new JoystickButton(coffin3, 6).whenPressed(new WhipUndeployGroup());
 			
 			new JoystickButton(coffin3, 5).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_WAITING));
 			new JoystickButton(coffin3, 4).whenPressed(new AdjustRecycleGroup());
@@ -86,7 +89,7 @@ public class OI
 			fighter.whenPressed(new ActivateDumbDriveCommand());
 			fighter.whenReleased(new ActivateSmartDriveCommand());
 			
-			new JoystickButton(stickTankRight, 3).whenPressed(new AlignToPlayerStationGroup(false));
+			//new JoystickButton(stickTankRight, 3).whenPressed(new AlignToPlayerStationGroup(false));
 			//new JoystickButton(stickTankRight, 4).whenPressed(new AlignToPlayerStationGroup(true));
 			
 			new JoystickButton(stickTankLeft, 1).whenPressed(new CancelAllCommand());

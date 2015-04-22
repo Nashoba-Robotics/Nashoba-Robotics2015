@@ -15,6 +15,12 @@ public abstract class EmptyCommand extends CMD
 	}
 	
 	@Override
+	protected void onStart()
+	{
+		
+	}
+	
+	@Override
 	protected void initialize() 
 	{
 	}

@@ -1,25 +1,16 @@
 
 package edu.nr.robotics;
 
-import edu.nr.robotics.auton.AutonCloseAndDrive;
-import edu.nr.robotics.auton.AutonCloseAndLift;
+import edu.nr.robotics.auton.AutonGrabAndDrive;
+import edu.nr.robotics.auton.AutonGrabeAndLift;
 import edu.nr.robotics.auton.AutonDoNothingCommand;
-import edu.nr.robotics.auton.AutonRedeemGroup;
-import edu.nr.robotics.auton.AutonRedeemGroup.AutonType;
-import edu.nr.robotics.subsystems.backElevator.BackElevator;
+import edu.nr.robotics.auton.AutonWhipAndDrive;
 import edu.nr.robotics.subsystems.binGrabber.BinGrabber;
-import edu.nr.robotics.subsystems.camera.CameraOffCommand;
-import edu.nr.robotics.subsystems.camera.CameraOnCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.commands.AlignAnglePlayerStation;
-import edu.nr.robotics.subsystems.drive.commands.AlignHorizontalToPlayerStationCommand;
-import edu.nr.robotics.subsystems.drive.commands.AutonDriveToStepShort;
-import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
-import edu.nr.robotics.subsystems.drive.commands.DriveToPlayerStationDistance;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
+import edu.nr.robotics.subsystems.whip.Whip;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -39,32 +30,24 @@ public class Robot extends IterativeRobot
 		OI.init();
 		Drive.init();
 		FrontElevator.init();
-		BackElevator.init();
+		Whip.init();
 		BinGrabber.init();
 		
-		//TODO Test these autonomous commands
 		autoCommandChooser = new SendableChooser();
 		autoCommandChooser.addDefault("Do Nothing", new AutonDoNothingCommand());
-		autoCommandChooser.addObject("Recycle Set", new AutonRedeemGroup(AutonType.ShortDistanceRecycleSet));
-		autoCommandChooser.addObject("Robot Set", new AutonRedeemGroup(AutonType.ShortDistanceRobotSet));
-		//autoCommandChooser.addObject("Redeem Left", new AutonRedeemGroup(AutonType.ShortDistanceDriveLeft));
-		//autoCommandChooser.addObject("Redeem Right", new AutonRedeemGroup(AutonType.ShortDistanceDriveRight));
-		autoCommandChooser.addObject("Pickup Bin And Lift", new AutonCloseAndLift());
-		autoCommandChooser.addObject("Redeem + Lower Bins and Close", new AutonRedeemGroup(AutonType.ShortDistancePutBinsDown));
-		autoCommandChooser.addObject("Pickup + Drive to Auto Zone", new AutonCloseAndDrive());
-		autoCommandChooser.addObject("Redeem + Drive Short", new AutonRedeemGroup(AutonType.ShortDistanceDriveShort));
+		autoCommandChooser.addObject("Whip + Drive Forward", new AutonWhipAndDrive());
+		autoCommandChooser.addObject("Grab Bin + Lift", new AutonGrabeAndLift());
+		autoCommandChooser.addObject("Grab + Drive to Auto Zone", new AutonGrabAndDrive());
 		SmartDashboard.putData("Autonomous Chooser", autoCommandChooser);
 		
 		SmartDashboard.putData(FrontElevator.getInstance());
 		SmartDashboard.putData(Drive.getInstance());
-		SmartDashboard.putData(BackElevator.getInstance());
+		SmartDashboard.putData(Whip.getInstance());
 		SmartDashboard.putData(BinGrabber.getInstance());
 		
-		SmartDashboard.putBoolean("RISKY AUTON", false);
-		SmartDashboard.putData(new AutonDriveToStepShort(8));
 		SmartDashboard.putData("Front Elevator Starting Height", new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_STARTING_CONFIGURATION));
 		
-		SmartDashboard.putNumber("Angle Chooser", Math.PI/4);
+		/*SmartDashboard.putNumber("Angle Chooser", Math.PI/4);
 		SmartDashboard.putData("", new EmptyCommand("")
 		{
 			@Override
@@ -77,35 +60,7 @@ public class Robot extends IterativeRobot
 				
 			}
 			
-		});
-		
-		SmartDashboard.putData("Align Camera Angle", new AlignAnglePlayerStation(false));
-		SmartDashboard.putData("Align Camera Center", new AlignHorizontalToPlayerStationCommand(false));
-		
-		SmartDashboard.putData(new CameraOnCommand());
-		SmartDashboard.putData(new CameraOffCommand());
-		SmartDashboard.putData(new DriveToPlayerStationDistance(3, true));
-		
-		DriveAngleCommand cmd = new DriveAngleCommand(Math.PI, false);
-		SmartDashboard.putData("Rotate 180", cmd);
-		
-		DriveAngleCommand cmd2 = new DriveAngleCommand(-Math.PI, false);
-		SmartDashboard.putData("Rotate -180", cmd2);
-		
-		/* Angle Testing
-        SmartDashboard.putNumber("Smart Angle", 1.57);
-        SmartDashboard.putData(new EmptyCommand("Drive to smartdash angle")
-        {
-			@Override
-			protected void onStart() 
-			{
-			}
-			@Override
-			protected void onExecute() 
-			{
-				new DriveAngleCommandNew(SmartDashboard.getNumber("Smart Angle")).start();
-			}
-        });*/
+		});*/
     }
 	
     public void autonomousInit() 
@@ -121,6 +76,7 @@ public class Robot extends IterativeRobot
     public void autonomousPeriodic() 
     {
         Scheduler.getInstance().run();
+        ArduinoLink.getInstance().updateAuton();
         
         //Update SmartDashboard info after the scheduler runs our command(s)
         putSubsystemDashInfo();
@@ -141,6 +97,7 @@ public class Robot extends IterativeRobot
     public void teleopPeriodic() 
     {
         Scheduler.getInstance().run();
+        ArduinoLink.getInstance().updateTeleop();
     	
         //Update SmartDashboard info after the scheduler runs our commands
         putSubsystemDashInfo();
@@ -158,6 +115,7 @@ public class Robot extends IterativeRobot
     public void disabledPeriodic() 
 	{
 		Scheduler.getInstance().run();
+		ArduinoLink.getInstance().updateDisabled();
 		
 		//Update SmartDashboard info after the scheduler runs our commands
         putSubsystemDashInfo();
@@ -167,6 +125,5 @@ public class Robot extends IterativeRobot
     {
     	Drive.getInstance().putSmartDashboardInfo();
     	FrontElevator.getInstance().putSmartDashboardInfo();
-    	BackElevator.getInstance().dashboardInfo();
     }
 }
