@@ -3,6 +3,7 @@ package edu.nr.robotics.commandgroup;
 import edu.nr.robotics.subsystems.binGrabber.CloseBinGrabberCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
+import edu.nr.robotics.subsystems.frontElevator.commands.FrontArmsCloseCommand;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
@@ -12,6 +13,8 @@ public class CloseBinGrabberAndRaiseGroup extends CommandGroup
 	public CloseBinGrabberAndRaiseGroup()
 	{
 		this.addSequential(new CloseBinGrabberCommand());
+		this.addSequential(new WaitCommand(0.2));
+		this.addSequential(new FrontArmsCloseCommand());
 		this.addSequential(new WaitCommand(.5));
 	}
 	

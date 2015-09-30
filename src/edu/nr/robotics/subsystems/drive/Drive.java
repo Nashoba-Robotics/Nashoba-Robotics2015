@@ -2,10 +2,11 @@
 package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.robotics.OI;
+import edu.nr.robotics.Robot;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
-import edu.nr.robotics.subsystems.drive.commands.DriveJoystickTankCommand;
 import edu.nr.robotics.subsystems.drive.mxp.NavX;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.CANTalon;
@@ -27,8 +28,6 @@ public class Drive extends Subsystem
 	
 	private Encoder leftEnc, rightEnc;
 	private double ticksPerRev = 256, wheelDiameter = 0.4975;
-	
-	private DigitalInput bumperButtonLeft, bumperButtonRight;
 	
 	private PIDController leftPid, rightPid;
 	
@@ -77,12 +76,7 @@ public class Drive extends Subsystem
 
 		hDrive = new CANTalon(RobotMap.HDriveTalon);
 		
-		bumperButtonLeft = new DigitalInput(RobotMap.BUMPER_BUTTON_LEFT);
-		bumperButtonRight = new DigitalInput(RobotMap.BUMPER_BUTTON_RIGHT);
-		
 		NavX.init();
-		
-        SmartDashboard.putBoolean("Joystick Arcade?", OI.USING_ARCADE);
 	}
 	
 	public static Drive getInstance()
@@ -110,14 +104,7 @@ public class Drive extends Subsystem
 	
 	public void initDefaultCommand()
 	{
-		if(OI.USING_ARCADE)
-		{
-			setDefaultCommand(new DriveJoystickArcadeCommand());
-		}
-		else
-		{
-			setDefaultCommand(new DriveJoystickTankCommand());
-		}
+		setDefaultCommand(new DriveJoystickArcadeCommand());
     }
 
 	public void arcadeDrive(double moveValue, double rotateValue)
@@ -178,6 +165,7 @@ public class Drive extends Subsystem
         
         SmartDashboard.putNumber("Arcade Left Motors", leftMotorSpeed);
         SmartDashboard.putNumber("Arcade Right Motors", rightMotorSpeed);
+        SmartDashboard.putBoolean("Half Speed", false);
         
         if(leftPid.isEnable() && rightPid.isEnable())
         {
@@ -286,16 +274,6 @@ public class Drive extends Subsystem
 		return (getRightEncoderSpeed() + getLeftEncoderSpeed()) / 2;
 	}
 	
-	public boolean getBumper1()
-	{
-		return !bumperButtonLeft.get();
-	}
-	
-	public boolean getBumper2()
-	{
-		return !bumperButtonRight.get();
-	}
-	
 	public void putSmartDashboardInfo()
 	{
 		//SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
@@ -303,10 +281,10 @@ public class Drive extends Subsystem
 		
 		//SmartDashboard.putNumber("Gyro", getAngleDegrees());
 		
+		SmartDashboard.putNumber("Encoder Left", this.getEncoder1Distance());
+		SmartDashboard.putNumber("Encoder Right", this.getEncoder2Distance());
 		
 		SmartDashboard.putNumber("Encoders", this.getEncoderAve());
-		SmartDashboard.putBoolean("Bumper 1", this.getBumper1());
-		SmartDashboard.putBoolean("Bumper 2", this.getBumper2());
 		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
 		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
 	}

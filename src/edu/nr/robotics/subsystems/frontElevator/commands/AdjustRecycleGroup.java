@@ -14,6 +14,7 @@ public class AdjustRecycleGroup extends CommandGroup
 		this.addSequential(new WaitCommand(0.4));
 		this.addSequential(new CloseBinGrabberCommand());
 		this.addSequential(new WaitCommand(0.25));
+		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_PICK_UP_TOTE_TWO));
 		this.addSequential(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_WAITING));
 	}
 }

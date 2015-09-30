@@ -1,9 +1,10 @@
 package edu.nr.robotics.commandgroup;
 
 import edu.nr.robotics.subsystems.CMD;
-import edu.nr.robotics.subsystems.backElevator.BackElevator;
+import edu.nr.robotics.subsystems.binGrabber.BinGrabber;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
+import edu.nr.robotics.subsystems.whip.Whip;
 
 public class CancelAllCommand extends CMD
 {
@@ -11,7 +12,8 @@ public class CancelAllCommand extends CMD
 	{
 		this.requires(FrontElevator.getInstance());
 		this.requires(Drive.getInstance());
-		this.requires(BackElevator.getInstance());
+		this.requires(Whip.getInstance());
+		this.requires(BinGrabber.getInstance());
 	}
 	
 	@Override

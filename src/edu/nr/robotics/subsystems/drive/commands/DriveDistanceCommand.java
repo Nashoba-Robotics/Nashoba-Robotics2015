@@ -105,6 +105,12 @@ public class DriveDistanceCommand extends CMD implements PIDOutput
 		
 		double tempThrust = Math.min(Math.abs(currentSetThrust), maxSpeed) * Math.signum(currentSetThrust);
 		
+		if(debug)
+		{
+			SmartDashboard.putNumber("Whip Thrust", tempThrust);
+			SmartDashboard.putNumber("Whip Turn", turn);
+			SmartDashboard.putNumber("Whip Error", pid.getError());
+		}
 		Drive.getInstance().arcadeDrive(tempThrust, turn);
     }
 
@@ -129,5 +135,11 @@ public class DriveDistanceCommand extends CMD implements PIDOutput
     	Drive.getInstance().setTalonRampRate(0);
     	Drive.getInstance().setDriveP(Drive.JOYSTICK_DRIVE_P);	
     	pid.reset();
+	}
+	
+	private boolean debug = false;
+	public void setDebug(boolean value)
+	{
+		this.debug = value;
 	}
 }

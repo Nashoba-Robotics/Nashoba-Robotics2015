@@ -30,45 +30,62 @@ public class DriveJoystickArcadeCommand extends CMD
     @Override
     protected void onExecute()
     {
-    	double moveValue = OI.getInstance().getArcadeMoveValue();
-    	double driveMagnitude = Math.pow(moveValue, 2) * Math.signum(moveValue);
-    	
-    	//TODO Test direction reversing
-    	if(OI.getInstance().reverseDriveDirection())
-    		driveMagnitude *= -1;
-    	
-    	double turn;
-    	
-    	if(OI.getInstance().useGyroCorrection())
+    	if(OI.getInstance().drivingModeChooser.getSelected().equals("arcade"))
     	{
-    		hDriveActivated = true;
-    		turn = gyroCorrection.getTurnValue();
+	    	double moveValue = OI.getInstance().getArcadeMoveValue();
+	    	double driveMagnitude = Math.pow(moveValue, 2) * Math.signum(moveValue);
+	    	
+	    	if(OI.getInstance().reverseDriveDirection())
+	    		driveMagnitude *= -1;
+	    	
+	    	double turn;
+	    	
+	    	if(OI.getInstance().useGyroCorrection())
+	    	{
+	    		hDriveActivated = true;
+	    		turn = gyroCorrection.getTurnValue();
+	    	}
+	    	else
+	    	{
+	    		//Use the joystick to get turn value
+	    		double rawTurn = OI.getInstance().getArcadeTurnValue();
+	    		
+	    		//Wait until joystick returns to rest before switching controls to turning
+	    		if(Math.abs(rawTurn) < 0.15)
+	    			hDriveActivated = false;
+	    		
+	    		if(hDriveActivated)
+	    			rawTurn = 0;
+	    		
+	    		//Scale down the turn value intensity and square it
+	    		turn = Math.pow(rawTurn*0.9, 2) * Math.signum(rawTurn);
+	    		
+	    		gyroCorrection.clearInitialValue();
+	    	}
+	    	
+			Drive.getInstance().setHDrive(OI.getInstance().speedMultiplier*OI.getInstance().getHDriveValue());
+	    	
+	    	SmartDashboard.putNumber("Drive Magnitude", driveMagnitude);
+	    	SmartDashboard.putNumber("Turn", turn);    	
+	    	
+	    	Drive.getInstance().arcadeDrive(OI.getInstance().speedMultiplier*driveMagnitude, OI.getInstance().speedMultiplier*turn, false);
     	}
-    	else
-    	{
-    		//Use the joystick to get turn value
-    		double rawTurn = OI.getInstance().getArcadeTurnValue();
-    		
-    		//TODO Test new H-Drive controls
-    		//Wait until joystick returns to rest before switching controls to turning
-    		if(Math.abs(rawTurn) < 0.2)
-    			hDriveActivated = false;
-    		
-    		if(hDriveActivated)
-    			rawTurn = 0;
-    		
-    		//Scale down the turn value intensity and square it
-    		turn = Math.pow(rawTurn*0.9, 2) * Math.signum(rawTurn);
-    		
-    		gyroCorrection.clearInitialValue();
-    	}
-    	
-		Drive.getInstance().setHDrive(OI.getInstance().getHDriveValue());
-    	
-    	SmartDashboard.putNumber("Drive Magnitude", driveMagnitude);
-    	SmartDashboard.putNumber("Turn", turn);    	
+    	else{
+    		double left = OI.getInstance().getTankLeftValue();
+        	double right = OI.getInstance().getTankRightValue();
+        	if(Math.abs(left - right) < .25)
+        	{
+        		left = (Math.abs(left) + Math.abs(right))/2*Math.signum(left);
+        		right = (Math.abs(left) + Math.abs(right))/2*Math.signum(right);
+        	}
+        	// square the inputs (while preserving the sign) to increase fine control while permitting full power
+            right = right*right*right;
+            left = left*left*left;
+            
+    		Drive.getInstance().setHDrive(OI.getInstance().getHDriveValue());
+    		Drive.getInstance().tankDrive(OI.getInstance().speedMultiplier*left, OI.getInstance().speedMultiplier*right);
 
-    	Drive.getInstance().arcadeDrive(driveMagnitude, turn, false);
+    	}
     }
 
     //Always return false for a default command

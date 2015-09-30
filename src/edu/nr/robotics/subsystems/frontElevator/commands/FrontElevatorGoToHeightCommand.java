@@ -41,9 +41,9 @@ public class FrontElevatorGoToHeightCommand extends CMD
 		if(goingDown)
 		{
 			if(talonRampGoingDownFast)
-				FrontElevator.getInstance().setTalonRampRate(24);
+				FrontElevator.getInstance().setTalonRampRate(15);
 			else
-				FrontElevator.getInstance().setTalonRampRate(20);
+				FrontElevator.getInstance().setTalonRampRate(10);
 			
 			pid.setPID(1, 0.03, pid.getD());
 			pid.setOutputRange(-maxDownSpeedMagnitude, maxDownSpeedMagnitude);
