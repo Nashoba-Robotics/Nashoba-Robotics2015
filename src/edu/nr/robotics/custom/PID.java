@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.util.BoundaryException;
 public class PID implements LiveWindowSendable
 {
 
-    public static final double kDefaultPeriod = .05;
+    public static final double kDefaultPeriod = .005;
     private static int instances = 0;
     private double m_P;     // factor for "proportional" control
     private double m_I;     // factor for "integral" control
@@ -119,7 +119,7 @@ public class PID implements LiveWindowSendable
      * @param source The PIDSource object that is used to get values
      * @param output The PIDOutput object that is set to the output percentage
      * @param period the loop time for doing calculations. This particularly effects calculations of the
-     * integral and differential terms. The default is 50ms.
+     * integral and differential terms. The default is 5ms.
      */
     public PID(double Kp, double Ki, double Kd, double Kf,
                          PIDSource source, PIDOutput output,
