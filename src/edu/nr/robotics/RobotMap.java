@@ -22,8 +22,8 @@ public class RobotMap
 	public static final int backElevatorTalon2 = 14;
 	
 	public static final int pneumaticsModule = 61;
-	public static final int doubleSolenoidForward = 2;
-	public static final int doubleSolenoidReverse = 3;
+	public static final int binGrabberForward = 4; //done
+	public static final int binGrabberReverse = 6; //done
 	
 	public static final int IRSensor = 1, IRSensor2 = 2;
 	
@@ -43,14 +43,14 @@ public class RobotMap
 	public static final int CAMERA_DIGITAL_PORT = 3; 
 	
 	//TODO Get the right solenoid numbers
-	public static final int WHIP_FORWARD = 4;
-	public static final int WHIP_REVERSE = 5;
+	public static final int WHIP_FORWARD = 3;
+	public static final int WHIP_REVERSE = 0;
 	
-	public static final int WHIP_LOCK_FORWARD = 6;
+	public static final int WHIP_LOCK_FORWARD = 5;
 	public static final int WHIP_LOCK_REVERSE = 7;
 	
-	public static final int FRONT_ARMS_FORWARD = 8;
-	public static final int FRONT_ARMS_REVERSE = 9;
+	public static final int FRONT_ARMS_FORWARD = 2;
+	public static final int FRONT_ARMS_REVERSE = 1;
 	
 	
 }

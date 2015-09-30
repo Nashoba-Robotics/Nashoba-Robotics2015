@@ -25,8 +25,8 @@ public class BinGrabber extends Subsystem
 	private BinGrabber()
 	{
 		binGrabber = new DoubleSolenoid(RobotMap.pneumaticsModule, 
-				  RobotMap.doubleSolenoidForward, 
-				  RobotMap.doubleSolenoidReverse);
+				  RobotMap.binGrabberForward, 
+				  RobotMap.binGrabberReverse);
 	}
 	@Override
 	protected void initDefaultCommand()

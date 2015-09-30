@@ -2,10 +2,11 @@
 package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.robotics.OI;
+import edu.nr.robotics.Robot;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
-import edu.nr.robotics.subsystems.drive.commands.DriveJoystickTankCommand;
 import edu.nr.robotics.subsystems.drive.mxp.NavX;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.CANTalon;
@@ -103,14 +104,7 @@ public class Drive extends Subsystem
 	
 	public void initDefaultCommand()
 	{
-		if(OI.USING_ARCADE)
-		{
-			setDefaultCommand(new DriveJoystickArcadeCommand());
-		}
-		else
-		{
-			setDefaultCommand(new DriveJoystickTankCommand());
-		}
+		setDefaultCommand(new DriveJoystickArcadeCommand());
     }
 
 	public void arcadeDrive(double moveValue, double rotateValue)
@@ -171,6 +165,7 @@ public class Drive extends Subsystem
         
         SmartDashboard.putNumber("Arcade Left Motors", leftMotorSpeed);
         SmartDashboard.putNumber("Arcade Right Motors", rightMotorSpeed);
+        SmartDashboard.putBoolean("Half Speed", false);
         
         if(leftPid.isEnable() && rightPid.isEnable())
         {
@@ -286,6 +281,8 @@ public class Drive extends Subsystem
 		
 		//SmartDashboard.putNumber("Gyro", getAngleDegrees());
 		
+		SmartDashboard.putNumber("Encoder Left", this.getEncoder1Distance());
+		SmartDashboard.putNumber("Encoder Right", this.getEncoder2Distance());
 		
 		SmartDashboard.putNumber("Encoders", this.getEncoderAve());
 		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
