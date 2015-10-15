@@ -108,7 +108,7 @@ public class OI
 	{
 		if(driveRight.getRawButton(2))
 		{
-			return -driveRight.getX();
+			return -snapDriveJoysticks(driveRight.getX());
 		}
 		else
 		{
