@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class DriveJoystickArcadeCommand extends CMD 
+public class DriveJoystickCommand extends CMD 
 {
 	private AngleGyroCorrection gyroCorrection;
 	private boolean hDriveActivated = false;
 	
-    public DriveJoystickArcadeCommand() 
+    public DriveJoystickCommand() 
     {
         requires(Drive.getInstance());
         gyroCorrection = new AngleGyroCorrection();

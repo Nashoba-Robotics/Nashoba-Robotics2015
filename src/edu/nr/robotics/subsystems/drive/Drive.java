@@ -4,7 +4,7 @@ package edu.nr.robotics.subsystems.drive;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.Robot;
 import edu.nr.robotics.RobotMap;
-import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
+import edu.nr.robotics.subsystems.drive.commands.DriveJoystickCommand;
 import edu.nr.robotics.subsystems.drive.mxp.NavX;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -104,7 +104,7 @@ public class Drive extends Subsystem
 	
 	public void initDefaultCommand()
 	{
-		setDefaultCommand(new DriveJoystickArcadeCommand());
+		setDefaultCommand(new DriveJoystickCommand());
     }
 
 	public void arcadeDrive(double moveValue, double rotateValue)
