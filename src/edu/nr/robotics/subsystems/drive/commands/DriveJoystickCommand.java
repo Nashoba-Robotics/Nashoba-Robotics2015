@@ -71,17 +71,24 @@ public class DriveJoystickCommand extends CMD
 	    	Drive.getInstance().arcadeDrive(OI.getInstance().speedMultiplier*driveMagnitude, OI.getInstance().speedMultiplier*turn, false);
     	}
     	else{
+    		//Get values of the joysticks
     		double left = OI.getInstance().getTankLeftValue();
         	double right = OI.getInstance().getTankRightValue();
+    		
+        	//Do the math for turning
         	if(Math.abs(left - right) < .25)
         	{
         		left = (Math.abs(left) + Math.abs(right))/2*Math.signum(left);
         		right = (Math.abs(left) + Math.abs(right))/2*Math.signum(right);
         	}
-        	// square the inputs (while preserving the sign) to increase fine control while permitting full power
+        	
+    		// cube the inputs (while preserving the sign) to increase fine control while permitting full power
             right = right*right*right;
             left = left*left*left;
-            
+
+            SmartDashboard.putNumber("Tank Left Motor", left);
+            SmartDashboard.putNumber("Tank Right Motor", right);
+
     		Drive.getInstance().setHDrive(OI.getInstance().getHDriveValue());
     		Drive.getInstance().tankDrive(OI.getInstance().speedMultiplier*left, OI.getInstance().speedMultiplier*right);
 
