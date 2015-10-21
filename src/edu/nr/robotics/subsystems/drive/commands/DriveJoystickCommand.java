@@ -43,12 +43,12 @@ public class DriveJoystickCommand extends CMD
 	    	if(OI.getInstance().useGyroCorrection())
 	    	{
 	    		hDriveActivated = true;
-	    		turn = gyroCorrection.getTurnValue();
+	    		turn = gyroCorrection.getTurnValue()/3;
 	    	}
 	    	else
 	    	{
 	    		//Use the joystick to get turn value
-	    		turn = OI.getInstance().getArcadeTurnValue()/5;
+	    		turn = OI.getInstance().getArcadeTurnValue()/3;
 	    		
 	    		//Wait until joystick returns to rest before switching controls to turning
 	    		if(Math.abs(turn) < 0.15)
