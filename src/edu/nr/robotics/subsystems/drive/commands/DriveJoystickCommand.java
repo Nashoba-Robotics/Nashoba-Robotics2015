@@ -13,6 +13,7 @@ public class DriveJoystickCommand extends CMD
 {
 	private AngleGyroCorrection gyroCorrection;
 	private boolean hDriveActivated = false;
+	private double oldTurn;
 	
     public DriveJoystickCommand() 
     {
@@ -23,7 +24,7 @@ public class DriveJoystickCommand extends CMD
     @Override
 	protected void onStart()
     {
-		
+		oldTurn = OI.getInstance().getArcadeMoveValue();
 	}
     
     // Called repeatedly when this Command is scheduled to run
@@ -33,10 +34,9 @@ public class DriveJoystickCommand extends CMD
     	if(OI.getInstance().drivingModeChooser.getSelected().equals("arcade"))
     	{
 	    	double moveValue = OI.getInstance().getArcadeMoveValue();
-	    	double driveMagnitude = Math.pow(moveValue, 2) * Math.signum(moveValue);
-	    	
-	    	if(OI.getInstance().reverseDriveDirection())
-	    		driveMagnitude *= -1;
+	    	double driveMagnitude = moveValue;
+			if(OI.getInstance().reverseDriveDirection())
+	    		driveMagnitude  *= -1;
 	    	
 	    	double turn;
 	    	
@@ -48,27 +48,26 @@ public class DriveJoystickCommand extends CMD
 	    	else
 	    	{
 	    		//Use the joystick to get turn value
-	    		double rawTurn = OI.getInstance().getArcadeTurnValue();
+	    		turn = OI.getInstance().getArcadeTurnValue();
 	    		
 	    		//Wait until joystick returns to rest before switching controls to turning
-	    		if(Math.abs(rawTurn) < 0.15)
+	    		if(Math.abs(turn) < 0.15)
 	    			hDriveActivated = false;
 	    		
 	    		if(hDriveActivated)
-	    			rawTurn = 0;
-	    		
-	    		//Scale down the turn value intensity and square it
-	    		turn = Math.pow(rawTurn*0.9, 2) * Math.signum(rawTurn);
+	    			turn = 0;
 	    		
 	    		gyroCorrection.clearInitialValue();
 	    	}
 	    	
 			Drive.getInstance().setHDrive(OI.getInstance().speedMultiplier*OI.getInstance().getHDriveValue());
 	    	
-	    	SmartDashboard.putNumber("Drive Magnitude", driveMagnitude);
+	    	SmartDashboard.putNumber("Drive Magnitude", moveValue);
 	    	SmartDashboard.putNumber("Turn", turn);    	
 	    	
-	    	Drive.getInstance().arcadeDrive(OI.getInstance().speedMultiplier*driveMagnitude, OI.getInstance().speedMultiplier*turn, false);
+	    	Drive.getInstance().arcadeDrive(OI.getInstance().speedMultiplier*driveMagnitude, OI.getInstance().speedMultiplier*turn, oldTurn, true);
+	    	
+	    	oldTurn = OI.getInstance().speedMultiplier*turn;
     	}
     	else{
     		//Get values of the joysticks
