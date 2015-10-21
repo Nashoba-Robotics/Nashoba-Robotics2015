@@ -48,7 +48,7 @@ public class DriveJoystickCommand extends CMD
 	    	else
 	    	{
 	    		//Use the joystick to get turn value
-	    		turn = OI.getInstance().getArcadeTurnValue();
+	    		turn = OI.getInstance().getArcadeTurnValue()/5;
 	    		
 	    		//Wait until joystick returns to rest before switching controls to turning
 	    		if(Math.abs(turn) < 0.15)

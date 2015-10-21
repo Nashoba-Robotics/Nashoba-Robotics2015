@@ -184,7 +184,7 @@ public class Drive extends Subsystem
         if(leftPid.isEnable() && rightPid.isEnable())
         {
         	leftPid.setSetpoint(leftMotorSpeed);
-            rightPid.setSetpoint(rightMotorSpeed);
+            rightPid.setSetpoint(-rightMotorSpeed);
         }
         else
         {
