@@ -114,54 +114,68 @@ public class Drive extends Subsystem
 	
 	public void arcadeDrive(double moveValue, double rotateValue, boolean squaredInputs) 
 	{
+		this.arcadeDrive(moveValue, rotateValue, rotateValue, false);
+	}
+	
+	
+	//Source for a lot of this from 254's code from 2015.
+	public void arcadeDrive(double throttle, double wheel, double oldWheel, boolean squaredInputs) 
+	{
         double leftMotorSpeed;
         double rightMotorSpeed;
 
-        moveValue = limit(moveValue);
-        rotateValue = limit(rotateValue);
-
+        throttle = limit(throttle);
+        wheel = limit(wheel);
+        
         if (squaredInputs) 
         {
             // square the inputs (while preserving the sign) to increase fine control while permitting full power
-            if (moveValue >= 0.0) {
-                moveValue = (moveValue * moveValue);
+            if (throttle >= 0.0) {
+            	throttle = (throttle * throttle);
             } else {
-                moveValue = -(moveValue * moveValue);
+            	throttle = -(throttle * throttle);
             }
-            if (rotateValue >= 0.0) {
-                rotateValue = (rotateValue * rotateValue);
+            if (wheel >= 0.0) {
+                wheel = (wheel * wheel);
             } else {
-                rotateValue = -(rotateValue * rotateValue);
+            	wheel = -(wheel * wheel);
             }
         }
+        
+        double negInertia = wheel - oldWheel;
+               
+        // Negative inertia!
+        double negInertiaScalar;
+        
+        if (wheel * negInertia > 0) {
+            negInertiaScalar = 2.5;
+        } else {
+            if (Math.abs(wheel) > 0.65) {
+                negInertiaScalar = 5.0;
+            } else {
+                negInertiaScalar = 3.0;
+            }
+        }
+        
+        wheel = wheel + negInertia * negInertiaScalar;
+        
+        rightMotorSpeed = leftMotorSpeed = throttle;
+        leftMotorSpeed += wheel;
+        rightMotorSpeed -= wheel;
 
-        if (moveValue > 0.0)
-        {
-            if (rotateValue > 0.0) 
-            {
-                leftMotorSpeed = moveValue - rotateValue;
-                rightMotorSpeed = Math.max(moveValue, rotateValue);
-            } 
-            else
-            {
-                leftMotorSpeed = Math.max(moveValue, -rotateValue);
-                rightMotorSpeed = moveValue + rotateValue;
-            }
-        } 
-        else 
-        {
-            if (rotateValue > 0.0) 
-            {
-                leftMotorSpeed = -Math.max(-moveValue, rotateValue);
-                rightMotorSpeed = moveValue + rotateValue;
-            } 
-            else 
-            {
-                leftMotorSpeed = moveValue - rotateValue;
-                rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
-            }
+        if (leftMotorSpeed > 1.0) {
+        	rightMotorSpeed -= leftMotorSpeed - 1.0;
+            leftMotorSpeed = 1.0;
+        } else if (rightMotorSpeed > 1.0) {
+        	leftMotorSpeed -= rightMotorSpeed - 1.0;
+        	rightMotorSpeed = 1.0;
+        } else if (leftMotorSpeed < -1.0) {
+        	rightMotorSpeed += -1.0 - leftMotorSpeed;
+            leftMotorSpeed = -1.0;
+        } else if (rightMotorSpeed < -1.0) {
+        	leftMotorSpeed += -1.0 - rightMotorSpeed;
+        	rightMotorSpeed = -1.0;
         }
-        rightMotorSpeed = -rightMotorSpeed;
         
         SmartDashboard.putNumber("Arcade Left Motors", leftMotorSpeed);
         SmartDashboard.putNumber("Arcade Right Motors", rightMotorSpeed);
@@ -170,7 +184,7 @@ public class Drive extends Subsystem
         if(leftPid.isEnable() && rightPid.isEnable())
         {
         	leftPid.setSetpoint(leftMotorSpeed);
-            rightPid.setSetpoint(rightMotorSpeed);
+            rightPid.setSetpoint(-rightMotorSpeed);
         }
         else
         {
