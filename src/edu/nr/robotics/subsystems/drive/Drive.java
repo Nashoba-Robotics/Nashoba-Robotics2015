@@ -114,7 +114,68 @@ public class Drive extends Subsystem
 	
 	public void arcadeDrive(double moveValue, double rotateValue, boolean squaredInputs) 
 	{
-		this.arcadeDrive(moveValue, rotateValue, rotateValue, false);
+		double leftMotorSpeed;
+        double rightMotorSpeed;
+
+        moveValue = limit(moveValue);
+        rotateValue = limit(rotateValue);
+
+        if (squaredInputs) 
+        {
+            // square the inputs (while preserving the sign) to increase fine control while permitting full power
+            if (moveValue >= 0.0) {
+                moveValue = (moveValue * moveValue);
+            } else {
+                moveValue = -(moveValue * moveValue);
+            }
+            if (rotateValue >= 0.0) {
+                rotateValue = (rotateValue * rotateValue);
+            } else {
+                rotateValue = -(rotateValue * rotateValue);
+            }
+        }
+
+        if (moveValue > 0.0)
+        {
+            if (rotateValue > 0.0) 
+            {
+                leftMotorSpeed = moveValue - rotateValue;
+                rightMotorSpeed = Math.max(moveValue, rotateValue);
+            } 
+            else
+            {
+                leftMotorSpeed = Math.max(moveValue, -rotateValue);
+                rightMotorSpeed = moveValue + rotateValue;
+            }
+        } 
+        else 
+        {
+            if (rotateValue > 0.0) 
+            {
+                leftMotorSpeed = -Math.max(-moveValue, rotateValue);
+                rightMotorSpeed = moveValue + rotateValue;
+            } 
+            else 
+            {
+                leftMotorSpeed = moveValue - rotateValue;
+                rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
+            }
+        }
+        rightMotorSpeed = -rightMotorSpeed;
+        
+        SmartDashboard.putNumber("Arcade Left Motors", leftMotorSpeed);
+        SmartDashboard.putNumber("Arcade Right Motors", rightMotorSpeed);
+        SmartDashboard.putBoolean("Half Speed", false);
+        
+        if(leftPid.isEnable() && rightPid.isEnable())
+        {
+        	leftPid.setSetpoint(leftMotorSpeed);
+            rightPid.setSetpoint(rightMotorSpeed);
+        }
+        else
+        {
+        	setRawMotorSpeed(leftMotorSpeed, -rightMotorSpeed);
+        }
 	}
 	
 	
@@ -219,10 +280,16 @@ public class Drive extends Subsystem
 		rightTalon.set(-right);
 	}
 	
-	public void tankDrive(double leftMotorSpeed, double rightMotorSpeed)
-	{
-		leftPid.setSetpoint(leftMotorSpeed);
-        rightPid.setSetpoint(rightMotorSpeed);
+	public void tankDrive(double leftMotorSpeed, double rightMotorSpeed) {
+		if(leftPid.isEnable() && rightPid.isEnable())
+        {
+        	leftPid.setSetpoint(leftMotorSpeed);
+            rightPid.setSetpoint(rightMotorSpeed);
+        }
+        else
+        {
+        	setRawMotorSpeed(leftMotorSpeed, rightMotorSpeed);
+        }
 	}
 	
 	public void setDriveP(double p)
