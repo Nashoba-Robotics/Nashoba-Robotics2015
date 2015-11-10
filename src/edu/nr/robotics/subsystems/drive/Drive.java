@@ -174,7 +174,7 @@ public class Drive extends Subsystem
         }
         else
         {
-        	setRawMotorSpeed(leftMotorSpeed, -rightMotorSpeed);
+        	setRawMotorSpeed(rightMotorSpeed, leftMotorSpeed);
         }
 	}
 	
