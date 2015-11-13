@@ -4,7 +4,7 @@ package edu.nr.robotics.subsystems.drive;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.Robot;
 import edu.nr.robotics.RobotMap;
-import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
+import edu.nr.robotics.subsystems.drive.commands.DriveJoystickCommand;
 import edu.nr.robotics.subsystems.drive.mxp.NavX;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -30,9 +30,6 @@ public class Drive extends Subsystem
 	private double ticksPerRev = 256, wheelDiameter = 0.4975;
 	
 	private PIDController leftPid, rightPid;
-	
-	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
-	private final double MAX_ENCODER_RATE = 12;
 	
 	
 	CANTalon leftTalon, rightTalon;
@@ -66,8 +63,8 @@ public class Drive extends Subsystem
 		
 		//Max speed of robot is 20 ft/sec, so in order for our PIDController to work, the scale of encoder rate
 		//in ft/sec must be on a scale of -1 to 1 (so it can be used to calculate motor output)
-		leftEnc.setDistancePerPulse(distancePerPulse / MAX_ENCODER_RATE);
-		rightEnc.setDistancePerPulse(distancePerPulse / MAX_ENCODER_RATE);
+		leftEnc.setDistancePerPulse(distancePerPulse / RobotMap.MAX_ENCODER_RATE);
+		rightEnc.setDistancePerPulse(distancePerPulse / RobotMap.MAX_ENCODER_RATE);
 		
 		leftPid = new PIDController(JOYSTICK_DRIVE_P, 0, 0, 1, leftEnc, leftTalon);
 		rightPid = new PIDController(JOYSTICK_DRIVE_P, 0, 0, 1, rightEnc, rightTalon);
@@ -104,7 +101,7 @@ public class Drive extends Subsystem
 	
 	public void initDefaultCommand()
 	{
-		setDefaultCommand(new DriveJoystickArcadeCommand());
+		setDefaultCommand(new DriveJoystickCommand());
     }
 
 	public void arcadeDrive(double moveValue, double rotateValue)
@@ -114,7 +111,7 @@ public class Drive extends Subsystem
 	
 	public void arcadeDrive(double moveValue, double rotateValue, boolean squaredInputs) 
 	{
-        double leftMotorSpeed;
+		double leftMotorSpeed;
         double rightMotorSpeed;
 
         moveValue = limit(moveValue);
@@ -174,6 +171,81 @@ public class Drive extends Subsystem
         }
         else
         {
+        	setRawMotorSpeed(rightMotorSpeed, leftMotorSpeed);
+        }
+	}
+	
+	
+	//Source for a lot of this from 254's code from 2015.
+	public void arcadeDrive(double throttle, double wheel, double oldWheel, boolean squaredInputs) 
+	{
+        double leftMotorSpeed;
+        double rightMotorSpeed;
+
+        throttle = limit(throttle);
+        wheel = limit(wheel);
+        
+        if (squaredInputs) 
+        {
+            // square the inputs (while preserving the sign) to increase fine control while permitting full power
+            if (throttle >= 0.0) {
+            	throttle = (throttle * throttle);
+            } else {
+            	throttle = -(throttle * throttle);
+            }
+            if (wheel >= 0.0) {
+                wheel = (wheel * wheel);
+            } else {
+            	wheel = -(wheel * wheel);
+            }
+        }
+        
+        double negInertia = wheel - oldWheel;
+               
+        // Negative inertia!
+        double negInertiaScalar;
+        
+        if (wheel * negInertia > 0) {
+            negInertiaScalar = 2.5;
+        } else {
+            if (Math.abs(wheel) > 0.65) {
+                negInertiaScalar = 5.0;
+            } else {
+                negInertiaScalar = 3.0;
+            }
+        }
+        
+        wheel = wheel + negInertia * negInertiaScalar;
+        
+        rightMotorSpeed = leftMotorSpeed = throttle;
+        leftMotorSpeed += wheel;
+        rightMotorSpeed -= wheel;
+
+        if (leftMotorSpeed > 1.0) {
+        	rightMotorSpeed -= leftMotorSpeed - 1.0;
+            leftMotorSpeed = 1.0;
+        } else if (rightMotorSpeed > 1.0) {
+        	leftMotorSpeed -= rightMotorSpeed - 1.0;
+        	rightMotorSpeed = 1.0;
+        } else if (leftMotorSpeed < -1.0) {
+        	rightMotorSpeed += -1.0 - leftMotorSpeed;
+            leftMotorSpeed = -1.0;
+        } else if (rightMotorSpeed < -1.0) {
+        	leftMotorSpeed += -1.0 - rightMotorSpeed;
+        	rightMotorSpeed = -1.0;
+        }
+        
+        SmartDashboard.putNumber("Arcade Left Motors", leftMotorSpeed);
+        SmartDashboard.putNumber("Arcade Right Motors", rightMotorSpeed);
+        SmartDashboard.putBoolean("Half Speed", false);
+        
+        if(leftPid.isEnable() && rightPid.isEnable())
+        {
+        	leftPid.setSetpoint(leftMotorSpeed);
+            rightPid.setSetpoint(-rightMotorSpeed);
+        }
+        else
+        {
         	setRawMotorSpeed(leftMotorSpeed, -rightMotorSpeed);
         }
 	}
@@ -205,10 +277,16 @@ public class Drive extends Subsystem
 		rightTalon.set(-right);
 	}
 	
-	public void tankDrive(double leftMotorSpeed, double rightMotorSpeed)
-	{
-		leftPid.setSetpoint(leftMotorSpeed);
-        rightPid.setSetpoint(rightMotorSpeed);
+	public void tankDrive(double leftMotorSpeed, double rightMotorSpeed) {
+		if(leftPid.isEnable() && rightPid.isEnable())
+        {
+        	leftPid.setSetpoint(leftMotorSpeed);
+            rightPid.setSetpoint(rightMotorSpeed);
+        }
+        else
+        {
+        	setRawMotorSpeed(leftMotorSpeed, rightMotorSpeed);
+        }
 	}
 	
 	public void setDriveP(double p)
@@ -251,22 +329,22 @@ public class Drive extends Subsystem
 	
 	public double getEncoder1Distance()
 	{
-		return leftEnc.getDistance() * MAX_ENCODER_RATE;
+		return leftEnc.getDistance() * RobotMap.MAX_ENCODER_RATE;
 	}
 	
 	public double getEncoder2Distance()
 	{
-		return -rightEnc.getDistance() * MAX_ENCODER_RATE;
+		return -rightEnc.getDistance() * RobotMap.MAX_ENCODER_RATE;
 	}
 	
 	public double getLeftEncoderSpeed()
 	{
-		return leftEnc.getRate() * MAX_ENCODER_RATE;
+		return leftEnc.getRate() * RobotMap.MAX_ENCODER_RATE;
 	}
 	
 	public double getRightEncoderSpeed()
 	{
-		return -rightEnc.getRate() * MAX_ENCODER_RATE;
+		return -rightEnc.getRate() * RobotMap.MAX_ENCODER_RATE;
 	}
 	
 	public double getEncoderAverageSpeed()
