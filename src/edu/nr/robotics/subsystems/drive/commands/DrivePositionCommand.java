@@ -6,6 +6,7 @@ import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.FalconPathPlanner;
 import edu.nr.robotics.subsystems.drive.Setpoint;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -21,19 +22,20 @@ public class DrivePositionCommand extends CMD {
 	double[][] positions;
 	
 	double timeStep = 20; //period of control loop on Rio, milliseconds
-	double totalTime = 8000; //milliseconds
+	double totalTime; //milliseconds
 	
 	double prevLeftVel;
 	double prevRightVel;
 	FalconPathPlanner path;
 	
-    public DrivePositionCommand(double[][] positions, double Kv, double Ka, double Kp, double Kd) {
+    public DrivePositionCommand(double time, double[][] positions, double Kv, double Ka, double Kp, double Kd) {
         requires(Drive.getInstance());
         this.Kv = Kv;
         this.Ka = Ka;
         this.Kp = Kp;
         this.Kd = Kd;
         this.positions = positions;
+        this.totalTime = time*1000;
     }
 
     // Called just before this Command runs the first time
@@ -49,34 +51,50 @@ public class DrivePositionCommand extends CMD {
 	}
     
     private void createPath() {
+    	FieldCentric.getInstance().reset();
 		path = new FalconPathPlanner(positions);
 		path.calculate(totalTime/1000, timeStep/1000, RobotMap.ROBOT_WIDTH);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void onExecute() {
-    	dt = System.currentTimeMillis() - prevTime;
-    	prevTime = System.currentTimeMillis();
+    	SmartDashboard.putNumber("Times so far", (System.currentTimeMillis() - startTime)/timeStep);
 
-    	//Left wheel
-    	Setpoint leftSetpoint = lookUpLeftSetpoint(System.currentTimeMillis() - startTime);
-    	double leftXError = leftSetpoint.xpos - FieldCentric.getInstance().getX();
-    	double leftYError = leftSetpoint.ypos - FieldCentric.getInstance().getY();
-    	double leftError = Math.sqrt(Math.pow(leftXError, 2) + Math.pow(leftYError, 2));
-    	double leftErrorDeriv = (leftError - leftErrorLast) / dt;
-    	double leftMotorSpeed = Kv * leftSetpoint.vel + Ka * leftSetpoint.acc + Kp * leftError + Kd * leftErrorDeriv;
-    	leftErrorLast = leftError;
+    	if(path.leftPath.length < (System.currentTimeMillis() - startTime)/timeStep) {
+    		SmartDashboard.putString("Cancelled by time?", "Yes");
+    		this.cancel();
+	    } else {
+    		SmartDashboard.putString("Cancelled by time?", "No");
 
-    	//Right wheel
-    	Setpoint rightSetpoint = lookUpRightSetpoint(System.currentTimeMillis() - startTime);
-    	double rightXError = rightSetpoint.xpos - FieldCentric.getInstance().getX();
-    	double rightYError = rightSetpoint.ypos - FieldCentric.getInstance().getY();
-    	double rightError = Math.sqrt(Math.pow(rightXError, 2) + Math.pow(rightYError, 2));
-    	double rightErrorDeriv = (rightError - rightErrorLast) / dt;
-    	double rightMotorSpeed = Kv * rightSetpoint.vel + Ka * rightSetpoint.acc + Kp * rightError + Kd * rightErrorDeriv;
-    	rightErrorLast = rightError;
-    	
-    	Drive.getInstance().tankDrive(leftMotorSpeed, rightMotorSpeed);
+	    	dt = System.currentTimeMillis() - prevTime;
+	    	prevTime = System.currentTimeMillis();
+	    	SmartDashboard.putNumber("Time in command", System.currentTimeMillis() - startTime);
+	    	//Left wheel
+	    	Setpoint leftSetpoint = lookUpLeftSetpoint(System.currentTimeMillis() - startTime);
+	    	double leftXError = leftSetpoint.ypos - FieldCentric.getInstance().getY() - RobotMap.ROBOT_WIDTH;
+	    	double leftYError = leftSetpoint.xpos - FieldCentric.getInstance().getX();
+	    	double leftError = Math.signum(leftXError + leftYError) * Math.sqrt(Math.pow(leftXError, 2) + Math.pow(leftYError, 2));
+	    	double leftErrorDeriv = (leftError - leftErrorLast) / dt;
+	    	double leftMotorSpeed = Kv * leftSetpoint.vel + Ka * leftSetpoint.acc + Kp * leftError + Kd * leftErrorDeriv;
+	    	leftErrorLast = leftError;
+	    	SmartDashboard.putNumber("Left Error", leftError);
+	    	SmartDashboard.putNumber("Left X Point", leftSetpoint.xpos);
+	    	SmartDashboard.putNumber("Left Y Point", leftSetpoint.ypos);
+
+	    	//Right wheel
+	    	Setpoint rightSetpoint = lookUpRightSetpoint(System.currentTimeMillis() - startTime);
+	    	double rightXError = rightSetpoint.xpos - FieldCentric.getInstance().getX();
+	    	double rightYError = rightSetpoint.ypos - FieldCentric.getInstance().getY();
+	    	double rightError = Math.signum(rightXError + rightYError) * Math.sqrt(Math.pow(rightXError, 2) + Math.pow(rightYError, 2));
+	    	double rightErrorDeriv = (rightError - rightErrorLast) / dt;
+	    	double rightMotorSpeed = Kv * rightSetpoint.vel + Ka * rightSetpoint.acc + Kp * rightError + Kd * rightErrorDeriv;
+	    	rightErrorLast = rightError;
+	    	SmartDashboard.putNumber("Right Error", rightError);
+	    	SmartDashboard.putNumber("Right X Point", rightSetpoint.xpos);
+	    	SmartDashboard.putNumber("Right Y Point", rightSetpoint.ypos);
+
+	    	Drive.getInstance().tankDrive(leftMotorSpeed, -rightMotorSpeed);
+    	}
     }
     
     private Setpoint lookUpLeftSetpoint(long t) {
@@ -103,7 +121,7 @@ public class DrivePositionCommand extends CMD {
 
 	// Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return path.leftPath.length < (System.currentTimeMillis() - startTime)/timeStep;
     }
 
     // Called once after isFinished returns true

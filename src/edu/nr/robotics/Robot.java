@@ -133,5 +133,6 @@ public class Robot extends IterativeRobot
     {
     	Drive.getInstance().putSmartDashboardInfo();
     	FrontElevator.getInstance().putSmartDashboardInfo();
+    	FieldCentric.getInstance().putSmartDashboardInfo();
     }
 }

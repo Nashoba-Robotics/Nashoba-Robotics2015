@@ -3,6 +3,8 @@ package edu.nr.robotics.subsystems.drive;
 import java.util.LinkedList;
 import java.util.List;
 
+//NOTE: X is forward direction, Y is side-to-side directions
+
 /**
  * This Class provides many useful algorithms for Robot Path Planning. It uses optimization techniques and knowledge
  * of Robot Motion in order to calculate smooth path trajectories, if given only discrete waypoints. The Benefit of these optimization

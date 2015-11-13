@@ -5,6 +5,8 @@ import edu.nr.robotics.subsystems.drive.Position;
 
 public class FieldCentric {
 
+	//NOTE: X is forward, Y is side-to-side
+	
 	private static FieldCentric instance;
 	private final double initialTheta;
     private double initialGyro = 0;
@@ -36,8 +38,8 @@ public class FieldCentric {
         
         double ave = Drive.getInstance().getEncoderAve();
         double delta_x_r = (ave-lastEncoderDistance);
-        double deltax = delta_x_r * Math.cos(angle);
-        double deltay = delta_x_r * Math.sin(angle);
+        double deltax = delta_x_r * Math.sin(angle);
+        double deltay = delta_x_r * Math.cos(angle);
         x += deltax;
         y += deltay;
         dis += delta_x_r;
@@ -79,4 +81,9 @@ public class FieldCentric {
     	lastEncoderDistance = Drive.getInstance().getEncoderAve();
     	initialGyro = Drive.getInstance().getAngleDegrees();
     }
+
+	public void putSmartDashboardInfo() {
+		// TODO Auto-generated method stub
+		
+	}
 }

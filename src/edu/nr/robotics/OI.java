@@ -81,9 +81,8 @@ public class OI
 		fighter.whenReleased(new ActivateSmartDriveCommand());
 		new JoystickButton(driveLeft, 1).whenPressed(new CancelAllCommand());
 		new JoystickButton(driveRight, 1).whenPressed(
-						new DrivePositionCommand(new double[][]{
-																{1, 1},
-																{5, 1}},
+						new DrivePositionCommand(100,new double[][]{
+																{0, 1}},
 												 1/RobotMap.MAX_ENCODER_RATE, 0, 0, 0));
 	}
 	

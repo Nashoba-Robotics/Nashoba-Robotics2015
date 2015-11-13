@@ -52,7 +52,6 @@ public class RobotMap
 	public static final int FRONT_ARMS_FORWARD = 2;
 	public static final int FRONT_ARMS_REVERSE = 1;
 	
-	public static final double ROBOT_WIDTH = 2; //distance between left and right wheels, feet 
-	//TODO get the distance between the robot's left and right wheels
+	public static final double ROBOT_WIDTH = 2.1; //distance between left and right wheels, feet 
 	public static final double MAX_ENCODER_RATE = 12; //Max speed of the robot in ft/sec
 }
