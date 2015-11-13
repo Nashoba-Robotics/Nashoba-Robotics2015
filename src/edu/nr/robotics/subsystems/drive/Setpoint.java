@@ -1,10 +1,11 @@
 package edu.nr.robotics.subsystems.drive;
 
 public class Setpoint {
-	public double pos, vel, acc;
+	public double xpos, ypos, vel, acc;
 	
-	public Setpoint(double pos, double vel, double acc) {
-		this.pos = pos;
+	public Setpoint(double xpos, double ypos, double vel, double acc) {
+		this.xpos = xpos;
+		this.ypos = ypos;
 		this.vel = vel;
 		this.acc = acc;
 	}
