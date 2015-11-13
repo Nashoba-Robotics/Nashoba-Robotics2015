@@ -20,7 +20,7 @@ public class DrivePositionCommand extends CMD {
 	double rightErrorLast;
 	double[][] positions;
 	
-	double timeStep = 100; //period of control loop on Rio, milliseconds
+	double timeStep = 20; //period of control loop on Rio, milliseconds
 	double totalTime = 8000; //milliseconds
 	
 	double prevLeftVel;
