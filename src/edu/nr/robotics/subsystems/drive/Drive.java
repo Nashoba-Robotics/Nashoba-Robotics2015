@@ -235,6 +235,8 @@ public class Drive extends Subsystem
         	rightMotorSpeed = -1.0;
         }
         
+        leftMotorSpeed *= 1.18;
+        
         SmartDashboard.putNumber("Arcade Left Motors", leftMotorSpeed);
         SmartDashboard.putNumber("Arcade Right Motors", rightMotorSpeed);
         SmartDashboard.putBoolean("Half Speed", false);
@@ -278,6 +280,8 @@ public class Drive extends Subsystem
 	}
 	
 	public void tankDrive(double leftMotorSpeed, double rightMotorSpeed) {
+        leftMotorSpeed *= 1.18;
+
 		if(leftPid.isEnable() && rightPid.isEnable())
         {
         	leftPid.setSetpoint(leftMotorSpeed);

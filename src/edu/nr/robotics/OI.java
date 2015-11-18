@@ -4,6 +4,7 @@ import edu.nr.robotics.commandgroup.CancelAllCommand;
 import edu.nr.robotics.commandgroup.CloseBinGrabberAndRaiseGroup;
 import edu.nr.robotics.commandgroup.DriveAndGetStationAngle;
 import edu.nr.robotics.commandgroup.ScoreGroup;
+import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.binGrabber.ToggleBinGrabberCommand;
 import edu.nr.robotics.subsystems.drive.commands.*;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
@@ -83,7 +84,8 @@ public class OI
 		new JoystickButton(driveRight, 1).whenPressed(
 						new DrivePositionCommand(100,new double[][]{
 																{0, 1}},
-												 1/RobotMap.MAX_ENCODER_RATE, 0, 0, 0));
+												 0.5/RobotMap.MAX_ENCODER_RATE, 0, 1, 0));
+		new JoystickButton(driveRight, 10).whenPressed(new ResetEncodersCommand());
 	}
 	
 	public static OI getInstance()

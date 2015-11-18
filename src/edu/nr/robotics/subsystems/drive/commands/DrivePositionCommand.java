@@ -98,15 +98,16 @@ public class DrivePositionCommand extends CMD {
     }
     
     private Setpoint lookUpLeftSetpoint(long t) {
-    	Setpoint setpoint = lookUpSetpoint(t, path.leftPath, path.smoothLeftVelocity, prevLeftVel);
+    	Setpoint setpoint = lookUpSetpoint(t, path.smoothPath, path.smoothLeftVelocity, prevLeftVel);
 		prevLeftVel = setpoint.vel;
     	return setpoint;
 	}
     
     private Setpoint lookUpRightSetpoint(long t) {
-    	Setpoint setpoint = lookUpSetpoint(t, path.rightPath, path.smoothRightVelocity, prevRightVel);
+    	Setpoint setpoint = lookUpSetpoint(t, path.smoothPath, path.smoothRightVelocity, prevRightVel);
 		prevRightVel = setpoint.vel;
-    	return setpoint;
+    	SmartDashboard.putNumber("Path Value 50", path.smoothPath[50][1]);
+		return setpoint;
 	}
     
     private Setpoint lookUpSetpoint(long t, double[][] path, double[][] velocity, double prevVel) {
@@ -116,6 +117,7 @@ public class DrivePositionCommand extends CMD {
     	double yvel = velocity[(int) (t/timeStep)][1];
     	double vel = Math.sqrt(Math.pow(xvel, 2) + Math.pow(yvel, 2));
     	double acc = (vel-prevVel)/dt;
+    	SmartDashboard.putNumber("Path Length", velocity.length);
     	return new Setpoint(xpos, ypos, vel, acc);
     }
 
