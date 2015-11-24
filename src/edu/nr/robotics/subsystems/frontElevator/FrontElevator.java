@@ -78,7 +78,6 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 		if(singleton == null)
 		{
 			singleton = new FrontElevator();
-			SmartDashboard.putData("Front Elevator Subsystem", singleton);
 		}
 	}
 	

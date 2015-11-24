@@ -24,23 +24,30 @@ public class Robot extends IterativeRobot
 {
     Command autonomousCommand;
     SendableChooser autoCommandChooser;
+
+    public enum Mode {
+    	TELEOP, AUTONOMOUS, DISABLED
+    }
+    
+    public Mode currentMode;
     
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit()
-    {
-    	
-    	SmartDashboard.putNumber("Auton Whip Wait Time", 1);
-    	
+    {    	
 		OI.init();
 		Drive.init();
 		FrontElevator.init();
 		Whip.init();
 		BinGrabber.init();
 		
-		autoCommandChooser = new SendableChooser();
+		smartDashboardInit();
+    }
+    
+    public void smartDashboardInit() {
+    	autoCommandChooser = new SendableChooser();
 		autoCommandChooser.addDefault("Do Nothing", new AutonDoNothingCommand());
 		autoCommandChooser.addObject("Whip + Drive Forward", new AutonWhipAndDrive());
 		autoCommandChooser.addObject("Grab Bin + Lift", new AutonGrabAndLift());
@@ -65,10 +72,13 @@ public class Robot extends IterativeRobot
 		SmartDashboard.putData("Undeploy Lock", new WhipUndeployLockCommand());
 		SmartDashboard.putData("Deploy Whip Piston", new WhipDeployCommand());
 		SmartDashboard.putData("Undeploy Whip Piston", new WhipUndeployCommand());
+		
+    	SmartDashboard.putNumber("Auton Whip Wait Time", 1);
     }
 	
     public void autonomousInit() 
     {
+    	currentMode = Mode.AUTONOMOUS;
     	// instantiate the command used for the autonomous period
         autonomousCommand =(Command) autoCommandChooser.getSelected();
         autonomousCommand.start();
@@ -79,20 +89,14 @@ public class Robot extends IterativeRobot
      */
     public void autonomousPeriodic() 
     {
-    	FieldCentric.getInstance().update();
-        Scheduler.getInstance().run();
-        ArduinoLink.getInstance().updateAuton();
-        
-        //Update SmartDashboard info after the scheduler runs our command(s)
-        putSubsystemDashInfo();
+    	periodic(Mode.AUTONOMOUS);
     }
 
     public void teleopInit() 
     {
+    	currentMode = Mode.TELEOP;
 		// This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to 
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
+        // teleop starts running.
         if (autonomousCommand != null) autonomousCommand.cancel();
     }
     
@@ -101,12 +105,7 @@ public class Robot extends IterativeRobot
      */
     public void teleopPeriodic() 
     {
-    	FieldCentric.getInstance().update();
-        Scheduler.getInstance().run();
-        ArduinoLink.getInstance().updateTeleop();
-    	
-        //Update SmartDashboard info after the scheduler runs our commands
-        putSubsystemDashInfo();
+    	periodic(Mode.TELEOP);
         OI.getInstance().speedMultiplier = SmartDashboard.getNumber("Speed Multiplier");
     }
 
@@ -116,19 +115,42 @@ public class Robot extends IterativeRobot
      */
     public void disabledInit()
     {
-
+    	currentMode = Mode.DISABLED;
     }
     
     public void disabledPeriodic() 
 	{
-    	FieldCentric.getInstance().update();
-		Scheduler.getInstance().run();
-		ArduinoLink.getInstance().updateDisabled();
+    	periodic(Mode.DISABLED);
 		
-		//Update SmartDashboard info after the scheduler runs our commands
-        putSubsystemDashInfo();
 	}
 
+    private void periodic(Mode mode)
+    {
+    	FieldCentric.getInstance().update();
+		Scheduler.getInstance().run();
+
+		updateArduino(mode);
+		
+        putSubsystemDashInfo();
+    }
+    
+    private void updateArduino(Mode mode)
+    {
+    	switch(mode) {
+		case TELEOP:
+	        ArduinoLink.getInstance().updateTeleop();
+	        break;
+		case DISABLED: 
+			ArduinoLink.getInstance().updateDisabled();
+			break;
+		case AUTONOMOUS:
+	        ArduinoLink.getInstance().updateAuton();
+			break;
+		default:
+			break;
+		}
+    }
+    
     private void putSubsystemDashInfo()
     {
     	Drive.getInstance().putSmartDashboardInfo();
