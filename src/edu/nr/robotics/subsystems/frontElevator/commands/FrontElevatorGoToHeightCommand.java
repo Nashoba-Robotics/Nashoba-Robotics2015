@@ -5,7 +5,6 @@ import edu.nr.robotics.custom.PID;
 import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.drive.mxp.NavX;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -72,33 +71,12 @@ public class FrontElevatorGoToHeightCommand extends CMD
     }
 
     
-    private boolean joystickIsZero = false;
-    private long joystickZeroStartTime = -1;
     
     // Called repeatedly when this Command is scheduled to run
     @Override
 	protected void onExecute()
     {
     	SmartDashboard.putNumber("Elevator Err", pid.getError());
-    	
-    	/*if(OI.getInstance().getArcadeMoveValue() == 0)
-    	{
-    		if(joystickZeroStartTime == -1 && !joystickIsZero)
-    		{
-    			joystickZeroStartTime = System.currentTimeMillis();
-    		}
-    		
-    		if(joystickZeroStartTime != -1 && System.currentTimeMillis() - joystickZeroStartTime > 750)
-    		{
-    			joystickIsZero = true;
-    			joystickZeroStartTime = -1;
-    		}
-    	}
-    	else
-    	{
-    		joystickIsZero = false;
-    		joystickZeroStartTime = -1;
-    	}*/
     	
     	if(NavX.getInstance().getPitch() < -3 && OI.getInstance().getArcadeMoveValue() == 0)
     	{

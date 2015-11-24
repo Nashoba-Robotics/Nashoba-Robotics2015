@@ -2,9 +2,7 @@ package edu.nr.robotics;
 
 import edu.nr.robotics.commandgroup.CancelAllCommand;
 import edu.nr.robotics.commandgroup.CloseBinGrabberAndRaiseGroup;
-import edu.nr.robotics.commandgroup.DriveAndGetStationAngle;
 import edu.nr.robotics.commandgroup.ScoreGroup;
-import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.binGrabber.ToggleBinGrabberCommand;
 import edu.nr.robotics.subsystems.drive.commands.*;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
@@ -14,7 +12,6 @@ import edu.nr.robotics.subsystems.whip.WhipUndeployGroup;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is the glue that binds the controls on the physical operator

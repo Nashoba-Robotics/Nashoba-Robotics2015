@@ -1,7 +1,5 @@
 package edu.nr.robotics.commandgroup;
 
-import edu.nr.robotics.EmptyCommand;
-import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 

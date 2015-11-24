@@ -2,12 +2,8 @@ package edu.nr.robotics.auton;
 
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
-import edu.nr.robotics.subsystems.frontElevator.commands.FrontArmsOpenCommand;
 import edu.nr.robotics.subsystems.frontElevator.commands.FrontElevatorGoToHeightCommand;
-import edu.nr.robotics.subsystems.whip.WhipDeployCommand;
 import edu.nr.robotics.subsystems.whip.WhipDeployGroup;
-import edu.nr.robotics.subsystems.whip.WhipDeployLockCommand;
-import edu.nr.robotics.subsystems.whip.WhipUndeployLockCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

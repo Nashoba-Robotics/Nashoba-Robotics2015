@@ -20,7 +20,6 @@ public class PID implements LiveWindowSendable
 {
 
     public static final double kDefaultPeriod = .005;
-    private static int instances = 0;
     private double m_P;     // factor for "proportional" control
     private double m_I;     // factor for "integral" control
     private double m_D;     // factor for "derivative" control
@@ -41,8 +40,6 @@ public class PID implements LiveWindowSendable
     PIDSource m_pidInput;
     PIDOutput m_pidOutput;
     java.util.Timer m_controlLoop;
-    private boolean m_freed = false;
-    private boolean m_usingPercentTolerance;
 
     /**
      * Tolerance is the type of tolerance used to specify if the PID controller is on target.
@@ -146,7 +143,6 @@ public class PID implements LiveWindowSendable
 
         m_controlLoop.schedule(new PIDTask(this), 0L, (long) (m_period * 1000));
 
-        instances++;
         m_tolerance = new NullTolerance();
     }
 
@@ -199,7 +195,6 @@ public class PID implements LiveWindowSendable
     public void free() {
       m_controlLoop.cancel();
       synchronized (this) {
-        m_freed = true;
         m_pidOutput = null;
         m_pidInput = null;
         m_controlLoop = null;
@@ -463,16 +458,7 @@ public class PID implements LiveWindowSendable
         m_tolerance = new PercentageTolerance(percent);
     }
 
-    /** Set the PID tolerance using a Tolerance object.
-     * Tolerance can be specified as a percentage of the range or as an absolute
-     * value. The Tolerance object encapsulates those options in an object. Use it by
-     * creating the type of tolerance that you want to use: setTolerance(new PID.AbsoluteTolerance(0.1))
-     * @param tolerance a tolerance object of the right type, e.g. PercentTolerance
-     * or AbsoluteTolerance
-     */
-    private synchronized void setTolerance(Tolerance tolerance) {
-        m_tolerance = tolerance;
-    }
+
 
     /**
      * Set the absolute error which is considered tolerable for use with
