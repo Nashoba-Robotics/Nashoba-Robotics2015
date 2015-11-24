@@ -4,6 +4,7 @@ import edu.nr.robotics.commandgroup.CancelAllCommand;
 import edu.nr.robotics.commandgroup.CloseBinGrabberAndRaiseGroup;
 import edu.nr.robotics.commandgroup.ScoreGroup;
 import edu.nr.robotics.subsystems.binGrabber.ToggleBinGrabberCommand;
+import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.commands.*;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.nr.robotics.subsystems.frontElevator.commands.*;
@@ -43,40 +44,71 @@ public class OI
 		operatorLeft = new Joystick(2);
 		operatorRight = new Joystick(3);
 		
-		new JoystickButton(operatorRight, 9).whenPressed(new FrontArmsToggleCommand());
-		new JoystickButton(operatorRight, 8).whenPressed(new ToteTwoToWaitWithOpeningArmsGroup());
-		new JoystickButton(operatorRight, 7).whenPressed(new WhipDeployGroup());
-		new JoystickButton(operatorRight, 6).whenPressed(new WhipUndeployGroup());
+		new JoystickButton(operatorRight, 9).whenPressed(
+				new FrontArmsToggleCommand());
+		new JoystickButton(operatorRight, 8).whenPressed(
+				new ToteTwoToWaitWithOpeningArmsGroup());
+		new JoystickButton(operatorRight, 7).whenPressed(
+				new WhipDeployGroup());
+		new JoystickButton(operatorRight, 6).whenPressed(
+				new WhipUndeployGroup());
 		
-		new JoystickButton(operatorRight, 5).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_WAITING));
-		new JoystickButton(operatorRight, 4).whenPressed(new AdjustRecycleGroup());
+		new JoystickButton(operatorRight, 5).whenPressed(
+				new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_WAITING));
+		new JoystickButton(operatorRight, 4).whenPressed(
+				new AdjustRecycleGroup());
 		
-		new JoystickButton(operatorRight, 10).whenPressed(new ToteTwoToWaitGroup());
+		new JoystickButton(operatorRight, 10).whenPressed(
+				new ToteTwoToWaitGroup());
 		
-		new JoystickButton(operatorRight, 2).whenPressed(new ToteOneToScoreGroup());
-		new JoystickButton(operatorRight, 1).whenPressed(new ScoreGroup());
-		new JoystickButton(operatorLeft, 8).whenPressed(new CloseBinGrabberAndRaiseGroup());
+		new JoystickButton(operatorRight, 2).whenPressed(
+				new ToteOneToScoreGroup());
+		new JoystickButton(operatorRight, 1).whenPressed(
+				new ScoreGroup());
+		new JoystickButton(operatorLeft, 8).whenPressed(
+				new CloseBinGrabberAndRaiseGroup());
 		
-		new JoystickButton(operatorLeft, 5).whenPressed(new ToggleBinGrabberCommand());
+		new JoystickButton(operatorLeft, 5).whenPressed(
+				new ToggleBinGrabberCommand());
 		
-		FrontElevatorGoToHeightCommand adjust = new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE);
+		FrontElevatorGoToHeightCommand adjust = 
+				new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_ADJUST_TOTE_ONE);
 		adjust.setGoingDownMaxRange(1);
 		adjust.setTalonRamp(true);
 		new JoystickButton(operatorLeft, 7).whenPressed(adjust);
 		
-		new JoystickButton(operatorLeft, 6).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BEFORE_TOTE_ADJUST));
+		new JoystickButton(operatorLeft, 6).whenPressed(
+				new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BEFORE_TOTE_ADJUST));
 		
-		new JoystickButton(operatorLeft, 1).whenPressed(new CancelAllCommand());
+		new JoystickButton(operatorLeft, 1).whenPressed(
+				new CancelAllCommand());
 		
-		new JoystickButton(operatorLeft, 3).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_SCORING));
+		new JoystickButton(operatorLeft, 3).whenPressed(
+				new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_SCORING));
         
-		new JoystickButton(operatorLeft, 2).whenPressed(new ToteTwoToScoreGroup());
+		new JoystickButton(operatorLeft, 2).whenPressed(
+				new ToteTwoToScoreGroup());
 		
-		new JoystickButton(operatorLeft, 4).whenPressed(new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BOTTOM));
+		new JoystickButton(operatorLeft, 4).whenPressed(
+				new FrontElevatorGoToHeightCommand(FrontElevator.HEIGHT_BOTTOM));
 		
 		JoystickButton fighter = new JoystickButton(operatorLeft, 9);
-		fighter.whenPressed(new ActivateDumbDriveCommand());
-		fighter.whenReleased(new ActivateSmartDriveCommand());
+		fighter.whenPressed(new EmptyCommand()
+		    	{
+					@Override
+					protected void onExecute()
+					{
+						Drive.getInstance().setPIDEnabled(false);
+					}
+		    	});
+		fighter.whenReleased(new EmptyCommand()
+		    	{
+					@Override
+					protected void onExecute()
+					{
+						Drive.getInstance().setPIDEnabled(true);
+					}
+		    	});		
 		new JoystickButton(driveLeft, 1).whenPressed(new CancelAllCommand());
 		new JoystickButton(driveRight, 1).whenPressed(
 						new DrivePositionCommand(100,new double[][]{

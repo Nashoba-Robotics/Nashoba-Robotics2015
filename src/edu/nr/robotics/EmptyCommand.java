@@ -14,6 +14,11 @@ public abstract class EmptyCommand extends CMD
 		this.requires(requires);
 	}
 	
+	public EmptyCommand()
+	{
+		
+	}
+	
 	@Override
 	protected void onStart()
 	{
