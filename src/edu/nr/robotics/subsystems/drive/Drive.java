@@ -31,9 +31,6 @@ public class Drive extends Subsystem
 	
 	private PIDController leftPid, rightPid;
 	
-	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
-	private final double MAX_ENCODER_RATE = 12;
-	
 	
 	CANTalon leftTalon, rightTalon;
 	CANTalon hDrive;
@@ -66,8 +63,8 @@ public class Drive extends Subsystem
 		
 		//Max speed of robot is 20 ft/sec, so in order for our PIDController to work, the scale of encoder rate
 		//in ft/sec must be on a scale of -1 to 1 (so it can be used to calculate motor output)
-		leftEnc.setDistancePerPulse(distancePerPulse / MAX_ENCODER_RATE);
-		rightEnc.setDistancePerPulse(distancePerPulse / MAX_ENCODER_RATE);
+		leftEnc.setDistancePerPulse(distancePerPulse / RobotMap.MAX_ENCODER_RATE);
+		rightEnc.setDistancePerPulse(distancePerPulse / RobotMap.MAX_ENCODER_RATE);
 		
 		leftPid = new PIDController(JOYSTICK_DRIVE_P, 0, 0, 1, leftEnc, leftTalon);
 		rightPid = new PIDController(JOYSTICK_DRIVE_P, 0, 0, 1, rightEnc, rightTalon);
@@ -238,6 +235,8 @@ public class Drive extends Subsystem
         	rightMotorSpeed = -1.0;
         }
         
+        leftMotorSpeed *= 1.18;
+        
         SmartDashboard.putNumber("Arcade Left Motors", leftMotorSpeed);
         SmartDashboard.putNumber("Arcade Right Motors", rightMotorSpeed);
         SmartDashboard.putBoolean("Half Speed", false);
@@ -281,6 +280,8 @@ public class Drive extends Subsystem
 	}
 	
 	public void tankDrive(double leftMotorSpeed, double rightMotorSpeed) {
+        leftMotorSpeed *= 1.18;
+
 		if(leftPid.isEnable() && rightPid.isEnable())
         {
         	leftPid.setSetpoint(leftMotorSpeed);
@@ -332,22 +333,22 @@ public class Drive extends Subsystem
 	
 	public double getEncoder1Distance()
 	{
-		return leftEnc.getDistance() * MAX_ENCODER_RATE;
+		return leftEnc.getDistance() * RobotMap.MAX_ENCODER_RATE;
 	}
 	
 	public double getEncoder2Distance()
 	{
-		return -rightEnc.getDistance() * MAX_ENCODER_RATE;
+		return -rightEnc.getDistance() * RobotMap.MAX_ENCODER_RATE;
 	}
 	
 	public double getLeftEncoderSpeed()
 	{
-		return leftEnc.getRate() * MAX_ENCODER_RATE;
+		return leftEnc.getRate() * RobotMap.MAX_ENCODER_RATE;
 	}
 	
 	public double getRightEncoderSpeed()
 	{
-		return -rightEnc.getRate() * MAX_ENCODER_RATE;
+		return -rightEnc.getRate() * RobotMap.MAX_ENCODER_RATE;
 	}
 	
 	public double getEncoderAverageSpeed()

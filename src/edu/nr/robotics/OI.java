@@ -4,6 +4,7 @@ import edu.nr.robotics.commandgroup.CancelAllCommand;
 import edu.nr.robotics.commandgroup.CloseBinGrabberAndRaiseGroup;
 import edu.nr.robotics.commandgroup.DriveAndGetStationAngle;
 import edu.nr.robotics.commandgroup.ScoreGroup;
+import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.binGrabber.ToggleBinGrabberCommand;
 import edu.nr.robotics.subsystems.drive.commands.*;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
@@ -80,6 +81,11 @@ public class OI
 		fighter.whenPressed(new ActivateDumbDriveCommand());
 		fighter.whenReleased(new ActivateSmartDriveCommand());
 		new JoystickButton(driveLeft, 1).whenPressed(new CancelAllCommand());
+		new JoystickButton(driveRight, 1).whenPressed(
+						new DrivePositionCommand(100,new double[][]{
+																{0, 1}},
+												 0.5/RobotMap.MAX_ENCODER_RATE, 0, 1, 0));
+		new JoystickButton(driveRight, 10).whenPressed(new ResetEncodersCommand());
 	}
 	
 	public static OI getInstance()

@@ -79,6 +79,7 @@ public class Robot extends IterativeRobot
      */
     public void autonomousPeriodic() 
     {
+    	FieldCentric.getInstance().update();
         Scheduler.getInstance().run();
         ArduinoLink.getInstance().updateAuton();
         
@@ -100,6 +101,7 @@ public class Robot extends IterativeRobot
      */
     public void teleopPeriodic() 
     {
+    	FieldCentric.getInstance().update();
         Scheduler.getInstance().run();
         ArduinoLink.getInstance().updateTeleop();
     	
@@ -119,6 +121,7 @@ public class Robot extends IterativeRobot
     
     public void disabledPeriodic() 
 	{
+    	FieldCentric.getInstance().update();
 		Scheduler.getInstance().run();
 		ArduinoLink.getInstance().updateDisabled();
 		
@@ -130,5 +133,6 @@ public class Robot extends IterativeRobot
     {
     	Drive.getInstance().putSmartDashboardInfo();
     	FrontElevator.getInstance().putSmartDashboardInfo();
+    	FieldCentric.getInstance().putSmartDashboardInfo();
     }
 }
