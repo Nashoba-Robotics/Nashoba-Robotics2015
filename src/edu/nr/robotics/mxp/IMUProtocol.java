@@ -1,4 +1,4 @@
-package edu.nr.robotics.subsystems.drive.mxp;
+package edu.nr.robotics.mxp;
 
 /* ============================================
 Nav6 source code is placed under the MIT license

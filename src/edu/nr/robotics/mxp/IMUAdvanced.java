@@ -1,4 +1,4 @@
-package edu.nr.robotics.subsystems.drive.mxp;
+package edu.nr.robotics.mxp;
 
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) Kauai Labs 2013. All Rights Reserved.                       */

@@ -1,7 +1,9 @@
 package edu.nr.robotics;
 
+import edu.nr.robotics.mxp.NavX;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.Position;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class FieldCentric {
 
@@ -83,7 +85,10 @@ public class FieldCentric {
     }
 
 	public void putSmartDashboardInfo() {
-		// TODO Auto-generated method stub
+		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
+		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
+		SmartDashboard.putNumber("NavX Roll", NavX.getInstance().getRoll());
 		
+		SmartDashboard.putNumber("Gyro", Drive.getInstance().getAngleDegrees());
 	}
 }
