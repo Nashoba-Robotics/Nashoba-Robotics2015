@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArduinoLink 
-{
+{	
 	private static ArduinoLink instance;
 	public static ArduinoLink getInstance()
 	{
@@ -13,27 +13,27 @@ public class ArduinoLink
 		return instance;
 	}
 	
-	private final String STATE_OFF = "Off",
-			STATE_COUNTDOWN = "Countdown",
-			STATE_SCORING = "Score";
+	public enum State {
+		OFF,COUNTDOWN,SCORING;
+	}
 	
-	private String previousState = STATE_OFF;
+	private State previousState = State.OFF;
 	private long startedScoringTime = 0;
 	
-	private String state = STATE_OFF;
+	private State state = State.OFF;
 	private ArduinoLink()
 	{
 	}
 	
 	public void updateDisabled()
 	{
-		SmartDashboard.putString("ArduinoState", STATE_OFF);
+		SmartDashboard.putString("ArduinoState", State.OFF.toString());
 		SmartDashboard.putNumber("ArduinoArgument", 0);
 	}
 	
 	public void updateAuton()
 	{
-		SmartDashboard.putString("ArduinoState", STATE_OFF);
+		SmartDashboard.putString("ArduinoState", State.OFF.toString());
 		SmartDashboard.putNumber("ArduinoArgument", 0);
 	}
 	
@@ -43,18 +43,18 @@ public class ArduinoLink
 		{
 			int time = (int)Math.round(DriverStation.getInstance().getMatchTime());
 			
-			if(state.equals(STATE_SCORING))
+			if(state.equals(State.SCORING))
 			{
 				if(System.currentTimeMillis() - startedScoringTime > 1000)
 					state = previousState;
 			}
 			
 			if(time <= 16)
-				state = STATE_COUNTDOWN;
+				state = State.COUNTDOWN;
 			
-			SmartDashboard.putString("ArduinoState", state);
+			SmartDashboard.putString("ArduinoState", state.toString());
 			
-			if(state.equalsIgnoreCase(STATE_COUNTDOWN))
+			if(state == State.COUNTDOWN)
 			{
 				SmartDashboard.putNumber("ArduinoArgument", time);
 			}
@@ -73,6 +73,6 @@ public class ArduinoLink
 	{
 		startedScoringTime = System.currentTimeMillis();
 		previousState = state;
-		state = STATE_SCORING;
+		state = State.SCORING;
 	}
 }
