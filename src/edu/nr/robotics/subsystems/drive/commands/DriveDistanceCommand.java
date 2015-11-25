@@ -1,9 +1,9 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
-import edu.nr.robotics.custom.PID;
-import edu.nr.robotics.subsystems.CMD;
+import edu.nr.lib.CMD;
+import edu.nr.lib.PID.PID;
+import edu.nr.lib.PID.EncoderPIDSource;
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.EncoderPIDSource;
 import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrection;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

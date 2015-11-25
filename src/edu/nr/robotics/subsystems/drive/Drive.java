@@ -2,9 +2,9 @@
 package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.lib.NRMath;
+import edu.nr.lib.navx.NavX;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickCommand;
-import edu.nr.robotics.mxp.NavX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.CANTalon;

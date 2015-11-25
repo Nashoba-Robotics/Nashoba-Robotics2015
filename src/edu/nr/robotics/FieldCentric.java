@@ -1,8 +1,8 @@
 package edu.nr.robotics;
 
-import edu.nr.robotics.mxp.NavX;
+import edu.nr.lib.Position;
+import edu.nr.lib.navx.NavX;
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.Position;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class FieldCentric {

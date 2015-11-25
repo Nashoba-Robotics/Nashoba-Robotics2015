@@ -1,5 +1,6 @@
 package edu.nr.robotics;
 
+import edu.nr.lib.EmptyCommand;
 import edu.nr.robotics.commandgroup.CancelAllCommand;
 import edu.nr.robotics.commandgroup.CloseBinGrabberAndRaiseGroup;
 import edu.nr.robotics.commandgroup.ScoreGroup;

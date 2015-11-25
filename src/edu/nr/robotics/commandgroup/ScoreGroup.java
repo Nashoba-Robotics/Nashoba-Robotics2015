@@ -1,8 +1,8 @@
 package edu.nr.robotics.commandgroup;
 
 
+import edu.nr.lib.EmptyCommand;
 import edu.nr.robotics.ArduinoLink;
-import edu.nr.robotics.EmptyCommand;
 import edu.nr.robotics.subsystems.binGrabber.OpenBinGrabberCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;

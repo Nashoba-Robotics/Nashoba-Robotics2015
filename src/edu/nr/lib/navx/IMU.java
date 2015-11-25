@@ -1,4 +1,4 @@
-package edu.nr.robotics.mxp;
+package edu.nr.lib.navx;
 
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) Kauai Labs 2013. All Rights Reserved.                        */
@@ -12,6 +12,8 @@ package edu.nr.robotics.mxp;
 
 import java.util.Arrays;
 
+import edu.nr.lib.navx.IMUProtocol.StreamResponse;
+import edu.nr.lib.navx.IMUProtocol.YPRUpdate;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.SerialPort;
