@@ -1,9 +1,10 @@
 
 package edu.nr.robotics.subsystems.drive;
 
+import edu.nr.lib.NRMath;
+import edu.nr.lib.navx.NavX;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickCommand;
-import edu.nr.robotics.subsystems.drive.mxp.NavX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.CANTalon;
@@ -110,22 +111,14 @@ public class Drive extends Subsystem
 		double leftMotorSpeed;
         double rightMotorSpeed;
 
-        moveValue = limit(moveValue);
-        rotateValue = limit(rotateValue);
+        moveValue = NRMath.limit(moveValue);
+        rotateValue = NRMath.limit(rotateValue);
 
         if (squaredInputs) 
         {
             // square the inputs (while preserving the sign) to increase fine control while permitting full power
-            if (moveValue >= 0.0) {
-                moveValue = (moveValue * moveValue);
-            } else {
-                moveValue = -(moveValue * moveValue);
-            }
-            if (rotateValue >= 0.0) {
-                rotateValue = (rotateValue * rotateValue);
-            } else {
-                rotateValue = -(rotateValue * rotateValue);
-            }
+            NRMath.squareWithSign(moveValue);
+            NRMath.squareWithSign(rotateValue);
         }
 
         if (moveValue > 0.0)
@@ -154,21 +147,12 @@ public class Drive extends Subsystem
                 rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
             }
         }
-        rightMotorSpeed = -rightMotorSpeed;
         
         SmartDashboard.putNumber("Arcade Left Motors", leftMotorSpeed);
         SmartDashboard.putNumber("Arcade Right Motors", rightMotorSpeed);
         SmartDashboard.putBoolean("Half Speed", false);
         
-        if(leftPid.isEnable() && rightPid.isEnable())
-        {
-        	leftPid.setSetpoint(leftMotorSpeed);
-            rightPid.setSetpoint(rightMotorSpeed);
-        }
-        else
-        {
-        	setRawMotorSpeed(rightMotorSpeed, leftMotorSpeed);
-        }
+        tankDrive(leftMotorSpeed, -rightMotorSpeed);
 	}
 	
 	
@@ -178,22 +162,15 @@ public class Drive extends Subsystem
         double leftMotorSpeed;
         double rightMotorSpeed;
 
-        throttle = limit(throttle);
-        wheel = limit(wheel);
+        throttle = NRMath.limit(throttle);
+        wheel = NRMath.limit(wheel);
         
         if (squaredInputs) 
         {
-            // square the inputs (while preserving the sign) to increase fine control while permitting full power
-            if (throttle >= 0.0) {
-            	throttle = (throttle * throttle);
-            } else {
-            	throttle = -(throttle * throttle);
-            }
-            if (wheel >= 0.0) {
-                wheel = (wheel * wheel);
-            } else {
-            	wheel = -(wheel * wheel);
-            }
+            // square the inputs (while preserving the sign) to
+        	// increase fine control while permitting full power
+            NRMath.squareWithSign(throttle);
+            NRMath.squareWithSign(wheel);
         }
         
         double negInertia = wheel - oldWheel;
@@ -230,22 +207,12 @@ public class Drive extends Subsystem
         	leftMotorSpeed += -1.0 - rightMotorSpeed;
         	rightMotorSpeed = -1.0;
         }
-        
-        leftMotorSpeed *= 1.18;
-        
+                
         SmartDashboard.putNumber("Arcade Left Motors", leftMotorSpeed);
         SmartDashboard.putNumber("Arcade Right Motors", rightMotorSpeed);
         SmartDashboard.putBoolean("Half Speed", false);
         
-        if(leftPid.isEnable() && rightPid.isEnable())
-        {
-        	leftPid.setSetpoint(leftMotorSpeed);
-            rightPid.setSetpoint(-rightMotorSpeed);
-        }
-        else
-        {
-        	setRawMotorSpeed(leftMotorSpeed, -rightMotorSpeed);
-        }
+        tankDrive(leftMotorSpeed, -rightMotorSpeed);
 	}
 	
 	public void setHDrive(double value)
@@ -295,17 +262,6 @@ public class Drive extends Subsystem
 		rightPid.setPID(p, 0, 0, 1);
 	}
 	
-	private double limit(double num)
-	{
-		if (num > 1.0) {
-            return 1.0;
-        }
-        if (num < -1.0) {
-            return -1.0;
-        }
-        return num;
-	}
-	
 	public double getAngleDegrees() 
 	{
 		return NavX.getInstance().getYaw();
@@ -353,18 +309,11 @@ public class Drive extends Subsystem
 	}
 	
 	public void putSmartDashboardInfo()
-	{
-		//SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
-		//SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
-		
-		//SmartDashboard.putNumber("Gyro", getAngleDegrees());
-		
+	{	
 		SmartDashboard.putNumber("Encoder Left", this.getEncoder1Distance());
 		SmartDashboard.putNumber("Encoder Right", this.getEncoder2Distance());
 		
 		SmartDashboard.putNumber("Encoders", this.getEncoderAve());
-		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
-		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
 	}
 }
 

@@ -1,4 +1,4 @@
-package edu.nr.robotics.subsystems;
+package edu.nr.lib;
 
 import edu.wpi.first.wpilibj.command.Command;
 

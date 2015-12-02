@@ -1,4 +1,4 @@
-package edu.nr.robotics.subsystems.drive.mxp;
+package edu.nr.lib.navx;
 
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) Kauai Labs 2013. All Rights Reserved.                       */
@@ -12,6 +12,7 @@ package edu.nr.robotics.subsystems.drive.mxp;
 
 import java.util.Arrays;
 
+import edu.nr.lib.navx.IMUProtocol.QuaternionUpdate;
 import edu.wpi.first.wpilibj.SerialPort;
 
 /**

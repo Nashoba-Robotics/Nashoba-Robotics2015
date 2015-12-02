@@ -1,4 +1,4 @@
-package edu.nr.robotics.subsystems.drive.mxp;
+package edu.nr.lib.navx;
 
 import edu.wpi.first.wpilibj.SerialPort;
 

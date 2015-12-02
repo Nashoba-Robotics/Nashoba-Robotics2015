@@ -1,9 +1,9 @@
 package edu.nr.robotics.subsystems.frontElevator.commands;
 
+import edu.nr.lib.CMD;
+import edu.nr.lib.PID.PID;
+import edu.nr.lib.navx.NavX;
 import edu.nr.robotics.OI;
-import edu.nr.robotics.custom.PID;
-import edu.nr.robotics.subsystems.CMD;
-import edu.nr.robotics.subsystems.drive.mxp.NavX;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 

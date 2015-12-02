@@ -1,6 +1,6 @@
 package edu.nr.robotics.subsystems.binGrabber;
 
-import edu.nr.robotics.subsystems.CMD;
+import edu.nr.lib.CMD;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 /**

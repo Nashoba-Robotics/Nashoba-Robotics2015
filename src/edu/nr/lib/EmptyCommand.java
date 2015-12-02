@@ -1,6 +1,5 @@
-package edu.nr.robotics;
+package edu.nr.lib;
 
-import edu.nr.robotics.subsystems.CMD;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public abstract class EmptyCommand extends CMD

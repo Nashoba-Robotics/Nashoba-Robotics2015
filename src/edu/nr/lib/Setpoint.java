@@ -1,4 +1,4 @@
-package edu.nr.robotics.subsystems.drive;
+package edu.nr.lib;
 
 public class Setpoint {
 	public double xpos, ypos, vel, acc;

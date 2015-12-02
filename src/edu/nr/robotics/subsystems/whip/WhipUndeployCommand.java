@@ -1,6 +1,6 @@
 package edu.nr.robotics.subsystems.whip;
 
-import edu.nr.robotics.subsystems.CMD;
+import edu.nr.lib.CMD;
 
 public class WhipUndeployCommand extends CMD
 {

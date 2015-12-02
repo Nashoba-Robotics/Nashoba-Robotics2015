@@ -1,4 +1,4 @@
-package edu.nr.robotics.subsystems.drive;
+package edu.nr.lib;
 
 public class Position {
 	public double x;

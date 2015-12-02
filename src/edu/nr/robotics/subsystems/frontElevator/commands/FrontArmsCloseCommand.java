@@ -1,6 +1,6 @@
 package edu.nr.robotics.subsystems.frontElevator.commands;
 
-import edu.nr.robotics.subsystems.CMD;
+import edu.nr.lib.CMD;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 
 public class FrontArmsCloseCommand extends CMD

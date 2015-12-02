@@ -1,7 +1,7 @@
 package edu.nr.robotics.subsystems.frontElevator.commands;
 
+import edu.nr.lib.CMD;
 import edu.nr.robotics.OI;
-import edu.nr.robotics.subsystems.CMD;
 import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 
 /**
