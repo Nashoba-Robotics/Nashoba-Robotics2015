@@ -81,6 +81,7 @@ public class DrivePositionCommand extends CMD {
 	    	double leftErrorDeriv = (leftError - leftErrorLast) / dt;
 	    	double leftMotorSpeed = Kv * leftSetpoint.vel + Ka * leftSetpoint.acc + Kp * leftError + Kd * leftErrorDeriv;
 	    	leftErrorLast = leftError;
+	    	SmartDashboard.putNumber("Left Motor - Motion", leftMotorSpeed);
 	    	SmartDashboard.putNumber("Left Error", leftError);
 	    	SmartDashboard.putNumber("Left X Point", leftSetpoint.xpos);
 	    	SmartDashboard.putNumber("Left Y Point", leftSetpoint.ypos);
@@ -93,6 +94,7 @@ public class DrivePositionCommand extends CMD {
 	    	double rightErrorDeriv = (rightError - rightErrorLast) / dt;
 	    	double rightMotorSpeed = Kv * rightSetpoint.vel + Ka * rightSetpoint.acc + Kp * rightError + Kd * rightErrorDeriv;
 	    	rightErrorLast = rightError;
+	    	SmartDashboard.putNumber("Right Motor - Motion", rightMotorSpeed);
 	    	SmartDashboard.putNumber("Right Error", rightError);
 	    	SmartDashboard.putNumber("Right X Point", rightSetpoint.xpos);
 	    	SmartDashboard.putNumber("Right Y Point", rightSetpoint.ypos);

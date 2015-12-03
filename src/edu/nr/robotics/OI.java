@@ -113,7 +113,7 @@ public class OI
 		new JoystickButton(driveLeft, 1).whenPressed(new CancelAllCommand());
 		new JoystickButton(driveRight, 1).whenPressed(
 						new DrivePositionCommand(100,new double[][]{
-																{0, 1}},
+																{1, 0}},
 												 0.5/RobotMap.MAX_ENCODER_RATE, 0, 1, 0));
 		new JoystickButton(driveRight, 10).whenPressed(new ResetEncodersCommand());
 	}

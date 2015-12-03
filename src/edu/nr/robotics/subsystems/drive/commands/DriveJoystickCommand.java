@@ -38,34 +38,25 @@ public class DriveJoystickCommand extends CMD
 			if(OI.getInstance().reverseDriveDirection())
 	    		driveMagnitude  *= -1;
 	    	
-	    	double turn;
-	    	
-	    	if(OI.getInstance().useGyroCorrection())
+			double turn = OI.getInstance().getArcadeTurnValue()/3;	    	
+	    	if(Math.abs(turn) < 0.05)
 	    	{
-	    		hDriveActivated = true;
-	    		turn = gyroCorrection.getTurnValue()/3;
+	    		if (Math.abs(driveMagnitude) > .1)
+	    		{
+	    			turn = gyroCorrection.getTurnValue()/3;
+	    		}
 	    	}
 	    	else
-	    	{
-	    		//Use the joystick to get turn value
-	    		turn = OI.getInstance().getArcadeTurnValue()/3;
-	    		
-	    		//Wait until joystick returns to rest before switching controls to turning
-	    		if(Math.abs(turn) < 0.15)
-	    			hDriveActivated = false;
-	    		
-	    		if(hDriveActivated)
-	    			turn = 0;
-	    		
+	    	{	    		
 	    		gyroCorrection.clearInitialValue();
 	    	}
 	    	
 			Drive.getInstance().setHDrive(OI.getInstance().speedMultiplier*OI.getInstance().getHDriveValue());
-	    	
+	    	turn *= 0.3;
 	    	SmartDashboard.putNumber("Drive Magnitude", moveValue);
 	    	SmartDashboard.putNumber("Turn", turn);    	
 	    	
-	    	Drive.getInstance().arcadeDrive(OI.getInstance().speedMultiplier*driveMagnitude, OI.getInstance().speedMultiplier*turn, oldTurn, true);
+	    	Drive.getInstance().arcadeDrive(OI.getInstance().speedMultiplier*driveMagnitude, -OI.getInstance().speedMultiplier*turn, oldTurn, true);
 	    	
 	    	oldTurn = OI.getInstance().speedMultiplier*turn;
     	}
