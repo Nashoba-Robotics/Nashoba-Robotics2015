@@ -165,6 +165,7 @@ public class Drive extends Subsystem
         throttle = NRMath.limit(throttle);
         wheel = NRMath.limit(wheel);
         
+        
         if (squaredInputs) 
         {
             // square the inputs (while preserving the sign) to
@@ -189,6 +190,7 @@ public class Drive extends Subsystem
         }
         
         wheel = wheel + negInertia * negInertiaScalar;
+        
         
         rightMotorSpeed = leftMotorSpeed = throttle;
         leftMotorSpeed += wheel;
@@ -239,11 +241,10 @@ public class Drive extends Subsystem
 		setPIDEnabled(false);
 		
 		leftTalon.set(left);
-		rightTalon.set(-right);
+		rightTalon.set(right);
 	}
 	
 	public void tankDrive(double leftMotorSpeed, double rightMotorSpeed) {
-        leftMotorSpeed *= 1.18;
 
 		if(leftPid.isEnable() && rightPid.isEnable())
         {
