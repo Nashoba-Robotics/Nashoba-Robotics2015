@@ -14,11 +14,11 @@ public class EncoderPIDSource implements PIDSource
 	@Override
 	public double pidGet()
 	{
-		return Drive.getInstance().getEncoderAve() - initialDistance;
+		return Drive.getInstance().getEncoderAverageDistance() - initialDistance;
 	}
 	
 	public void resetInitialValue()
 	{
-		initialDistance = Drive.getInstance().getEncoderAve();
+		initialDistance = Drive.getInstance().getEncoderAverageDistance();
 	}
 }

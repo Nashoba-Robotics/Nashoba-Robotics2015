@@ -42,7 +42,6 @@ public class RobotMap
 	
 	public static final int CAMERA_DIGITAL_PORT = 3; 
 	
-	//TODO Get the right solenoid numbers
 	public static final int WHIP_FORWARD = 3;
 	public static final int WHIP_REVERSE = 0;
 	

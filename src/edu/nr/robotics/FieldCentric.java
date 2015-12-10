@@ -38,7 +38,7 @@ public class FieldCentric {
         angle *= -1; //Gyro is reversed (clockwise causes an increase in the angle)
         angle += initialTheta; //Make the initial position be facing north
         
-        double ave = Drive.getInstance().getEncoderAve();
+        double ave = Drive.getInstance().getEncoderAverageDistance();
         double delta_x_r = (ave-lastEncoderDistance);
         double deltax = delta_x_r * Math.sin(angle);
         double deltay = delta_x_r * Math.cos(angle);
@@ -80,7 +80,7 @@ public class FieldCentric {
     {
     	x = 0;
     	y = 0;
-    	lastEncoderDistance = Drive.getInstance().getEncoderAve();
+    	lastEncoderDistance = Drive.getInstance().getEncoderAverageDistance();
     	initialGyro = Drive.getInstance().getAngleDegrees();
     }
 

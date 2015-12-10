@@ -272,48 +272,51 @@ public class Drive extends Subsystem
 		return getAngleDegrees() * (Math.PI)/180d;
 	}
 	
-	public double getEncoderAve()
-	{
-		return (getEncoder1Distance() + getEncoder2Distance()) / 2f;
-	}
-	
 	public void resetEncoders()
 	{
 		leftEnc.reset();
 		rightEnc.reset();
 	}
 	
-	public double getEncoder1Distance()
+	public double getEncoderLeftDistance()
 	{
 		return leftEnc.getDistance() * RobotMap.MAX_ENCODER_RATE;
 	}
 	
-	public double getEncoder2Distance()
+	public double getEncoderRightDistance()
 	{
 		return -rightEnc.getDistance() * RobotMap.MAX_ENCODER_RATE;
 	}
 	
-	public double getLeftEncoderSpeed()
+	public double getEncoderLeftSpeed()
 	{
 		return leftEnc.getRate() * RobotMap.MAX_ENCODER_RATE;
 	}
 	
-	public double getRightEncoderSpeed()
+	public double getEncoderRightSpeed()
 	{
 		return -rightEnc.getRate() * RobotMap.MAX_ENCODER_RATE;
 	}
 	
+	public double getEncoderAverageDistance()
+	{
+		return (getEncoderLeftDistance() + getEncoderRightDistance()) / 2f;
+	}
+	
 	public double getEncoderAverageSpeed()
 	{
-		return (getRightEncoderSpeed() + getLeftEncoderSpeed()) / 2;
+		return (getEncoderRightSpeed() + getEncoderLeftSpeed()) / 2;
 	}
 	
 	public void putSmartDashboardInfo()
 	{	
-		SmartDashboard.putNumber("Encoder Left", this.getEncoder1Distance());
-		SmartDashboard.putNumber("Encoder Right", this.getEncoder2Distance());
+		SmartDashboard.putNumber("Encoders Distance Ave", this.getEncoderAverageDistance());
+		SmartDashboard.putNumber("Encoders Speed Ave", this.getEncoderAverageSpeed());
+		SmartDashboard.putData("Encoder Left", leftEnc);
+		SmartDashboard.putData("Encoder Right", rightEnc);
 		
-		SmartDashboard.putNumber("Encoders", this.getEncoderAve());
+		SmartDashboard.putData("PID Left", leftPid);
+		SmartDashboard.putData("PID Right", rightPid);
 	}
 }
 
