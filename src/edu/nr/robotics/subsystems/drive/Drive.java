@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.CANTalon.ControlMode;
-import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
+import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
+import edu.wpi.first.wpilibj.PIDSourceType;
 
 /**
  *
@@ -38,7 +38,7 @@ public class Drive extends Subsystem
 		leftTalon.enableBrakeMode(true);
 		
 		CANTalon tempLeftTalon = new CANTalon(RobotMap.leftDriveTalon2);
-		tempLeftTalon.changeControlMode(ControlMode.Follower);
+		tempLeftTalon.changeControlMode(TalonControlMode.Follower);
 		tempLeftTalon.set(leftTalon.getDeviceID());
 		tempLeftTalon.enableBrakeMode(true);
 		
@@ -46,15 +46,15 @@ public class Drive extends Subsystem
 		rightTalon.enableBrakeMode(true);
 		
 		CANTalon tempRightTalon = new CANTalon(RobotMap.rightDriveTalon2);
-		tempRightTalon.changeControlMode(ControlMode.Follower);
+		tempRightTalon.changeControlMode(TalonControlMode.Follower);
 		tempRightTalon.set(rightTalon.getDeviceID());
 		tempRightTalon.enableBrakeMode(true);
 		
 		leftEnc = new Encoder(RobotMap.ENCODER_LEFT_A, RobotMap.ENCODER_LEFT_B);
 		rightEnc = new Encoder(RobotMap.ENCODER_RIGHT_A, RobotMap.ENCODER_RIGHT_B);
 		
-		leftEnc.setPIDSourceParameter(PIDSourceParameter.kRate);
-		rightEnc.setPIDSourceParameter(PIDSourceParameter.kRate);
+		leftEnc.setPIDSourceType(PIDSourceType.kRate);
+		rightEnc.setPIDSourceType(PIDSourceType.kRate);
 		
 		double distancePerPulse = (1 / ticksPerRev) * Math.PI * wheelDiameter;
 		
@@ -224,12 +224,12 @@ public class Drive extends Subsystem
 	
 	public void setPIDEnabled(boolean enabled)
 	{
-		if(enabled && !leftPid.isEnable())
+		if(enabled && !leftPid.isEnabled())
 		{
 			leftPid.enable();
 			rightPid.enable();
 		}
-		else if(!enabled && leftPid.isEnable())
+		else if(!enabled && leftPid.isEnabled())
 		{
 			leftPid.disable();
 			rightPid.disable();
@@ -246,7 +246,7 @@ public class Drive extends Subsystem
 	
 	public void tankDrive(double leftMotorSpeed, double rightMotorSpeed) {
 
-		if(leftPid.isEnable() && rightPid.isEnable())
+		if(leftPid.isEnabled() && rightPid.isEnabled())
         {
         	leftPid.setSetpoint(leftMotorSpeed);
             rightPid.setSetpoint(rightMotorSpeed);

@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -52,11 +53,13 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
     
     DoubleSolenoid solenoid;
     
+    PIDSourceType type;
+    
     public FrontElevator() 
     {
     	talon1 = new CANTalon (RobotMap.frontElevatorTalon1);
     	CANTalon slave = new CANTalon(RobotMap.frontElevatorTalon2);
-    	slave.changeControlMode(CANTalon.ControlMode.Follower);
+    	slave.changeControlMode(CANTalon.TalonControlMode.Follower);
     	slave.set(talon1.getDeviceID());
     	
 		potentiometer = new AnalogPotentiometer(RobotMap.POTENTIOMETER_FRONT_ELEVATOR);
@@ -151,5 +154,15 @@ public class FrontElevator extends Subsystem implements PIDSource, PIDOutput
 		{
 			solenoid.set(Value.kForward);
 		}*/
+	}
+
+	@Override
+	public void setPIDSourceType(PIDSourceType pidSource) {
+		type = pidSource;
+	}
+
+	@Override
+	public PIDSourceType getPIDSourceType() {
+		return type;
 	}
 }

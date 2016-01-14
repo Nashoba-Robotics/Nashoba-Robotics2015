@@ -15,6 +15,7 @@ import java.util.Arrays;
 import edu.nr.lib.navx.IMUProtocol.StreamResponse;
 import edu.nr.lib.navx.IMUProtocol.YPRUpdate;
 import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
@@ -61,6 +62,8 @@ public class IMU extends SensorBase implements PIDSource, LiveWindowSendable, Ru
     boolean stop = false;
     private IMUProtocol.YPRUpdate ypr_update_data;
     protected byte update_type = IMUProtocol.MSGID_YPR_UPDATE;
+    
+    PIDSourceType type;
     
     /**
      * Constructs the IMU class, overriding the default update rate
@@ -447,4 +450,14 @@ public class IMU extends SensorBase implements PIDSource, LiveWindowSendable, Ru
             }
         }
     }
+
+	@Override
+	public void setPIDSourceType(PIDSourceType pidSource) {
+		type = pidSource;
+	}
+
+	@Override
+	public PIDSourceType getPIDSourceType() {
+		return type;
+	}
 }
